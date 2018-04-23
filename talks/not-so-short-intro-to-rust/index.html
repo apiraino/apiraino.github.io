@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>A (not so short) introduction to the Rust language</title>
+
+		<meta name="description" content="... and an overview on its environment and tooling">
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+
+
+	</head>
+	<body class="reveal-viewport theme-font-montserrat theme-color-white-blue">
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-color="#99c0ff" data-id="822007276d2e7f089f4182e69e180990"><div class="sl-block" data-block-type="text" style="height: auto; width: 895px; left: 33px; top: 0px;" data-block-id="53fd2c5002e0e7489f34d980c3ffabde"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2>A (not so short) introduction to</h2>
+</div></div>
+
+
+
+
+
+
+<div class="sl-block" data-block-type="image" data-block-id="50d847c904768e78932772973ce02e74" style="min-width: 30px; min-height: 30px; width: 530px; height: 530px; left: 215px; top: 100px;"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="500" data-natural-height="500" data-lazy-loaded="" data-src="rust-intro/f3b4439ac130313f6546fd8652075aa9.png"></div></div></section><section data-background-color="#99c0ff" data-id="45b70b1da71779810c58ae7a4cc1521d"><div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 88px; top: 0px;" data-block-id="c9211db37609fe7cadcb8aa08b9af820"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2>About me</h2>
+</div></div>
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 660px; left: 148px; top: 140px; height: auto;" data-block-id="b078bbf46e1ac673af326adb6603b9cb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; line-height: 1.82;" data-has-line-height="">
+<ul>
+	<li>Backend web application "devops"</li>
+	<li>Pythonist</li>
+	<li>Did some Java, PHP</li>
+	<li>A bit of C, Assembly for <em>teh lulz</em>
+</li>
+</ul>
+</div></div></section><section data-id="d66902322b0b8e6fe92a02f4304db1e6" data-background-color="#99c0ff">
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 140px;" data-block-id="6634f6034409f896f7c3c028eba2ebff">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<p>Rust is a <strong>systems programming</strong> language focused on three goals:</p>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="width: 883px; left: 39px; top: 280px; height: auto;" data-block-id="4423d96be98bc044da198973caa784ca">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 2.821;" data-has-line-height="">
+<ul>
+	<li>
+<strong>Safety</strong>: achieved thanks to a painfully nick-picking compiler</li>
+	<li>
+<strong>Speed</strong>: compiled. No gc, no VM, no bytecode</li>
+	<li>
+<strong>Concurrency</strong>: <em>it's a bit complicated</em> ...</li>
+</ul>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="549d07acc699bc43099dc5ad1c6f55fb">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Rust at a glance</span></h2>
+</div>
+</div></section><section data-background-color="#99c0ff" data-id="4a6bd6f9d9066a3ac3733ae87b1d971e">
+
+<div class="sl-block" data-block-type="text" data-block-id="3efb0e122997ff2e54956d8d82f4f835" style="height: auto; min-width: 30px; min-height: 30px; width: 774px; left: 93px; top: 119px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08;" data-has-line-height="">
+<ul>
+	<li><span style="font-size:1.0em"><strong>2006</strong> Mozilla employee Graydon Hoare has an itch to scratch</span></li>
+	<li><span style="font-size:1.0em"><strong>2009</strong> Mozilla gets involved</span></li>
+	<li><span style="font-size:1.0em"><strong>2011</strong> Rust compiles itself</span></li>
+	<li><span style="font-size:1.0em"><strong>2015, May</strong> First stable release 1.0</span></li>
+	<li><span style="font-size:1.0em"><strong>2015-ish</strong> Graydon Hoare at Apple working on Swift</span></li>
+	<li><span style="font-size:1.0em">six weeks release schedule since then</span></li>
+	<li><span style="font-size:1.0em">stable + beta + nightly release channels</span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="707362326c95d1ddec0263337399726b">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; text-align: center;" dir="ui">
+<h2><span>Rust at a glance</span></h2>
+</div>
+</div></section><section data-background-color="#99c0ff" data-id="5b5863e48f323e6f7497a32f07b8b65f"><div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 91px; top: 0px;" data-block-id="81da9eea25749ac3723c4ecb1f605b7d">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;">
+<h2><span style="font-size:1.0em">Platform "tiers"</span></h2>
+</div>
+</div>
+
+
+<div class="sl-block" data-block-type="table" data-block-id="6c485710a85ddcf2fb2290972ba2bcd9" style="height: auto; min-width: 120px; min-height: 30px; width: 960px; left: 0px; top: 86px;">
+    <div class="sl-block-content" style="z-index: 11; font-size: 81%;" data-table-rows="3" data-table-border-color="" data-table-has-header="false" data-table-padding="12px">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="padding: 12px;">Tier 1</td>
+                    <td style="padding: 12px;">
+<em>"guaranteed to work"</em><br>
+binary release<br>
+API documentation<br>
+CI pass</td>
+                    <td style="padding: 12px;">i686, x86_64</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;">Tier 2</td>
+                    <td style="padding: 12px;">like Tier 1, but:<br>
+not always binary release<br>
+not always CI</td>
+                    <td style="padding: 12px;">aarch64<br>
+armv7<br>
+wasm32<br>
+ppc, sparc, mips, ...<br>
+other x86_64 (f.e. netbsd, fuchsia, ios, android)<br>
+...</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;">Tier 3</td>
+                    <td style="padding: 12px;">supported</td>
+                    <td style="padding: 12px;">mips<br>
+other x86_64 (f.e. dragonfly, haiku, openbsd)<br>
+...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 214px; left: 373px; top: 661px;" data-block-id="1cc5524b5d730b1d345bba50eee9314a">
+    <div class="sl-block-style" style="z-index: 13; opacity: 0.5;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; background-color: rgba(0, 0, 0, 0);">
+<p><a href="https://bit.ly/2xwLBoI" target="_blank">bit.ly/2xwLBoI</a></p>
+</div></div>
+</div></section><section data-background-color="#99c0ff" data-id="a3d99ca4377515e685e93724ca778ef8">
+
+
+<div class="sl-block" data-block-type="table" style="height: auto; width: 960px; left: 0px; top: 86px;" data-block-id="11e0d21354197f5b4a5a0f127020d541">
+    <div class="sl-block-content" style="z-index: 10; font-size: 81%;" data-table-rows="3" data-table-border-color="" data-table-has-header="false" data-table-padding="12px">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="padding: 12px;">Tier 1</td>
+                    <td style="padding: 12px;">
+<em>"guaranteed to work"</em><br>
+binary release<br>
+API documentation<br>
+CI pass</td>
+                    <td style="padding: 12px;">i686, x86_64</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;">Tier 2</td>
+                    <td style="padding: 12px;">like Tier 1, but:<br>
+not always binary release<br>
+not always CI</td>
+                    <td style="padding: 12px;">aarch64<br>
+armv7<br>
+wasm32<br>
+ppc, sparc, mips, ...<br>
+other x86_64 (f.e. netbsd, fuchsia, ios, android)<br>
+...</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;">Tier 3</td>
+                    <td style="padding: 12px;">supported</td>
+                    <td style="padding: 12px;">mips<br>
+other x86_64 (f.e. dragonfly, haiku, openbsd)<br>
+...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div class="sl-block" data-block-type="line" data-block-id="b3650d390987030eedcc042843b886dd" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 412px; top: 328px;"><div class="sl-block-content" data-line-x1="49" data-line-y1="83" data-line-x2="260" data-line-y2="83" data-line-color="#cc0000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 12;" data-line-width="21px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="211" height="1" viewbox="49 83 211 1"><line stroke="#cc0000" stroke-width="21" x1="49.5" y1="83.5" x2="229.5" y2="83.5"></line><polygon fill="#cc0000" transform="translate(229,83) rotate(90)" points="0,-31.5 31.5,31.5 -31.5,31.5"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="0d1e1483ab7514b875f01bf016c182b4" style="min-width: 4px; min-height: 4px; width: 118px; height: 33px; left: 640px; top: 311px;"><div class="sl-block-style" style="z-index: 13;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 13;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="5"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 118 33"><defs><clippath id="shape-mask-1-1524516559917"><rect width="118" height="33"></rect></clippath></defs><rect width="118" height="33" clip-path="url(#shape-mask-1-1524516559917)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="10"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 214px; left: 373px; top: 661px;" data-block-id="f482e6be3713edac68a68d7c36abedf8">
+    <div class="sl-block-style" style="z-index: 14; opacity: 0.5;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; background-color: rgba(0, 0, 0, 0);">
+<p><a href="https://bit.ly/2xwLBoI" target="_blank">bit.ly/2xwLBoI</a></p>
+</div></div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 91px; top: 0px;" data-block-id="4778cdb6eb2e4c9e486cf0d2a70c0609">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; border-width: 1px; text-align: center;">
+<h2><span style="font-size:1.0em">Platform "tiers"</span></h2>
+</div>
+</div></section><section data-background-color="#99c0ff" data-id="696e60bd381e78ab6c7b22744172bf83">
+
+<div class="sl-block" data-block-type="text" data-block-id="6f6694b3f02247257c827521a6d3c75a" style="height: auto; min-width: 30px; min-height: 30px; width: 214px; left: 373px; top: 661px;"><div class="sl-block-style" style="z-index: 11; opacity: 0.5;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; background-color: rgba(0, 0, 0, 0);">
+<p><a href="https://bit.ly/2hgzXFR" target="_blank">bit.ly/2hgzXFR</a></p>
+</div></div></div>
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 91px; top: 0px;" data-block-id="0ba510ce20241773271004d56a3268c9">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; text-align: center;">
+<h2><span style="font-size:1.0em">Executive summary</span></h2>
+</div>
+</div>
+<div class="sl-block" data-block-type="image" data-block-id="6e524000677d460184103fac943c190f" style="min-width: 30px; min-height: 30px; width: 767px; height: 541px; left: 97px; top: 89px;"><div class="sl-block-content" style="z-index: 13;"><img data-natural-width="600" data-natural-height="423" style="" data-lazy-loaded="" data-src="rust-intro/a08fe871cae16900ba364274c10d6b60.png"></div></div></section><section data-background-color="#99c0ff" data-id="7b00b2127cf412393a33cc9c125f3558">
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 91px; top: 0px;" data-block-id="fad1bdb17580b6b50b45b0a7df23e164">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;">
+<h2>Rust at a glance</h2>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="c4e9677e615e2e267266abd74f2d9411" style="height: auto; min-width: 30px; min-height: 30px; width: 589px; left: 187px; top: 210px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 2.08;" data-has-line-height="">
+<ul>
+	<li>
+	<p>Small standard library</p>
+	</li>
+	<li>
+	<p>No "batteries included" (random number generator? External package)</p>
+	</li>
+	<li>
+	<p><span style="text-align:left">Well documented standard library</span></p>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#99c0ff" data-id="91a0a5fde153026944c59fe199aa44a1">
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 91px; top: 0px;" data-block-id="55917d70549da104eb83f1b93e287954">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;">
+<h2>Rust at a glance</h2>
+</div>
+</div>
+<div class="sl-block" data-block-type="code" data-block-id="8aae1b41e3688bb457b1d2225dd279d5" style="min-width: 30px; min-height: 30px; width: 563px; height: 300px; left: 200px; top: 140px;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 12; font-size: 138%;"><pre class="bash"><code># install Rust compiler ...
+$ curl https://sh.rustup.rs -sSf | sh
+
+
+# ... and The whole Rust Bookshelf:
+# - language specs
+# - API documentation
+# - examples + tutorial books
+# ...
+$ rustup docs</code></pre></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="216778efe212b6b11437d0acf0d02f3a" style="height: auto; min-width: 30px; min-height: 30px; width: 657px; left: 158px; top: 472px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p>(basically you can learn Rust while offlined)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 181px; top: 530px;" data-block-id="76e5f05a10d55cbf5e5c0e0ab150cb50"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p>But also online!</p>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="44abbd02f477f662a4bb1c5d286ae95d" style="height: auto; min-width: 30px; min-height: 30px; width: 256px; left: 352px; top: 591px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; background-color: rgba(0, 0, 0, 0);">
+<p><a href="http://play.rust-lang.org" target="_blank">play.rust-lang.org</a></p>
+</div></div></section><section data-id="9d2ff5dc3ba994c5c3effa3d22b2efff" data-background-color="#99c0ff"><div class="sl-block" data-block-type="text" data-block-id="9944b30a8a430d75ed93349f1b5291b2" style="height: auto; min-width: 30px; min-height: 30px; width: 821px; left: 71px; top: 0px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; text-align: center;">
+<h2><span style="font-size:1.0em">Intended audience</span></h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 233px; left: 4px; top: 560px;" data-block-id="611643803218cd3aebabd324a516a98e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p>IoT / Embedded</p>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="min-width: 30px; min-height: 30px; width: 240px; height: 160px; left: 4px; top: 346px;" data-block-id="48d20506b7705c22a2f0495a75c1ec27"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="480" data-natural-height="320" data-lazy-loaded="" data-src="rust-intro/3371b81cfc112afd92fa89655380c26b.jpg"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 247px; left: 358px; top: 560px;" data-block-id="6502c1b32f7ee23783e86a9dcc888617"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<p>Web applications</p>
+</div></div>
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 222px; left: 729px; top: 537px;" data-block-id="40fd8993d6bac6c7de6384316ce937b4"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;">
+<p>System</p>
+
+<p>programming</p>
+</div></div>
+
+<div class="sl-block" data-block-type="image" data-block-id="7cb67a12ca3faf42ec66118aed0513c8" style="min-width: 30px; min-height: 30px; width: 320px; height: 234px; left: 320px; top: 233px;"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="744" data-natural-height="544" data-lazy-loaded="" data-src="rust-intro/3a6407be606f19ff09a931c1d3063f0c.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="761afcc63fc7ea92978b075ae5f8639f" style="min-width: 30px; min-height: 30px; width: 240px; height: 135px; left: 4px; top: 195px;"><div class="sl-block-content" style="z-index: 18;"><img style="" data-natural-width="256" data-natural-height="144" data-lazy-loaded="" data-src="rust-intro/0c0ef74baacd6e21eeb9b92e731915c4.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="58e9b7412a25b55cf680c8107ad21a6d" style="min-width: 30px; min-height: 30px; width: 240px; height: 164px; left: 720px; top: 264px;"><div class="sl-block-content" style="z-index: 19;"><img style="" data-natural-width="256" data-natural-height="175" data-lazy-loaded="" data-src="rust-intro/22ae42e272b158c2969a4d6c7e43d2de.png"></div></div></section><section data-background-color="#99c0ff" data-id="dd0f077c4d282d66a40edf9b772491a7">
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 90px; height: auto;" data-block-id="4e962bd72597e7f3660e4be301921832"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 10;">
+<h3>type inference</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="7c8d7aef5809bcdae937250cdba33a01"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 640px; height: 431px; left: 160px; top: 210px;" data-block-id="d2f5f72637c964371cd9e2212fc6aa98"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 12; font-size: 140%;"><pre class="rust"><code>fn main() {
+    // these
+    let a = "hello";
+    let b = String::from("world");
+    let c = 123;
+
+    // equals these
+    let a: &amp;str = "hello";
+    let b: String = String::from("world");
+    let c: i32 = 123;
+
+    println!("{} {} {}", a, b, c);
+    // prints: "hello world 123"
+}</code></pre></div></div></section><section data-background-color="#99c0ff" data-id="daa99db3af2880a9adadfbe185f31429">
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 90px; height: auto;" data-block-id="47e6ab998813a70ee02d5452edc03a16"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 10;">
+<h3>default immutable variables</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="edad68c1992fcf9d2747355061946f45"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11;">
+<h2>Language features</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" data-block-id="486e467a4f3654659edbc45baa0e33d0" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 181px; top: 436px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p>Returns a <strong>compile</strong> - not a runtime - error!</p>
+</div></div>
+<div class="sl-block" data-block-type="code" data-block-id="a775776b22162e50d26a79824c0b71ed" style="min-width: 30px; min-height: 30px; width: 896px; height: 200px; left: 33px; top: 500px;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 14; font-size: 115%;"><pre class="none"><code>error[E0596]: cannot borrow immutable local variable `s` as mutable
+ --&gt; src/main.rs:4:5
+  |
+2 |     let s = String::from("hello, ");
+  |         - consider changing this to `mut s`
+3 | 
+4 |     s.push_str(" world!");
+  |     ^ cannot borrow mutably</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 640px; height: 212px; left: 160px; top: 196px;" data-block-id="56d978e02df6aa9bff73f92b1e9f99df"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 15; font-size: 140%;"><pre class="none"><code>fn main() {
+    let s = String::from("hello, ");
+
+    s.push_str(" world!");
+
+    println!("{}", s);
+}</code></pre></div></div></section><section data-background-color="#99c0ff" data-id="f9226ef6c4c07648d1184d48e827b872">
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 90px; height: auto;" data-block-id="934d702ff7df67faf60423b696aa8be5"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;">
+<h3>default immutable variables</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="895bed79386efcfb60f9d1f420036470"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 12;">
+<h2>Language features</h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="code" style="width: 640px; height: 209px; left: 160px; top: 196px;" data-block-id="e92e02e2c247a564a6a2749497a709e3"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 13; font-size: 140%;"><pre class="none"><code>fn main() {
+    let mut s = String::from("hello, ");
+
+    s.push_str(" world!");
+
+    println!("{}", s); // "hello, world!"
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="3db326e338be666e662c9a03871482e1" style="min-width: 4px; min-height: 4px; width: 54px; height: 36px; left: 268px; top: 225px;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 14;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 54 36"><defs><clippath id="shape-mask-2-1524516564225"><rect width="54" height="36"></rect></clippath></defs><rect width="54" height="36" clip-path="url(#shape-mask-2-1524516564225)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="6"></rect></svg></div></div></section><section data-background-color="#99c0ff" data-id="3c66a0f29fdbc233567bac52f04c315a">
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="53eee5a58684eee70ac2461e95f5553e"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;">
+<h3>memory unsafe: double free</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="407f92a6f00c8a1d779d5ef24e88790e"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 12;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 712px; height: 402px; left: 125px; top: 173px;" data-block-id="b1dc2f38a6501e358245f53332531963"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 13; font-size: 140%;"><pre class="none"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    char *p = malloc(100); // allocate 100 bytes
+
+    free(p); // pointer is freed but not NULL'ed!
+    printf("[1] p = '%s' at %p\n", p, p);
+
+    free(p); // double free, undefined behaviour
+    printf("[2] p = '%s' at %p\n", p, p);
+
+    return 0;
+}</code></pre></div></div></section><section data-background-color="#99c0ff" data-id="70b9768a5e2be37324b0eb6db7957e39">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 804px; height: 525px; left: 80px; top: 161px;" data-block-id="dc90c27e2d7f6d6d3cece457680c593a"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 11; font-size: 130%;"><pre class="cpp"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    char *p = malloc(100); // allocate 100 bytes
+
+    free(p); // pointer is freed but not NULL'ed!
+    printf("[1] p = '%s' at %p\n", p, p);
+
+    free(p); // double free, undefined behaviour
+    printf("[2] p = '%s' at %p\n", p, p);
+
+    return 0;
+}
+
+$ gcc -Wall -Wextra -g double_free.c
+
+[1] p = '' at 0x55e775f16260
+
+[2] p = '`b�u�U' at 0x55e775f16260</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 356px; height: 62px; left: 192px; top: 619px;" data-block-id="7a934d5e10bfa9295d5deec645d5b32b"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 356 62"><defs><clippath id="shape-mask-166-1524517240779"><rect width="356" height="62"></rect></clippath></defs><rect width="356" height="62" clip-path="url(#shape-mask-166-1524517240779)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="6"></rect></svg></div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="0c47f6213246c4818a13ff26fec34539"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;">
+<h3>memory unsafe: double free</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="821fabe2d9ce9cae5f709b03c1ca5713"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 15;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" data-block-id="83a10baf4f2f12d24bf79983a45866c0" style="min-width: 30px; min-height: 30px; width: 121px; height: 117px; left: 763px; top: 569px;"><div class="sl-block-content" style="z-index: 16;"><img data-natural-width="150" data-natural-height="145" style="" data-lazy-loaded="" data-src="rust-intro/3d77ac539f85b2b1d93bf9548937459f.png"></div></div></section><section data-background-color="#99c0ff" data-id="bde3c277e762191d5b8aaa4efceb2051">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 720px; height: 541px; left: 80px; top: 159px;" data-block-id="769091d912574a7625025743e74d727f"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 140%;"><pre class="none"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char *pass = malloc(10);
+    strcpy(pass, "a1b2c3d4");
+
+    printf("'%s' (%p)\n", pass, pass);
+    free(pass);
+
+    strcpy("uh-oh...", pass);
+
+    return 0;
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="391e1d630398edbbc70f0adef6f66769"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;">
+<h3>memory unsafe: use after free</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="ceeb0815b17beefb730c3f33668a6b5b"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 13;">
+<h2>Language features</h2>
+</div></div></section><section data-background-color="#99c0ff" data-id="caa4c4e527967be45a3c83bada37727a">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 814px; height: 541px; left: 80px; top: 159px;" data-block-id="1c0f56333edd9e63d6f54d4489997cf2"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 140%;"><pre class="cpp"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char *pass = malloc(10);
+    strcpy(pass, "a1b2c3d4");
+
+    printf("'%s' (%p)\n", pass, pass);
+    free(pass);
+
+    strcpy("uh-oh...", pass);
+
+    return 0;
+}
+
+$ gcc -Wall -Wextra -g use_after_free.c
+'a1b2c3d4' (0x558f70dac260)
+Segmentation fault (core dumped)</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 458px; height: 36px; left: 80px; top: 651px;" data-block-id="1439c5fd420713905c736c00292f9879"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 11;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="5"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 458 36"><defs><clippath id="shape-mask-4-1524516722880"><rect width="458" height="36"></rect></clippath></defs><rect width="458" height="36" clip-path="url(#shape-mask-4-1524516722880)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="10"></rect></svg></div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="5a915d4e7f48c7360aae95aaf47ea4a2"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 12;">
+<h3>memory unsafe: use after free</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="4b3cddb698c1b9905af85d32acebe3e6"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 13;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 30px; min-height: 30px; width: 121px; height: 117px; left: 773px; top: 583px;" data-block-id="8c289fd18148e2a1e5384c1755dd521a"><div class="sl-block-content" style="z-index: 15;"><img data-natural-width="150" data-natural-height="145" style="" data-lazy-loaded="" data-src="rust-intro/3d77ac539f85b2b1d93bf9548937459f.png"></div></div></section><section data-background-color="#99c0ff" data-id="75b9e14736b2647607ebae3a51280138">
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="d24e212b9519fee5cb841740fe0fd732"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="360e24e95f3e594bbe3677840817359f" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 211px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 1.82;" data-has-line-height="">
+<h3>Rust compiler to the rescue!</h3>
+
+<ul>
+	<li>Ownership</li>
+	<li>Borrowing</li>
+	<li>Lifetimes</li>
+</ul>
+</div></div></section><section data-background-color="#99c0ff" data-id="b77fc2b6aaf44fe650c1df2baf080ecf">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 628px; height: 481px; left: 0px; top: 210px;" data-block-id="ef2f2da8d9b47ce69d3ed4a2c36fd06d"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 140%;"><pre class="none"><code style="padding: 5px;">#[allow(unused_variables)]
+
+fn main() {
+
+    // allocate a constant on the heap
+    let s1 = String::from("hello");
+
+    // clone it into another constant
+    let s1_cloned = s1.clone();
+
+    println!("s1 {:p}", &amp;s1);
+    println!("s1_cloned {:p}", &amp;s1_cloned);
+
+    // s1	 0x7ffd2bd30430
+    // s1_cloned 0x7ffd2bd30448
+
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="image" style="width: 320px; height: 407px; left: 640px; top: 217px;" data-block-id="885ab90a3c1a4ba9718a6bd238ed7179"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="300" data-natural-height="382" data-lazy-loaded="" data-src="rust-intro/4dc892f146869d4a53d0e1e386e4dffb.png"></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="73ca566f85fa0bebaab5a2a540cafdd1"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 12;">
+<h3>ownership</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="45b957a86fcc6a696496b01e8a4e759c"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 13;">
+<h2>Language features</h2>
+</div></div></section><section data-background-color="#99c0ff" data-id="c14e3cda8bc83598e87cc224b71ff7d9">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 640px; height: 295px; left: 0px; top: 171px;" data-block-id="077224af9b7bbfadefabe2dbd84c43da"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 11; font-size: 120%;"><pre class="none"><code>fn main() {
+    // char *p = malloc(5+1);
+    // strcpy(p, "hello");
+    let s1 = String::from("hello");
+
+    // create a new pointer to that memory location
+    let s2 = s1;
+    println!("s2 {:p}", &amp;s2);
+    
+    // error: "s1" ownership moved to "s2"
+    println!("{:p}", &amp;s1);
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="0955f75460b7f4c466e3a0b3dd9a8d31" style="min-width: 30px; min-height: 30px; width: 289px; height: 295px; left: 671px; top: 171px;"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="300" data-natural-height="306" data-lazy-loaded="" data-src="rust-intro/c5bc82daf2f2dc42daea29f9c3aa8472.png"></div></div>
+<div class="sl-block" data-block-type="code" data-block-id="6f3b65d6356ecc2bd290811608948811" style="min-width: 30px; min-height: 30px; width: 897px; height: 227px; left: 0px; top: 473px;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10;"><pre class="none"><code>error[E0382]: use of moved value: `s1`
+  --&gt; src/main.rs:16:20
+   |
+9  |     let s2 = s1;
+   |         -- value moved here
+...
+16 |     println!("{:p}", &amp;s1);
+   |                      ^^ value used here after move
+   |
+   = note: move occurs because `s1` has type `std::string::String`, \
+        which does not implement the `Copy` trait</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="642e2542d228a55e501fb9bb56f343b3"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 14;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="0c13467fcd450f16e085800ea9339ada"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 15;">
+<h3>ownership</h3>
+</div></div></section><section data-background-color="#99c0ff" data-id="8c882ea93f6e1034e71beba31ee5c746">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 618px; height: 346px; left: 160px; top: 156px;" data-block-id="1d678712df9edec5795bd10698fa9b79"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 11; font-size: 120%;"><pre class="none"><code>fn amend_string(mut my_param: String) {
+    my_param.push_str(" world!");
+}
+
+
+fn main() {
+    let mut s = String::from("hello");
+
+    // passing by value: ownership is lost forever
+    amend_string(s);
+
+    // error!
+    println!("{}", s);
+}</code></pre></div></div>
+
+<div class="sl-block" data-block-type="code" style="width: 618px; height: 185px; left: 160px; top: 515px;" data-block-id="8d7214f8f736dcaaf5fd395c792e8f1d"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 110%;"><pre class="none"><code>error[E0382]: use of moved value: `s`
+  --&gt; src/main.rs:13:20
+   |
+10 |     amend_string(s);
+   |                  - value moved here
+...
+13 |     println!("{}", s);
+   |                    ^ value used here after move</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="22765bbbe232661b23702c3cff15a62f"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 13;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="cd68731fdc3326923743a1352893e64f"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;">
+<h3>ownership</h3>
+</div></div></section><section data-background-color="#99c0ff" data-id="42b52932aa397c85d0a17f4a321f25ae">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 732px; height: 516px; left: 80px; top: 168px;" data-block-id="db3fa646bc8717d224cc3b91d33f4c35"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 11; font-size: 140%;"><pre class="none"><code>fn amend_string(mut my_param: String) -&gt; String {
+    my_param.push_str(" world!");
+    my_param
+}
+
+
+fn main() {
+    let mut s = String::from("hello");
+    println!("before: {:p} ({})", &amp;s, s);
+
+    // ownership is kindly returned
+    s = amend_string(s);
+
+    println!("after: {:p} ({})", &amp;s, s);
+}
+
+// before: 0x7ffca444b750 (hello)
+// after: 0x7ffca444b750 (hello world!)</code></pre></div></div>
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="a6b6ee1be33323196a225ec0a27c69a5"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 12;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="7a55ad32aa8e551aee65ae5a776c022f"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 13;">
+<h3>ownership</h3>
+</div></div></section><section data-background-color="#99c0ff" data-id="9682255d73648f8f82bd570cc5fcdad7">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 618px; height: 333px; left: 172px; top: 179px;" data-block-id="5db4b62dc2fdc1264fcf83a0f1075158"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 140%;"><pre class="none"><code>fn amend_string(my_param: &amp;String) {
+    my_param.push_str(" world!");
+}
+
+fn main() {
+    let s = String::from("hello");
+
+    // trick: passing "s" by reference
+    amend_string(&amp;s);
+}</code></pre></div></div>
+
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 271px; height: 36px; left: 386px; top: 179px;" data-block-id="bbe62da0c0a512b7ad4da8f48e3e5aee"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 271 36"><defs><clippath id="shape-mask-5-1524516795889"><rect width="271" height="36"></rect></clippath></defs><rect width="271" height="36" clip-path="url(#shape-mask-5-1524516795889)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="6"></rect></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 70px; height: 33px; left: 393px; top: 397px;" data-block-id="76ba046366a48f622fe681d2c690705b"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 13;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 70 33"><defs><clippath id="shape-mask-6-1524516795891"><rect width="70" height="33"></rect></clippath></defs><rect width="70" height="33" clip-path="url(#shape-mask-6-1524516795891)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="6"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="d2b122f9106eaca53fd96686b33d9a51"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 14;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 90px; height: auto;" data-block-id="f3b5a5d4fd1d6743dff74817a018a5cf"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 15;">
+<h3>passing by reference</h3>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 736px; height: 148px; left: 113px; top: 552px;" data-block-id="3b60f2c37d361a1bc4a6b19c1f40fe2e"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 16; font-size: 120%;"><pre class="none"><code>1 | fn amend_string(my_param: &amp;String) {
+  |                           ------- use `&amp;mut String` 
+                                      here to make mutable
+2 |     my_param.push_str(" world!");
+  |     ^^^^^^^^ cannot borrow as mutable</code></pre></div></div></section><section data-background-color="#99c0ff" data-id="6794c7d8f7aa49a6bcbe87726716494f">
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="width: 687px; height: 416px; left: 160px; top: 179px;" data-block-id="2c0183a4cdfdaadca9d49f6b279f5b91"><div class="sl-block-style" style="z-index: 10; transform: rotate(360deg);"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 140%;"><pre class="none"><code>fn amend_string(my_param: &amp;mut String) {
+    my_param.push_str(" world!");
+}
+
+fn main() {
+    let mut s = String::from("hello");
+
+    // fix: passing "s" by MUTABLE reference
+    amend_string(&amp;mut s);
+}</code></pre></div></div></div>
+
+<div class="sl-block" data-block-type="shape" style="width: 328px; height: 36px; left: 373px; top: 179px;" data-block-id="9e103a90d1670ef7b5a83781aec8e84e"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 11;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 328 36"><defs><clippath id="shape-mask-7-1524516796057"><rect width="328" height="36"></rect></clippath></defs><rect width="328" height="36" clip-path="url(#shape-mask-7-1524516796057)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="6"></rect></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 117px; height: 28px; left: 387px; top: 399px;" data-block-id="813ee99ccf763770cf66bf8df8853cf4"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 117 28"><defs><clippath id="shape-mask-8-1524516796058"><rect width="117" height="28"></rect></clippath></defs><rect width="117" height="28" clip-path="url(#shape-mask-8-1524516796058)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="6"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="95063ae4f4e82426b6be8377beabf35c"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 13;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 90px; height: auto;" data-block-id="3dad0bc29aad68292ca908b554cd7db7"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;">
+<h3>passing by reference</h3>
+</div></div></section><section data-background-color="#99c0ff" data-id="e8ec246cc71cef689769465d447f75f8">
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="35a4c8a026cfeb1ac2291ee129f939f1"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="7ddd967b77c773edcebe283ec6d83876"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;">
+<h3>under the hood: lifetimes</h3>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 803px; height: 210px; left: 57px; top: 490px;" data-block-id="dc355928fa61f6a6829387d56dadfeb8"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 13; font-size: 110%;"><pre class="none"><code>error[E0106]: missing lifetime specifier
+ --&gt; src/main.rs:1:39
+  |
+1 | fn check(s1: &amp;String, s2: &amp;String) -&gt; &amp;String{
+  |                                       ^ expected lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value,
+          but the signature does not say whether it is borrowed
+          from `s1` or `s2`</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 760px; height: 315px; left: 79px; top: 165px;" data-block-id="974ebc2f55850b642da4ab367b1c5ee6"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 14; font-size: 120%;"><pre class="none"><code>fn longest(s1: &amp;String, s2: &amp;String) -&gt; &amp;String {
+   if s1.len() &gt; s2.len() {
+        s1
+    } else {
+        s2
+    }
+}
+
+fn main() {
+    let a = String::from("abc");
+    let b = String::from("defgh");
+    println!("longest: {}", longest(&amp;a, &amp;b));
+}</code></pre></div></div></section><section data-background-color="#99c0ff" data-id="e0e2c45423b9ef548fe1d05fb934fdeb">
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="5b3f6d5a6a86b3fb48e61aa3635cf309"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="d7c63314fd046a92e5f8e4d6fd5c28b2"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 12;">
+<h3>under the hood: lifetimes</h3>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 760px; height: 323px; left: 101px; top: 179px;" data-block-id="0dbb492f745cad4412294c92f6d165b0"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 13; font-size: 120%;"><pre class="none"><code>fn longest&lt;'a&gt;(s1: &amp;'a String, s2: &amp;'a String) -&gt; &amp;'a String {
+   if s1.len() &gt; s2.len() {
+        s1
+    } else {
+        s2
+    }
+}
+
+fn main() {
+    let a = String::from("abc");
+    let b = String::from("defgh");
+    println!("longest: {}", longest(&amp;a, &amp;b));
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 760px; height: 31px; left: 101px; top: 179px;" data-block-id="c2e96fe384007278a84c9c59f38327f7"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 14;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 760 31"><defs><clippath id="shape-mask-9-1524516796688"><rect width="760" height="31"></rect></clippath></defs><rect width="760" height="31" clip-path="url(#shape-mask-9-1524516796688)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="6"></rect></svg></div></div></section><section data-background-color="#99c0ff" data-id="5df45d1704ca3cbf6fcf82a0af7d2734">
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 647px; left: 158px; top: 210px;" data-block-id="fdb65092094535bcae2eba1128862600"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 125%;">
+<ul>
+	<li style="text-align:left"><span style="font-size:0.7em">Rust compile-time checks are not "best-effort", it's a <u>guarantee</u> that your code is free from an entire class of bugs and vulnerabilities</span></li>
+</ul>
+
+<ul>
+	<li style="text-align:left"><span style="font-size:0.7em">If the compiler doesn't let you do something, it has its own <u>very good reasons</u>.</span></li>
+	<li style="text-align:left"><span style="font-size:0.7em">​​if it compiles, there's a good chance that your code is not buggy</span></li>
+</ul>
+
+<ul>
+	<li style="text-align:left"><span style="font-size:0.7em">"<em>... but in C/C++ I could do X and Y</em>", that's not necessarily an advantage.</span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 140px; height: auto;" data-block-id="c39d9b61edd8423c797091c7a6b42cee"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;">
+<pre style="text-align: center;">(last one, promised)</pre>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="2b2b88b6b8f25a66117c2926b75ef0e9"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 12;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="e0195377c39f9a3c4686c3da0897d5db"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;">
+<h3>memory safety</h3>
+</div></div></section><section data-background-color="#99c0ff" data-id="ff8bdbf359093ffa2fe86855d413592c">
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" data-block-id="516e295f684f56e1face7fc3e75408ac" style="min-width: 30px; min-height: 30px; width: 624px; height: 382px; left: 168px; top: 178px;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 142%;"><pre class="rust"><code>fn something_safe(...) {
+
+    // do a lot of checks safely
+
+    unsafe {
+
+        // &lt; your flux capacitor code here&gt;
+
+    }
+    
+    // back to safety
+
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="165e22e62c29adce6ebfd5882e2120ca" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 572px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<ul>
+	<li>
+	<p><span style="font-size:1.0em">special cases of mutable borrowing</span></p>
+	</li>
+	<li>
+	<p><span style="font-size:1.0em">integration with C libs</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 78px; top: 0px; height: auto;" data-block-id="bb068e2cfd44aab669db788950977d7d"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 13;">
+<h2>Language features</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 140px; height: auto;" data-block-id="90514e4f89e80d32565a595251f837d6"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;">
+<pre style="text-align:center">(ok, I lied)</pre>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="ebad23219d0ba62e1c96025b8de516c8"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 15;">
+<h3>memory safety</h3>
+</div></div></section><section data-background-color="#99c0ff" data-id="9ee11eb4f0d6f7b0bdd2e5b21051ab04">
+<div class="sl-block" data-block-type="text" data-block-id="ba1dc5d4bf63cc9803c0eaed0ac78a8d" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 396px;"><div class="sl-block-style" style="z-index: 13;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; line-height: 2.6;" dir="ui" data-has-line-height="">
+<ul>
+	<li>race conditions</li>
+	<li>deadlocks</li>
+	<li>bugs disappearing with a <em>printf()</em>
+</li>
+</ul>
+</div></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="055d070f97bc7860e74016f8fbdce2b3" style="min-width: 30px; min-height: 30px; width: 250px; height: 250px; left: 355px; top: 100px;"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="357" data-natural-height="357" data-lazy-loaded="" data-src="rust-intro/b82bdee585d5ee8a068ac93765cd2d5c.jpg"></div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="29d3a4127c2b6792127f5d9e2aa4c4a9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div></section><section data-background-color="#99c0ff" data-id="ed3ece1c9e8bbd44b4998f5ea119952e">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="6f4a56fba0225d6f5c0027dd1177c958"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="width: 646px; height: 141px; left: 192px; top: 553px;" data-block-id="9fdd7f5fd64c41fbaedaccbf86eb77fe"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="6"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 646 141"><defs><clippath id="shape-mask-10-1524516861737"><rect width="646" height="141"></rect></clippath></defs><rect width="646" height="141" clip-path="url(#shape-mask-10-1524516861737)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="12"></rect></svg></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="8ed2e9aaa7829b708e9963bb23d4dd1c" style="min-width: 30px; min-height: 30px; width: 712px; height: 616px; left: 125px; top: 83px;"><div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="898" data-natural-height="777" data-lazy-loaded="" data-src="rust-intro/eed9c59bd0aef2006a29b517daa883cd.png"></div></div></section><section data-background-color="#99c0ff" data-id="1f859a1c7b4241b69ae16e0bdc7a3014"><div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="2932c30c97dd64531e6d2b429f1f6aa7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="image" style="width: 106px; height: 129px; left: 107px; top: 345px;" data-block-id="c9137e80c064569440dd355b22bec1ba"><div class="sl-block-style" style="z-index: 12;"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="83" data-natural-height="101" data-lazy-loaded="" data-src="rust-intro/9ed7999c8efd249ec3589ca4668bb14f.svg"></div></div></div>
+
+
+
+<div class="sl-block" data-block-type="image" style="width: 150px; height: 150px; left: 85px; top: 125px;" data-block-id="e2b00f39a6fa5572ab5e64b3585ee306"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="256" data-natural-height="256" data-lazy-loaded="" data-src="rust-intro/725d573d9071ce2a20ef0f9466d3037d.png"></div></div>
+<div class="sl-block" data-block-type="image" style="width: 205px; height: 79px; left: 58px; top: 544px;" data-block-id="0bbd3627c4d7861e932c50976ded3476"><div class="sl-block-content" style="z-index: 14;"><img data-natural-width="158" data-natural-height="61" style="" data-lazy-loaded="" data-src="rust-intro/4b434ae23073a13a5d7a7e92960c008f.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 596px; left: 284px; top: 134px;" data-block-id="0c3f9431590851b5077ce629f02a1116"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; color: rgb(0, 0, 0); line-height: 1.56; font-size: 110%;" data-has-line-height="">
+<ul>
+	<li><span style="font-size:0.9em">green threads: user-space threads mapping M:N to OS threads</span></li>
+	<li><span style="font-size:0.9em"><span style="text-align:left">event loop that routinely checking all the coroutines</span></span></li>
+	<li><span style="font-size:0.9em"><span style="text-align:left"> non blocked coroutines moved to a different, runnable thread</span></span></li>
+	<li><span style="font-size:0.9em">thread communication via channels: <span style="text-align:start">no shared memory access</span></span></li>
+	<li><span style="font-size:0.9em"><span style="text-align:start">Futures/task (generators)</span></span></li>
+	<li><span style="font-size:0.9em"><span style="text-align:start">async/await</span></span></li>
+</ul>
+</div></div></section><section data-background-color="#99c0ff" data-id="5fdec28906b2e11f10bf8470ec858b3f">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 654px; left: 240px; top: 130px;" data-block-id="591a40e248349842df00e9e65231aa4b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; color: rgb(0, 0, 0); line-height: 1.69; font-size: 110%;" data-has-line-height="">
+<ul>
+	<li>
+	<p><span style="font-size:0.9em">stdlib provides 1:1 threading (<span style="text-align:left">smaller runtime</span>)</span></p>
+	</li>
+	<li>
+	<p><span style="font-size:0.9em">M:N threading provided by <span style="text-align:left">external crate (mioco)</span></span></p>
+	</li>
+	<li>
+	<p><span style="font-size:0.9em">message passing through channels</span></p>
+	</li>
+	<li>
+	<p><span style="font-size:0.9em">safe mutexing to access shared resources</span></p>
+	</li>
+	<li>
+	<p><span style="font-size:0.9em">event loop, coroutines/generators (nightly), tasks, futures (in heavy flux)</span></p>
+	</li>
+	<li>
+	<p><span style="font-size:0.9em">async/await syntax (nightly)</span></p>
+	</li>
+</ul>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="6db7002617e2fad1fc10d6b15e9dffbe"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+<div class="sl-block" data-block-type="image" data-block-id="d6d7b1d738ddd2bf283b27b78297ab76" style="min-width: 30px; min-height: 30px; width: 179px; height: 179px; left: 43px; top: 239px;"><div class="sl-block-content" style="z-index: 12;"><img data-natural-width="256" data-natural-height="256" style="" data-lazy-loaded="" data-src="rust-intro/61e6381c3b9bfafd67d4021a59cdc9e5.png"></div></div></section><section data-background-color="#99c0ff" data-id="7afd3754601ba73da6e9db1cfadd3a48">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="5c8a10e7ba0cb1f6510700674f551177"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" data-block-id="264a7383aa1c08c97b2883fd27783268" style="height: auto; min-width: 30px; min-height: 30px; width: 725px; left: 118px; top: 420px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="font-size:1.2em">The Rust multithreading stack</span></p>
+
+<p><span style="font-size:36px">(all external crates!)</span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 628px; height: 280px; left: 166px; top: 90px;" data-block-id="fb3c51ed36f0896ab175551e12838174"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="361" data-natural-height="161" data-lazy-loaded="" data-src="rust-intro/eb3eed87a5a3ae9c31afb4b1860840fe.svg"></div></div></section><section data-background-color="#99c0ff" data-id="030661053c1a60016b41464b24790819">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="229f8d7474e2ff07eee4703cfb559b50"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 725px; left: 118px; top: 420px;" data-block-id="11f3366ff624b335e9bcc11a99b14d39"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<ul>
+	<li>
+	<p><span style="font-size:1.2em">low-level (Metal I/O) API for OS interfacing</span></p>
+	</li>
+	<li>
+	<p><span style="font-size:1.2em">signalling (readyness/notreadyness)</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 350px; height: 140px; left: 166px; top: 230px;" data-block-id="ff7372ba64297a1a931ac4d4b293601e"><div class="sl-block-style" style="z-index: 13; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(204, 0, 0)" data-shape-stretch="true" style="z-index: 13;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 350 140"><rect width="350" height="140" class="shape-element" fill="rgb(204, 0, 0)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="image" style="width: 628px; height: 280px; left: 166px; top: 90px;" data-block-id="7d38a113ac8b4bee152521bc08a354b3"><div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="361" data-natural-height="161" data-lazy-loaded="" data-src="rust-intro/eb3eed87a5a3ae9c31afb4b1860840fe.svg"></div></div></section><section data-background-color="#99c0ff" data-id="8c2f18e375fa4256952f3bfcfecbcc75">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="79fb37025b42a0fec01d9a48e345b047"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 725px; left: 118px; top: 420px;" data-block-id="480a75e38c0e8d790d9348dee48e7c7a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<ul>
+	<li>
+	<p><span style="font-size:1.2em">zero-cost (basically translates to a state-machine)</span></p>
+	</li>
+	<li>
+	<p><span style="font-size:1.2em">async/await support</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="705f780339132b8b23df98914e28ed75" style="min-width: 4px; min-height: 4px; width: 281px; height: 70px; left: 513px; top: 231px;"><div class="sl-block-style" style="z-index: 15; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(204, 0, 0)" data-shape-stretch="true" style="z-index: 15;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 281 70"><rect width="281" height="70" class="shape-element" fill="rgb(204, 0, 0)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 141px; height: 71px; left: 654px; top: 160px;" data-block-id="c2b8e02830de097a80813c237bdd587e"><div class="sl-block-style" style="z-index: 16; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(204, 0, 0)" data-shape-stretch="true" style="z-index: 16;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 141 71"><rect width="141" height="71" class="shape-element" fill="rgb(204, 0, 0)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="image" style="width: 628px; height: 280px; left: 166px; top: 90px;" data-block-id="34f8dd6f55b46da6d4c148bb9f980515"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="361" data-natural-height="161" data-lazy-loaded="" data-src="rust-intro/eb3eed87a5a3ae9c31afb4b1860840fe.svg"></div></div></section><section data-background-color="#99c0ff" data-id="a582822f4a5dd333ea54ca6fdc3e76aa">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="bd1ce3fb1bb538cad5e75066f5e774fd"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 725px; left: 118px; top: 420px;" data-block-id="b2274a10d644c2433f4306412265e692"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<ul>
+	<li>
+	<p style="text-align: left;"><span style="font-size:1.2em">event loop ("reactor")</span></p>
+	</li>
+	<li>
+	<p style="text-align: left;"><span style="font-size:1.2em">timers, tasks</span></p>
+	</li>
+	<li>
+	<p style="text-align: left;"><span style="font-size:1.2em">combinators (and, and_then, join, select etc.)</span></p>
+	</li>
+	<li>
+	<p style="text-align: left;"><span style="font-size:1.2em">io (read, write, etc.), tcp/udp streams</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="width: 487px; height: 70px; left: 167px; top: 160px;" data-block-id="6118d95d1af70e1c0fa29745a91e5428"><div class="sl-block-style" style="z-index: 13; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(204, 0, 0)" data-shape-stretch="true" style="z-index: 13;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 487 70"><rect width="487" height="70" class="shape-element" fill="rgb(204, 0, 0)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="image" style="width: 628px; height: 280px; left: 166px; top: 90px;" data-block-id="1a27f371f304a31f3d08304397728421"><div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="361" data-natural-height="161" data-lazy-loaded="" data-src="rust-intro/eb3eed87a5a3ae9c31afb4b1860840fe.svg"></div></div></section><section data-background-color="#99c0ff" data-id="088a974a52c086363bc55c7b6400356e">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="f9fe85e07aa520df478744034fd334e5"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="width: 628px; height: 280px; left: 166px; top: 90px;" data-block-id="8f8358b34f25c0c8a05f48c408d01ed0"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="361" data-natural-height="161" data-lazy-loaded="" data-src="rust-intro/eb3eed87a5a3ae9c31afb4b1860840fe.svg"></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 628px; height: 70px; left: 166px; top: 90px;" data-block-id="0f277f348ef62aeae0854c934c7e967f"><div class="sl-block-style" style="z-index: 12; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(204, 0, 0)" data-shape-stretch="true" style="z-index: 12;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 628 70"><rect width="628" height="70" class="shape-element" fill="rgb(204, 0, 0)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="64fd39f29e0cdab48a8a24364ab59b8d" style="min-width: 30px; min-height: 30px; width: 351px; height: 263px; left: 305px; top: 420px;"><div class="sl-block-content" style="z-index: 14;"><img data-natural-width="800" data-natural-height="600" style="" data-lazy-loaded="" data-src="rust-intro/ed37498933d491ea309d4903823dd8eb.jpg"></div></div></section><section data-background-color="#99c0ff" data-id="459a81fc00e2fb24268a8ce5f10737e0">
+
+<div class="sl-block" data-block-type="text" data-block-id="762c62494ef9ab646191eeb49ee2391d" style="height: auto; min-width: 30px; min-height: 30px; width: 640px; left: 160px; top: 190px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.82;" data-has-line-height="">
+<ul>
+	<li>I/O intensive application! Disk access, DB queries, network traffic, ...</li>
+</ul>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="cb99466d522f6eecb579f416e3376a22"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Concurrency</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="d52ea7b4b497c5cf0ff59c1d0a612772"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 15;">
+<h3><span>Ok, enough blabber: why do I care?</span></h3>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="a14ebe46bd3aba59d4a00051bbb3c969" style="height: auto; min-width: 30px; min-height: 30px; width: 640px; left: 160px; top: 330px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; line-height: 1.82;" data-has-line-height="">
+<h3>Pain Points</h3>
+
+<ul>
+	<li>hard to learn (many components to understand)</li>
+	<li>still weak mentoring (tutorials, examples, etc.) for newbies</li>
+	<li>effort not justified by all use-cases</li>
+</ul>
+</div></div></section><section data-background-color="#99c0ff" data-id="4422c8dc9320740943f6183518e0bcbb">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="b77dd78f906a6d17563884514ae13a0e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Traits</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="code" data-block-id="1d931b30c0869f6eba4325130bfbc875" style="min-width: 30px; min-height: 30px; width: 960px; height: 602px; left: 0px; top: 98px;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 12; font-size: 120%;"><pre class="bash"><code>pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String;
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&amp;self) -&gt; String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+fn main() {
+    let tweet = Tweet {
+       username: String::from("apiraino"),
+       content: String::from("people wear sadness and smiles at the same time"),
+    };
+
+    println!("{}", tweet.summary());
+    // apiraino: people wear sadness and smiles at the same time
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="9ff6ff790fc9a0601131c98a8437eb00" style="min-width: 4px; min-height: 4px; width: 960px; height: 510px; left: 0px; top: 190px;"><div class="sl-block-style" style="z-index: 13; opacity: 0.8;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(65, 65, 65)" data-shape-stretch="true" style="z-index: 13;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 960 510"><rect width="960" height="510" class="shape-element" fill="rgb(65, 65, 65)"></rect></svg></div></div></div></section><section data-background-color="#99c0ff" data-id="95fc7d6673330c744f69233c5c7dbeb4">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="dae30f3aad05339ea0a4c41ee36a8726"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Traits</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="code" style="width: 960px; height: 602px; left: 0px; top: 98px;" data-block-id="ee032e5d3341ddc2c3908e53a4b61fdc"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 11; font-size: 120%;"><pre class="bash"><code>pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String;
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&amp;self) -&gt; String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+fn main() {
+    let tweet = Tweet {
+       username: String::from("apiraino"),
+       content: String::from("people wear sadness and smiles at the same time"),
+    };
+
+    println!("{}", tweet.summary());
+    // apiraino: people wear sadness and smiles at the same time
+}
+</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 960px; height: 403px; left: 0px; top: 297px;" data-block-id="ec8d416330983267d7df6902a623b98d"><div class="sl-block-style" style="z-index: 12; opacity: 0.8;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(65, 65, 65)" data-shape-stretch="true" style="z-index: 12;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 960 403"><rect width="960" height="403" class="shape-element" fill="rgb(65, 65, 65)"></rect></svg></div></div></div></section><section data-background-color="#99c0ff" data-id="8dd779f76a5f1cf25bda2f6537476b56">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="e9508b71a674f012cc01a94d0fe2738b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Traits</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="code" style="width: 960px; height: 602px; left: 0px; top: 98px;" data-block-id="f96eea8b68f5f5f092b3644b3954bf69"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 11; font-size: 120%;"><pre class="bash"><code>pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String;
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&amp;self) -&gt; String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+fn main() {
+    let tweet = Tweet {
+       username: String::from("apiraino"),
+       content: String::from("people wear sadness and smiles at the same time"),
+    };
+
+    println!("{}", tweet.summary());
+    // apiraino: people wear sadness and smiles at the same time
+}
+</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 960px; height: 267px; left: 0px; top: 433px;" data-block-id="bee4df27b9f351f0d9560528e6ce69b9"><div class="sl-block-style" style="z-index: 12; opacity: 0.8;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(65, 65, 65)" data-shape-stretch="true" style="z-index: 12;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 960 267"><rect width="960" height="267" class="shape-element" fill="rgb(65, 65, 65)"></rect></svg></div></div></div></section><section data-background-color="#99c0ff" data-id="33ab702a1aa068754942e85cd077de93">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="2d7684fef7005e0837fb4b81ea3e7dca"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Traits</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="code" style="width: 960px; height: 602px; left: 0px; top: 98px;" data-block-id="9d0bff92f46ef58358b088bc18cd80f7"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 11; font-size: 120%;"><pre class="bash"><code>pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String;
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&amp;self) -&gt; String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+fn main() {
+    let tweet = Tweet {
+       username: String::from("apiraino"),
+       content: String::from("people wear sadness and smiles at the same time"),
+    };
+
+    println!("{}", tweet.summary());
+    // apiraino: people wear sadness and smiles at the same time
+}</code></pre></div></div></section><section data-background-color="#99c0ff" data-id="907aea45e47e3fd290dff3d92fd28783">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="c61cd44b1767b7ff0e41bcaf410e076d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Functional</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 180px; top: 220px;" data-block-id="bb4e222ec2b7ce9deb8811024c192a48"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.21;" data-has-line-height="">
+<ul>
+	<li><span style="font-size:1.2em">Iterators, filter(), map(), ...</span></li>
+	<li><span style="font-size:1.2em">Closures</span></li>
+</ul>
+</div></div></section><section data-background-color="#99c0ff" data-id="1e79db86439e60f2ee528ec7c4a01b64">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 956px; left: 4px; top: 0px;" data-block-id="78824d25a0bb93a851a63a3c2edde15b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Cargo: a modern package manager</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="image" data-block-id="7d407a0f95cfc385afd6094cdb1ea505" style="min-width: 30px; min-height: 30px; width: 203px; height: 182px; left: 379px; top: 513px;"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="306" data-natural-height="275" data-lazy-loaded="" data-src="rust-intro/cde511b9e1f111c6d444062b0d652d67.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="84418cd1be1face9743ff96f37ecb0b4" style="min-width: 30px; min-height: 30px; width: 180px; height: 180px; left: 776px; top: 168px;"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="250" data-natural-height="250" data-lazy-loaded="" data-src="rust-intro/848987e08d81ded396ed193af79396e5.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="26e602c3c82f32c5da26fbefd10c3df1" style="min-width: 30px; min-height: 30px; width: 182px; height: 182px; left: 529px; top: 168px;"><div class="sl-block-content" style="z-index: 13;"><img data-natural-width="400" data-natural-height="400" style="" data-lazy-loaded="" data-src="rust-intro/4d73c8d60380769acf424d8e0a528974.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="7ba2e15ed458b0bc639f5b34f794d2a0" style="min-width: 30px; min-height: 30px; width: 181px; height: 180px; left: 283px; top: 168px;"><div class="sl-block-content" style="z-index: 14;"><img data-natural-width="257" data-natural-height="256" style="" data-lazy-loaded="" data-src="rust-intro/33aa88b3d41ff8ae8ee9aba9b8bbde33.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="5f09a19d0d43c058b67bcb4d1c9a90a1" style="min-width: 30px; min-height: 30px; width: 214px; height: 178px; left: 4px; top: 168px;"><div class="sl-block-content" style="z-index: 15;"><img style="" data-natural-width="90" data-natural-height="75" data-lazy-loaded="" data-src="rust-intro/4714e15a819b6db0ece6ff02d6175e60.png"></div></div>
+
+
+
+<div class="sl-block" data-block-type="shape" data-block-id="4fd767aa402d74cee5025a580ad3103e" style="min-width: 4px; min-height: 4px; width: 106px; height: 94px; left: 428px; top: 401px;"><div class="sl-block-content" data-shape-type="arrow-down" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 16;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 106 94"><polygon points="53,94 106,47 74.19999999999999,47 74.19999999999999,0 31.799999999999997,0 31.799999999999997,47 0,47 53,94" class="shape-element" fill="rgb(255, 255, 255)"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="ec873d07c3d306d3c786322c8f483039" style="height: auto; min-width: 30px; min-height: 30px; width: 113px; left: 55px; top: 354px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17;">
+<p>sphinx</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 113px; left: 317px; top: 354px;" data-block-id="921976a11a433f2ec88123a95b138718"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18;">
+<p>javadoc</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 113px; left: 564px; top: 354px;" data-block-id="d83ff47eb1570bb30f27adcafe1b16c8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19;">
+<p>npm</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 181px; left: 776px; top: 354px;" data-block-id="e8f0a96580e5dd7910fa4603b64978d9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;">
+<p>yo' grandma</p>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 40px; height: 35px; left: 229px; top: 240px;" data-block-id="c730cc9ed26d2fe4a2e87aac79906a8a"><div class="sl-block-content" data-shape-type="symbol-plus-circle" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 22;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(255, 255, 255)"><path d="M16 0c-8.836 0-16 7.164-16 16s7.164 16 16 16 16-7.164 16-16-7.164-16-16-16zM24 18h-6v6h-4v-6h-6v-4h6v-6h4v6h6v4z"></path></g></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 40px; height: 35px; left: 474px; top: 240px;" data-block-id="ebbe708f8fa3d768f295349f046aa6a1"><div class="sl-block-content" data-shape-type="symbol-plus-circle" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 24;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(255, 255, 255)"><path d="M16 0c-8.836 0-16 7.164-16 16s7.164 16 16 16 16-7.164 16-16-7.164-16-16-16zM24 18h-6v6h-4v-6h-6v-4h6v-6h4v6h6v4z"></path></g></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 40px; height: 35px; left: 726px; top: 240px;" data-block-id="bd59384a197c4526916e14f3f341ba13"><div class="sl-block-content" data-shape-type="symbol-plus-circle" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 25;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(255, 255, 255)"><path d="M16 0c-8.836 0-16 7.164-16 16s7.164 16 16 16 16-7.164 16-16-7.164-16-16-16zM24 18h-6v6h-4v-6h-6v-4h6v-6h4v6h6v4z"></path></g></svg></div></div></section><section data-background-color="#99c0ff" data-id="74044b78b6b1082eb821504a0f0216d0">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 956px; left: 4px; top: 0px;" data-block-id="d2c882ea20cb64c3720bd6de299d658f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Cargo: a modern package manager</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="code" style="width: 588px; height: 393px; left: 186px; top: 210px;" data-block-id="9c50fcbe88ea48389d8fba4d61c1d5d4"><div class="sl-block-style" style="z-index: 12;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 12; font-size: 110%;"><pre class="rust"><code style="padding: 9px;"># create a new binary project (--lib for a library)
+$ cargo new my_project --bin
+
+$ ls -la my_project/
+-rw-r--r-- 1 user grp   83 apr 20 00:21 Cargo.toml
+drwxr-xr-x 6 user grp 4096 apr 20 00:21 .git
+-rw-r--r-- 1 user grp   19 apr 20 00:21 .gitignore
+drwxr-xr-x 2 user grp 4096 apr 20 00:21 src
+
+# add some code
+$ emacs src/main.rs
+
+# build your binary (downloads and compiles deps)
+$ cargo build --release
+
+# yay! publish your crate on crates.io
+$ cargo publish</code></pre></div></div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="cb55acdb009d38c83ac3334c291fb749" style="min-width: 4px; min-height: 4px; width: 588px; height: 186px; left: 186px; top: 210px;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 13;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="6"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 588 186"><defs><clippath id="shape-mask-11-1524516909094"><rect width="588" height="186"></rect></clippath></defs><rect width="588" height="186" clip-path="url(#shape-mask-11-1524516909094)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="12"></rect></svg></div></div></section><section data-background-color="#99c0ff" data-id="2c146eae45a8a569e49e485052ce7ff3">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 956px; left: 4px; top: 0px;" data-block-id="56a2fd04f8d81d5b4a6993b22665fd66"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Cargo: a modern package manager</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="shape" style="width: 588px; height: 132px; left: 186px; top: 390px;" data-block-id="bf645b24425a7403be5a8d40313b6c47"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="6"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 588 132"><defs><clippath id="shape-mask-12-1524516909406"><rect width="588" height="132"></rect></clippath></defs><rect width="588" height="132" clip-path="url(#shape-mask-12-1524516909406)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="12"></rect></svg></div></div>
+<div class="sl-block" data-block-type="code" style="width: 588px; height: 393px; left: 186px; top: 210px;" data-block-id="bd4a2d8aa50fc1fde7c9012061cdd058"><div class="sl-block-style" style="z-index: 10;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 110%;"><pre class="rust"><code style="padding: 9px;"># create a new binary project (--lib for a library)
+$ cargo new my_project --bin
+
+$ ls -la my_project/
+-rw-r--r-- 1 user grp   83 apr 20 00:21 Cargo.toml
+drwxr-xr-x 6 user grp 4096 apr 20 00:21 .git
+-rw-r--r-- 1 user grp   19 apr 20 00:21 .gitignore
+drwxr-xr-x 2 user grp 4096 apr 20 00:21 src
+
+# add some code
+$ emacs src/main.rs
+
+# build your binary (downloads and compiles deps)
+$ cargo build --release
+
+# yay! publish your crate on crates.io
+$ cargo publish</code></pre></div></div></div></section><section data-background-color="#99c0ff" data-id="90ee5481cfdadbfd0b7072b36515225d">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 956px; left: 4px; top: 0px;" data-block-id="5dde5d014c8e63318f3e0e089abb9add"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Cargo: a modern package manager</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="shape" style="width: 588px; height: 94px; left: 186px; top: 513px;" data-block-id="c544b3ffdbfa261a1dc7b526b485a3dd"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="6"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 588 94"><defs><clippath id="shape-mask-13-1524516909603"><rect width="588" height="94"></rect></clippath></defs><rect width="588" height="94" clip-path="url(#shape-mask-13-1524516909603)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="12"></rect></svg></div></div>
+<div class="sl-block" data-block-type="code" style="width: 588px; height: 393px; left: 186px; top: 210px;" data-block-id="edb2fe821045f1f157a147712fd31c70"><div class="sl-block-style" style="z-index: 10;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 10; font-size: 110%;"><pre class="rust"><code style="padding: 9px;"># create a new binary project (--lib for a library)
+$ cargo new my_project --bin
+
+$ ls -la my_project/
+-rw-r--r-- 1 user grp   83 apr 20 00:21 Cargo.toml
+drwxr-xr-x 6 user grp 4096 apr 20 00:21 .git
+-rw-r--r-- 1 user grp   19 apr 20 00:21 .gitignore
+drwxr-xr-x 2 user grp 4096 apr 20 00:21 src
+
+# add some code
+$ emacs src/main.rs
+
+# build your binary (downloads and compiles deps)
+$ cargo build --release
+
+# yay! publish your crate on crates.io
+$ cargo publish</code></pre></div></div></div></section><section data-background-color="#99c0ff" data-id="6181c812642c4b5abeeebf8e481156a8">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 956px; left: 4px; top: 0px;" data-block-id="a0288d1f72b116345cb419e68fd6c5b5"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Cargo: a modern package manager</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="code" style="width: 960px; height: 362px; left: 0px; top: 169px;" data-block-id="5056f2d6c801acbed8847d5fe828045a"><div class="sl-block-style" style="z-index: 12;"><div class="sl-block-content" data-highlight-theme="zenburn" style="z-index: 12; font-size: 110%;"><pre class="apache"><code style="padding: 5px;">$ cargo
+...
+  build       Compile current project
+  check       Analyze current project and report errors, but don't build object files
+  clean       Remove the target directory
+  doc         Build this project's and its dependencies' documentation
+  new         Create a new cargo project
+  init        Create a new cargo project in an existing directory
+  run         Build and execute src/main.rs
+  test        Run the tests
+  bench       Run the benchmarks
+  update      Update dependencies listed in Cargo.lock
+  search      Search registry for crates
+  publish     Package and upload this project to the registry
+  install     Install a Rust binary
+  uninstall   Uninstall a Rust binary</code></pre></div></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="e11a990bdb57aca53f67159fb917aecd" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 560px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p>Extensible! The community provides additional features: <a href="http://bit.ly/2qPQLWO" target="_blank">bit.ly/2qPQLWO</a></p>
+</div></div></section><section data-background-color="#99c0ff" data-id="96aaa9774dfd6e824c00db26aab3c860">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="216a22c3f434cd51edcced48013d1058"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Documenting code</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="6deb32a49ca9b43f8ababe279c15981e"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;">
+<pre style="text-align:center"><span>&lt;insert joke about code documentation&gt;</span></pre>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 181px; top: 291px;" data-block-id="5c91d1cf0a85490e036906dcb17dbc19"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; line-height: 1.82;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Write code</li>
+	<li>Add some inline comments</li>
+	<li>
+	<pre>$ cargo doc</pre>
+	</li>
+	<li>
+	<p><a href="https://doc.rust-lang.org/std/" target="_blank">Here's some docs</a></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 661px; left: 150px; top: 210px;" data-block-id="96ab97faacd08bf2f69d5b543ee02f16"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;" dir="ui">
+<p>Good news! Automagically generated by <em>cargo</em></p>
+</div></div>
+</section><section data-background-color="#99c0ff" data-id="a308170f2fd470b51e67566d077dc87b">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="81acba98cd7776c0b1d968af1f9125e8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2>Tests</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="e6837c374a5ea440c89a43117ad5d5f9"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 12;">
+<pre style="text-align:center"><span>&lt;insert joke about unit tests&gt;</span></pre>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 180px; top: 280px;" data-block-id="c2ccf05548e3979254df36e05b0c833a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; line-height: 1.82;" data-has-line-height="">
+<ul>
+	<li><span style="text-align:left"><u>testing code bits</u>: add a test "class" in your code files</span></li>
+	<li>
+<u>unit tests</u>: import your crate in a separate test module (like any usual external dependency)</li>
+	<li>in the documentation (<em>à la doctest</em> for Python)</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="12087bb46830eef82bb57db84867bb76" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 210px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p>Three ways to add tests to your code</p>
+</div></div></section><section data-background-color="#99c0ff" data-id="9e0f82afc6206b1b5d85b729261d2d1f">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="c676d5af32aea745895f274d602029e2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2>Ecosystem: IDE support</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 250px; left: 355px; top: 646px;" data-block-id="bc009b9b59dbd32cf19da89973c74f2e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 1.82;" data-has-line-height="">
+<p><a href="http://areweideyet.com" target="_blank">areweideyet.com</a></p>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="ba9045f13fc7c5b1a055903e757b01c5" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 140px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<h3>First-class support</h3>
+</div></div>
+<div class="sl-block" data-block-type="image" data-block-id="4feb06c6055f28fcc68712016d3897b9" style="min-width: 30px; min-height: 30px; width: 142px; height: 142px; left: 319px; top: 212px;"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="236" data-natural-height="236" data-lazy-loaded="" data-src="rust-intro/27c70beffa72fe134eed3bdc6076b56c.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="d02a42b2b2d75052feedd40ec15153ec" style="min-width: 30px; min-height: 30px; width: 140px; height: 140px; left: 501px; top: 213px;"><div class="sl-block-content" style="z-index: 15;"><img data-natural-width="256" data-natural-height="256" style="" data-lazy-loaded="" data-src="rust-intro/fe515f8cf024d0cdf575884627210e21.jpg"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 422px;" data-block-id="561ecc9d5d1500d8864b6ed78bef389f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;">
+<h3>Also supported by</h3>
+</div></div>
+<div class="sl-block" data-block-type="image" data-block-id="026e6d941fe94a56c1193e93e7ae8fa1" style="min-width: 30px; min-height: 30px; width: 142px; height: 142px; left: 139px; top: 492px;"><div class="sl-block-content" style="z-index: 17;"><img data-natural-width="256" data-natural-height="256" style="" data-lazy-loaded="" data-src="rust-intro/263bcf3b553afe986be05f0d4d8014e3.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="4a8cd9a7d83bd4dc5e2073ab727cb830" style="min-width: 30px; min-height: 30px; width: 139px; height: 140px; left: 321px; top: 493px;"><div class="sl-block-content" style="z-index: 18;"><img data-natural-width="256" data-natural-height="258" style="" data-lazy-loaded="" data-src="rust-intro/b7018a632acc94bc7d342fdfdebfbafd.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="166a83d944f8b28e3049997af9be9899" style="min-width: 30px; min-height: 30px; width: 141px; height: 141px; left: 500px; top: 493px;"><div class="sl-block-content" style="z-index: 19;"><img style="" data-natural-width="256" data-natural-height="256" data-lazy-loaded="" data-src="rust-intro/fbcd4cbd38c6e6d8a0941f39ad7279ce.png"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="dd7ad32f1de8f81837156bd4e37bc7fe" style="min-width: 30px; min-height: 30px; width: 140px; height: 127px; left: 681px; top: 500px;"><div class="sl-block-content" style="z-index: 20;"><img style="" data-natural-width="256" data-natural-height="233" data-lazy-loaded="" data-src="rust-intro/b8065a6fde2f105034e57a2425c270ff.jpg"></div></div></section><section data-background-color="#99c0ff" data-id="27b8541cef563c8c600ce3734c6e8437">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 834px; left: 64px; top: 0px;" data-block-id="881fcfba0141e5b023864810cce00bf6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2>Ecosystem: web frameworks</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="0e42faf12a7da064d4c8e3392f1a0033"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;">
+<h3 style="text-align:center"><span>a laundry checklist</span></h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 373px; left: 295px; top: 210px;" data-block-id="4daee50b05a196e4983b762183066738"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; line-height: 1.82;" data-has-line-height="">
+<ul>
+	<li>URL routing</li>
+	<li>ORM</li>
+	<li>data (de)serialization</li>
+	<li>community support</li>
+	<li>queue-based workers</li>
+	<li>async</li>
+</ul>
+</div></div></section><section data-background-color="#99c0ff" data-id="23ba02bd10fae969193c7c5299007b66">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 834px; left: 64px; top: 0px;" data-block-id="f5d82120aaf5033204068648b28e4a9c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2>Ecosystem: web frameworks</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 259px; left: 353px; top: 646px;" data-block-id="9623421f3ab585b48deddcfb8f76e8bf"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.82;" data-has-line-height="">
+<p><a href="http://arewewebyet.org" target="_blank">arewewebyet.org</a></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 751px; left: 123px; top: 180px;" data-block-id="593c3963cdc335a804dc55b398f81bb7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 1.82;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+<u>frameworks</u>: <em>Rocket</em> (sync), <em>gotham</em> (async, young), <em>actix</em> (async, actor model), <em>Iron</em> (sync, abandoned)</li>
+	<li>
+<u>ORM</u>: <em>Diesel</em> (sync)</li>
+	<li>
+<u>data (de)serialization</u>: <em>serde (</em>mature)</li>
+	<li>
+<u>queue-based workers</u>: bare AMQP libs</li>
+	<li>
+<u>async</u>: <em>tokio (</em>steep learning curve, in heavy flux)</li>
+	<li>a slew of microframeworks: <em>hyper</em><span style="text-align:left"> stands out</span> (a few others not so active / well supported)</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 90px; height: auto;" data-block-id="9bce0e5e1f21064524fbb4cbc7c75d8a"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 13;">
+<h3 style="text-align:center">my findings so far</h3>
+</div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="e1255d6361094958f6ef698ef561e6b2" style="min-width: 4px; min-height: 4px; width: 36px; height: 38px; left: 62px; top: 405px;"><div class="sl-block-content" data-shape-type="symbol-wondering" data-shape-fill-color="rgb(255, 255, 0)" data-shape-stretch="true" style="z-index: 14;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(255, 255, 0)"><path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13zM23.304 18.801l0.703 2.399-13.656 4-0.703-2.399zM8 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM20 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2z"></path></g></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 36px; height: 38px; left: 62px; top: 189px;" data-block-id="666f96b0ec7e0c441ce45d8e3a5a5e45"><div class="sl-block-content" data-shape-type="symbol-smiley" data-shape-fill-color="rgb(106, 168, 79)" data-shape-stretch="true" style="z-index: 15;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(106, 168, 79)"><path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13zM8 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM20 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM22.003 19.602l2.573 1.544c-1.749 2.908-4.935 4.855-8.576 4.855s-6.827-1.946-8.576-4.855l2.573-1.544c1.224 2.036 3.454 3.398 6.003 3.398s4.779-1.362 6.003-3.398z"></path></g></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 36px; height: 38px; left: 62px; top: 459px;" data-block-id="2a59647937bfda5fc7ef0a3dcf0cfedc"><div class="sl-block-content" data-shape-type="symbol-wondering" data-shape-fill-color="rgb(255, 255, 0)" data-shape-stretch="true" style="z-index: 17;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(255, 255, 0)"><path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13zM23.304 18.801l0.703 2.399-13.656 4-0.703-2.399zM8 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM20 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2z"></path></g></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 36px; height: 38px; left: 62px; top: 511px;" data-block-id="61274f975d40f5b2c1d0e062a188c4ff"><div class="sl-block-content" data-shape-type="symbol-sad" data-shape-fill-color="rgb(136, 4, 4)" data-shape-stretch="true" style="z-index: 18;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(136, 4, 4)"><path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13zM8 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM20 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM9.997 24.398l-2.573-1.544c1.749-2.908 4.935-4.855 8.576-4.855 3.641 0 6.827 1.946 8.576 4.855l-2.573 1.544c-1.224-2.036-3.454-3.398-6.003-3.398-2.549 0-4.779 1.362-6.003 3.398z"></path></g></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 36px; height: 38px; left: 62px; top: 295px;" data-block-id="d4dd620e4d382234bcbc975df5da1ad9"><div class="sl-block-content" data-shape-type="symbol-smiley" data-shape-fill-color="rgb(106, 168, 79)" data-shape-stretch="true" style="z-index: 19;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(106, 168, 79)"><path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13zM8 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM20 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM22.003 19.602l2.573 1.544c-1.749 2.908-4.935 4.855-8.576 4.855s-6.827-1.946-8.576-4.855l2.573-1.544c1.224 2.036 3.454 3.398 6.003 3.398s4.779-1.362 6.003-3.398z"></path></g></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 36px; height: 38px; left: 62px; top: 352px;" data-block-id="8cb969273ec31612aba9b9a718322d18"><div class="sl-block-content" data-shape-type="symbol-smiley" data-shape-fill-color="rgb(106, 168, 79)" data-shape-stretch="true" style="z-index: 21;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(106, 168, 79)"><path d="M16 32c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM16 3c7.18 0 13 5.82 13 13s-5.82 13-13 13-13-5.82-13-13 5.82-13 13-13zM8 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM20 10c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2-1.105 0-2-0.895-2-2zM22.003 19.602l2.573 1.544c-1.749 2.908-4.935 4.855-8.576 4.855s-6.827-1.946-8.576-4.855l2.573-1.544c1.224 2.036 3.454 3.398 6.003 3.398s4.779-1.362 6.003-3.398z"></path></g></svg></div></div></section><section data-background-color="#99c0ff" data-id="39de67b3039d52d407cc92555f9ed17a">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="685aef171159ba9ce82537faa69a176e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; text-align: center;" dir="ui">
+<h2>Ecosystem: WASM</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 665px; left: 148px; top: 90px; height: auto;" data-block-id="8ea98db671962c4d3f45ecbcddde93ea"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;">
+<h3 style="text-align:center">The buzzword you'll hear in 2019</h3>
+</div></div>
+
+<div class="sl-block" data-block-type="text" data-block-id="3a86a6867331605dc06843a919933d33" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 451px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<ul>
+	<li>W3C open specs</li>
+	<li>low-level, architecture-independent byte code</li>
+	<li>safe, efficient execution</li>
+	<li>compact binaries</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" data-block-id="0b3689d9f35724815be6fa7e4e345aae" style="min-width: 30px; min-height: 30px; width: 396px; height: 206px; left: 282px; top: 210px;"><div class="sl-block-content" style="z-index: 15;"><img data-natural-width="350" data-natural-height="182" style="" data-lazy-loaded="" data-src="rust-intro/118da501ed74db657f9034743c261581.jpg"></div></div></section><section data-background-color="#99c0ff" data-id="8b91961517742e5495a55490d978e72e">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="a32dd02de7516887e8164229fb7e75b0"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2>Ecosystem: WASM</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 106px; height: 94px; left: 201px; top: 280px;" data-block-id="8c00f7d79e8c259932d3d9b5e3576e6f"><div class="sl-block-style" style="z-index: 12; transform: rotate(270deg);"><div class="sl-block-content" data-shape-type="arrow-down" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 12;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 106 94"><polygon points="53,94 106,47 74.19999999999999,47 74.19999999999999,0 31.799999999999997,0 31.799999999999997,47 0,47 53,94" class="shape-element" fill="rgb(255, 255, 255)"></polygon></svg></div></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="78d04747c6f09ee46ce2349d7e7002a5" style="min-width: 30px; min-height: 30px; width: 302px; height: 518px; left: 329px; top: 91px;"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="311" data-natural-height="534" data-lazy-loaded="" data-src="rust-intro/088cc5ed963210c2a860a9f6a7ee5016.png"></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 106px; height: 94px; left: 655px; top: 284px;" data-block-id="405993584fd87d44e01f44e73eaa6291"><div class="sl-block-style" style="z-index: 14; transform: rotate(270deg);"><div class="sl-block-content" data-shape-type="arrow-down" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 14;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 106 94"><polygon points="53,94 106,47 74.19999999999999,47 74.19999999999999,0 31.799999999999997,0 31.799999999999997,47 0,47 53,94" class="shape-element" fill="rgb(255, 255, 255)"></polygon></svg></div></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="fecf452e7b090bb5332fceea30cc890b" style="min-width: 30px; min-height: 30px; width: 96px; height: 96px; left: 780px; top: 90px;"><div class="sl-block-content" style="z-index: 15;"><img style="" data-natural-width="96" data-natural-height="96" data-lazy-loaded="" data-src="rust-intro/9b04d90bf99beeaf5cfefe0b3015b0a4.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="776c5dd2fb1bba9310377bffa5f8a0c1" style="min-width: 30px; min-height: 30px; width: 96px; height: 96px; left: 780px; top: 230px;"><div class="sl-block-content" style="z-index: 16;"><img data-natural-width="256" data-natural-height="256" style="" data-lazy-loaded="" data-src="rust-intro/8ffdfb2009c5fcc8e7c11d2dd85244c0.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="b9b815fbc577c593249a500707ff322c" style="min-width: 30px; min-height: 30px; width: 96px; height: 96px; left: 780px; top: 370px;"><div class="sl-block-content" style="z-index: 17;"><img style="" data-natural-width="256" data-natural-height="256" data-lazy-loaded="" data-src="rust-intro/e47932b3b7c783ad3afa2574ba723b3b.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="479e2474527a0d4e51b4300b959452b2" style="min-width: 30px; min-height: 30px; width: 96px; height: 99px; left: 780px; top: 510px;"><div class="sl-block-content" style="z-index: 18;"><img style="" data-natural-width="256" data-natural-height="264" data-lazy-loaded="" data-src="rust-intro/f214efc91d25dc824f1f26fde6c4bd3e.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="3e420874c3b1b1eca3ae236f1ac2c379" style="min-width: 30px; min-height: 30px; width: 96px; height: 96px; left: 81px; top: 161px;"><div class="sl-block-content" style="z-index: 19;"><img style="" data-natural-width="256" data-natural-height="256" data-lazy-loaded="" data-src="rust-intro/f4f5ed8e36aa41d84edae35aab760825.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="925207c6fa046d5e06d7e6203ec4dd51" style="min-width: 30px; min-height: 30px; width: 97px; height: 97px; left: 81px; top: 301px;"><div class="sl-block-content" style="z-index: 20;"><img style="" data-natural-width="256" data-natural-height="256" data-lazy-loaded="" data-src="rust-intro/a463f72ffad485f215232e2bde5a54df.jpg"></div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="811dd701a51ac960e319a6abbfdc401f" style="min-width: 4px; min-height: 4px; width: 97px; height: 97px; left: 81px; top: 442px;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 21;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 97 97"><rect width="97" height="97" class="shape-element" fill="rgb(255, 255, 255)"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="f3e65500ff878f44c391a950cf5b206c" style="height: auto; min-width: 30px; min-height: 30px; width: 97px; left: 80px; top: 465px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 22; line-height: 0.754;" data-has-line-height="">
+<p>other</p>
+
+<p>...</p>
+</div></div></section><section data-background-color="#99c0ff" data-id="216a5258454bb9e5bb215dca3a76126e">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="18d2d5eafb02d03091e8938cb0cfee53"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2>Ecosystem: WASM</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 960px; left: 0px; top: 90px; height: auto;" data-block-id="1399b843577c8774da011570ab8c3dcc"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 10;">
+<h3 style="text-align:center">Malware? Check!</h3>
+</div></div>
+<div class="sl-block" data-block-type="code" data-block-id="f09025516010753334f84b7d951792be" style="min-width: 30px; min-height: 30px; width: 816px; height: 489px; left: 70px; top: 153px;"><div class="sl-block-style" style="z-index: 12; transform: rotate(360deg);"><div class="sl-block-content" data-highlight-theme="github-gist" style="z-index: 12;"><pre class="matlab"><code style="padding: 10px;">Wasm.Webcoinminer
+
+Updated: April 11, 2018 1:19:22 PM
+Type: Potentially Unwanted App
+Infection Length: Varies
+Risk Impact: Low
+Systems Affected: Windows
+
+SUMMARY
+
+Behavior
+Wasm.Webcoinminer is a detection for a module of a JavaScript cryptocurrency
+miner that runs in web browsers. 
+
+
+TECHNICAL DESCRIPTION
+
+If WebAssembly (WASM) is supported by the user's browser, this risk is loaded
+as a module of a JavaScript coinminer that runs in web browsers. It provides
+APIs for JS.Webcoinminer to take full advantage of the victim's hardware 
+capability in-browser. 
+
+The JavaScript coinminer is loaded in the browser when the user visits a web
+page hosting the JavaScript. It runs as long as the user stays on the web page.</code></pre></div></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="06c76cbd2f67f2b9bba34e980b93630d" style="height: auto; min-width: 30px; min-height: 30px; width: 284px; left: 339px; top: 661px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><a href="https://symc.ly/2Hdp7xG" target="_blank">symc.ly/2Hdp7xG</a></p>
+</div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="804640217f84f8cbc73b5e3e5c2ef289" style="min-width: 4px; min-height: 4px; width: 191px; height: 36px; left: 70px; top: 153px;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 14;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="5"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 191 36"><defs><clippath id="shape-mask-55-1524516931752"><rect width="191" height="36"></rect></clippath></defs><rect width="191" height="36" clip-path="url(#shape-mask-55-1524516931752)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="10"></rect></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 816px; height: 96px; left: 70px; top: 479px;" data-block-id="2bf51895bb2a977636523cc6b85cbf9b"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 16;" data-shape-stroke-color="#cc0000" data-shape-stroke-width="5"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 816 96"><defs><clippath id="shape-mask-68-1524516961347"><rect width="816" height="96"></rect></clippath></defs><rect width="816" height="96" clip-path="url(#shape-mask-68-1524516961347)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#cc0000" stroke-width="10"></rect></svg></div></div></section><section data-background-color="#99c0ff" data-id="c15d787efbba4ad9835a185adb825c98">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="fd01a315e2839e68758d78ef2eec6302"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; border-width: 1px; text-align: center;" dir="ui">
+<h2>Ecosystem: WASM</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="width: 960px; left: 0px; top: 90px; height: auto;" data-block-id="5f06de0c16385f8cddb3c67ae277d650"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;">
+<h3 style="text-align:center">Tooling</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="aed476b3a175e73733e8b0bc2d832a02" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 180px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<blockquote>
+<p style="text-align:left">Compiling Rust to WebAssembly should be the best choice for fast code for the Web.<br>
+-- <a href="https://bit.ly/2qKBtTJ" target="_blank">bit.ly/2qKBtTJ</a></p>
+</blockquote>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="3b0e401b8a7b6a263322cc0351635ef9" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 362px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08;" data-has-line-height="">
+<ul>
+	<li>Rust compiler has <em>wasm32</em> target</li>
+	<li>
+<em>wasm-bindgen:</em> high-level types communication between Rust and JS</li>
+	<li>Sample project in online IDE: <a href="http://bit.ly/2vtHauj" target="_blank">bit.ly/2vtHauj</a>
+</li>
+</ul>
+</div></div>
+
+</section><section data-background-color="#99c0ff" data-id="ccc5e91d09a8c7307433640b7a13cc3a">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 630px; left: 165px; top: 115px;" data-block-id="036cf46fe0f02b97cfb73cee946737b8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08;" data-has-line-height="">
+<ul>
+	<li>2018: key year</li>
+	<li>stabilization, improve tooling, lower learning curve</li>
+	<li>working groups (WG) for portability, embedded, web, cli, and many more</li>
+</ul>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="c06e7f367ce1f8a5c96b94b2862af722"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Future of Rust</span></h2>
+</div></div>
+</section><section data-background-color="#99c0ff" data-id="8a322216bd7db8b169fd0f53918be6f2">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="173cca636d6423df527a4cb8380d2c68"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Community</span></h2>
+</div></div>
+
+<div class="sl-block" data-block-type="image" data-block-id="14cea39470aa228204dfca38b2c54041" style="min-width: 30px; min-height: 30px; width: 678px; height: 570px; left: 141px; top: 119px;"><div class="sl-block-content" style="z-index: 13;"><img data-natural-width="890" data-natural-height="748" style="" data-lazy-loaded="" data-src="rust-intro/d3db2e07ab6571f26bc12ba0913af0a5.png"></div></div></section><section data-background-color="#99c0ff" data-id="af22b01ca90ad2b72d46afc8ee616c8f">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 723px; left: 119px; top: 108px;" data-block-id="16fe4166ec28fd608435a283440ac88d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;" dir="ui">
+<ul>
+	<li>Mozilla (of course): Servo, Quantum</li>
+	<li>System76 (<a href="http://bit.ly/2K0Kosu" target="_blank">bit.ly/2K0Kosu</a>)</li>
+	<li>Dropbox</li>
+	<li>Atlassian</li>
+	<li>Core OS</li>
+</ul>
+
+<p>see: Rust Friends (<a href="http://bit.ly/2JVVKO9" target="_blank">bit.ly/2JVVKO9</a>)</p>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="2cff75c424433fcf2368d49a23df773d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Who uses Rust?</span></h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 723px; left: 120px; top: 514px;" data-block-id="67b15305ae4454dfbf152df5096bff0c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;" dir="ui">
+<ul>
+	<li><a href="http://rust-lang.org" target="_blank">rust-lang.org</a></li>
+	<li><a href="http://github.com/rust-unofficial/awesome-rust" target="_blank">github.com/rust-unofficial/awesome-rust</a></li>
+	<li><a href="http://readrust.net" target="_blank">readrust.net</a></li>
+	<li>
+<a href="http://readrust.net" target="_blank">/</a><a href="https://reddit.com/r/rust" target="_blank">r/rust</a>
+</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 91px; top: 397px;" data-block-id="98764fc5f9d0b42190494f4477418fe9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Resources</span></h2>
+</div></div></section><section data-background-color="#99c0ff" data-id="56a2867e6e68d1cf682efbbd40f5d079">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="7bf55b1a8c88bae3b9ebc03addcfd9d9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Who uses Rust?</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="table" data-block-id="b746df68ef1747509b5cb64f0a3915a7" style="height: auto; min-width: 120px; min-height: 30px; width: 960px; left: 0px; top: 159px;"><div class="sl-block-content" style="z-index: 12; text-align: center; font-size: 110%; background-color: rgba(0, 0, 0, 0);" data-table-cols="2" data-table-rows="4" data-table-padding="7px" data-table-has-header="true" data-table-border-color="rgba(0, 0, 0, 0)"><table><tbody>
+<tr>
+<th style="padding: 7px; border-color: rgba(0, 0, 0, 0);">YES</th>
+<th style="padding: 7px; border-color: rgba(0, 0, 0, 0);">NO</th>
+</tr>
+<tr>
+<td style="padding: 7px; border-color: rgba(0, 0, 0, 0);">I <em>need</em> to do that thing<br>
+and make it really <em>fast</em>
+</td>
+<td style="padding: 7px; border-color: rgba(0, 0, 0, 0);">I <em>want</em> to make that thing run faster, just for the sake of it</td>
+</tr>
+<tr>
+<td style="padding: 7px; border-color: rgba(0, 0, 0, 0);">I'm a C/C++ coder<br>
+ tired of mem mgmt bugs</td>
+<td style="padding: 7px; border-color: rgba(0, 0, 0, 0);">I do Python/Ruby/Node, I'm not hitting the limit of my stack</td>
+</tr>
+<tr>
+<td style="padding: 7px; border-color: rgba(0, 0, 0, 0);">I need to write a new standalone component and I want to try something new</td>
+<td style="padding: 7px; border-color: rgba(0, 0, 0, 0);">I want to <em>rewrite</em> that thing in Rust</td>
+</tr>
+</tbody></table></div></div>
+<div class="sl-block" data-block-type="text" style="width: 960px; left: 0px; top: 90px; height: auto;" data-block-id="2ed59b27eb7eaa31fb7874c3b669d6a9"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 13;">
+<h3 style="text-align:center">How about you?</h3>
+</div></div></section><section data-background-color="#99c0ff" data-id="b2f89242715345a62f931cf343a9f9d1">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="2abe7fd55de2c8804f4c5cb469af3560"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Who uses Rust?</span></h2>
+</div></div>
+
+
+<div class="sl-block" data-block-type="text" style="width: 960px; left: 0px; top: 90px; height: auto;" data-block-id="730105b07af894b7adcfe272415f2fb5"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 12;">
+<h3 style="text-align:center">How about you?</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 745px; left: 108px; top: 210px;" data-block-id="c0598aa7eef4394ad7938a2f0d05cf4b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; line-height: 2.08; font-size: 118%;" data-has-line-height="">
+<ul>
+	<li>Rust itself won't make you a better coder</li>
+	<li>You need the right use case for Rust</li>
+	<li>Rust vs. Go =&gt; apples and oranges</li>
+	<li>Do not fix problems you do not have by throwing Rust at them</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="0e3e177f90e0ee7748fb4477789796b4" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 611px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p>source: <a href="http://bit.ly/2F5RZCm" target="_blank">bit.ly/2F5RZCm</a></p>
+</div></div></section><section data-background-color="#99c0ff" data-id="1b06d24b04f66973562fa01b7801a0d8">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 0px;" data-block-id="598674d2c9ea794e2e4b2842e35444b1"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; border-width: 1px; text-align: center;" dir="ui">
+<h2><span style="font-size:1.0em">Thanks</span></h2>
+</div></div>
+<div class="sl-block" data-block-type="image" data-block-id="7937169b276833c6c3d3bee5eb6d8bea" style="min-width: 30px; min-height: 30px; width: 735px; height: 441px; left: 113px; top: 80px;"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="735" data-natural-height="441" data-lazy-loaded="" data-src="rust-intro/3b19848ec7263f8187c8bd9345d91b00.jpg"></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="4810fb874d5baef3c252063eea9b6084" style="min-width: 30px; min-height: 30px; width: 85px; height: 85px; left: 80px; top: 545px;"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="256" data-natural-height="256" data-lazy-loaded="" data-src="rust-intro/670e55f4e928c0e7048ee90fa57936cb.png"></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="06767eb340a68875b26f51b10a84c210" style="height: auto; min-width: 30px; min-height: 30px; width: 128px; left: 165px; top: 568px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p>apiraino</p>
+</div></div>
+<div class="sl-block" data-block-type="image" data-block-id="e08dc07df2ec164a0eb23f68cc2110d7" style="min-width: 30px; min-height: 30px; width: 85px; height: 85px; left: 395px; top: 545px;"><div class="sl-block-content" style="z-index: 15;"><img style="" data-natural-width="256" data-natural-height="256" data-lazy-loaded="" data-src="rust-intro/6ac908ad88efe9e1cda7e62a7094056e.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 128px; left: 496px; top: 568px;" data-block-id="66ae4593f1bd828076aecf95be5faccc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;">
+<p>contacts</p>
+</div></div></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":1232104,"slug":"rust-intro","title":"A (not so short) introduction to the Rust language","description":"... and an overview on its environment and tooling","width":960,"height":700,"visibility":"self","published_at":"2018-04-23T20:46:24.530Z","sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/96720432d72bee2f1003499611a7fc17/thumb.jpg?1524429976","view_count":0,"user":{"id":862129,"username":"apiraino","name":null,"description":null,"thumbnail_url":"https://www.gravatar.com/avatar/dcdcb057c9f0bab3f5e3d1db3f81cb0f?s=140\u0026d=https%3A%2F%2Fstatic.slid.es%2Fimages%2Fdefault-profile-picture.png","paid":true,"pro":false,"lite":true,"team_id":null,"settings":{"id":1087833,"present_controls":true,"present_upsizing":true,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null}},"background_transition":"none","transition":"none","theme_id":null,"theme_font":"montserrat","theme_color":"white-blue","auto_slide_interval":0,"comments_enabled":false,"forking_enabled":false,"rolling_links":false,"center":false,"shuffle":false,"should_loop":false,"share_notes":false,"slide_number":true,"slide_count":63,"rtl":false,"version":2,"collaborative":true,"deck_user_editor_limit":1,"data_updated_at":1524517243126,"font_typekit":null,"font_google":null,"notes":{"27b8541cef563c8c600ce3734c6e8437":"","7b00b2127cf412393a33cc9c125f3558":"A big std library needs a much higher effort from the core team","ec461292f7050f4a6a52b5b563829152":"A real C coder\nMulti-threading, async wizard","45b70b1da71779810c58ae7a4cc1521d":"A real C coder\nMulti-threading, async wizard","822007276d2e7f089f4182e69e180990":"","4a6bd6f9d9066a3ac3733ae87b1d971e":"","8c882ea93f6e1034e71beba31ee5c746":"non si capisce che si passa per value","e8ec246cc71cef689769465d447f75f8":"","ed3ece1c9e8bbd44b4998f5ea119952e":"timing bug / heisenbug\n\ncaused by the processor memory reordering","459a81fc00e2fb24268a8ce5f10737e0":"Other than that, you just don't give a flying fuck about the threading model\n\n... unless you're trolling on Reddit/HN","216a5258454bb9e5bb215dca3a76126e":"sortof \"rule 34\" for browser technologies","56a2867e6e68d1cf682efbbd40f5d079":"I'm in the process of learning whether it's a useful tool for me","5df45d1704ca3cbf6fcf82a0af7d2734":"If you feel confused, that's perfectly normal.\nRust memory management is not easy to grasp","9682255d73648f8f82bd570cc5fcdad7":""}}};
+
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/head.min.js"></script>
+		<script src="lib/reveal.min.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 960,
+				height: 700,
+				margin: 0.05,
+
+				controls: true,
+				progress: true,
+				history: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: true,
+
+				autoSlide: 0 || 0,
+				autoSlideStoppable: true,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+
+				transition: "none",
+				backgroundTransition: "none",
+
+				dependencies: [
+					{ src: 'lib/reveal-plugins/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/highlight/highlight.js', async: true, callback: function() { hljs.initHighlighting(); hljs.initHighlightingOnLoad(); } },
+					{ src: 'lib/reveal-plugins/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+		
+
+	</body>
+</html>
