@@ -1,6 +1,6 @@
 ## Thoughts
 
-* [On why I should post my thoughts](ipse_dixit/why.md)
+* 20180726 [On submitting a patch for an Ubuntu package](ipse_dixit/ubuntu_patch.md)
 
 ## Talks
 
