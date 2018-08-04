@@ -2,3 +2,4 @@ theme: jekyll-theme-hacker
 title: "localhost"
 description: "sorting the wheat from the chaff"
 show_downloads: false # displays download button on the .io page
+repository: apiraino/apiraino.github.io
