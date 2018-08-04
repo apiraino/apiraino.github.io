@@ -1,6 +1,4 @@
 # files for running site in local
-assets
-_layouts
 docker-compose.yml
 docker-entrypoint.sh
 Gemfile*
