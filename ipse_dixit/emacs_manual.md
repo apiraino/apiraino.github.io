@@ -1,7 +1,6 @@
 << [go back](https://apiraino.github.io)
 
-# How the EMACS manual explains what a local variable is
-
+## How the EMACS manual explains what a local variable is
 
 > let is used to attach or bind a symbol to a value in such a way that the Lisp interpreter will not confuse the variable with a variable of the same name that is not part of the function.
 

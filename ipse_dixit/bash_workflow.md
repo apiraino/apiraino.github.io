@@ -1,6 +1,6 @@
 << [go back](https://apiraino.github.io)
 
-# bash oneliners
+## bash oneliners
 
 1. need to do a simple scripting job
 2. always start saying: "_Ok, let's crack this with a simple bash oneliner, I'm too lazy to do that in $_other_language_" ...
