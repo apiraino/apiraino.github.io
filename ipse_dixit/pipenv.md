@@ -52,6 +52,6 @@ $ pipenv lock
 
 ## Links
 
-Command reference: https://github.com/pyenv/pyenv/blob/master/COMMANDS.md#pyenv-install
+Command reference: [https://github.com/pyenv/pyenv/blob/master/COMMANDS.md#pyenv-install](https://github.com/pyenv/pyenv/blob/master/COMMANDS.md#pyenv-install)
 
 << [go back](https://apiraino.github.io)
