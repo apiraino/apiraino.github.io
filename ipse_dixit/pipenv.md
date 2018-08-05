@@ -1,4 +1,4 @@
-<< [go back](https://apiraino.github.io)
+<< [go back](/)
 
 ## On managing Python packages with `pipenv` instead of `pip`+`virtualenv`
 
@@ -54,4 +54,4 @@ $ pipenv lock
 
 Command reference: [https://github.com/pyenv/pyenv/blob/master/COMMANDS.md#pyenv-install](https://github.com/pyenv/pyenv/blob/master/COMMANDS.md#pyenv-install)
 
-<< [go back](https://apiraino.github.io)
+<< [go back](/)

@@ -1,4 +1,4 @@
-<< [go back](https://apiraino.github.io)
+<< [go back](/)
 
 ## On submitting a patch for an Ubuntu package
 
@@ -35,4 +35,4 @@ and
 
 For any question or doubt, support is available on irc.freenode.net on `#ubuntu-motu` or `ubuntu-motu@lists.ubuntu.com`.
 
-<< [go back](https://apiraino.github.io)
+<< [go back](/)

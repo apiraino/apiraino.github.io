@@ -1,4 +1,4 @@
-<< [go back](https://apiraino.github.io)
+<< [go back](/)
 
 ## bash oneliners
 
@@ -7,4 +7,4 @@
 3. ... end up with "_I'll never write a bash script again_"
 4. goto 1
 
-<< [go back](https://apiraino.github.io)
+<< [go back](/)

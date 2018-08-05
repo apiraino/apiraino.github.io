@@ -1,4 +1,4 @@
-<< [go back](https://apiraino.github.io)
+<< [go back](/)
 
 ## How the EMACS manual explains what a local variable is
 
@@ -10,4 +10,4 @@
 
 [link to the manual](https://www.gnu.org/software/emacs/manual/html_node/eintr/let.html)
 
-<< [go back](https://apiraino.github.io)
+<< [go back](/)
