@@ -69,7 +69,19 @@ No luck.
 
 ### Part III: following _systemd_ bloody trail
 
-[Here](https://github.com/systemd/systemd/issues/7137) there's a thorough bug report that teaches me how to edit the `logind` configuration, followed by a convoluted explaination by Poettering on why systemd's behaviour is correct and passes the buck to the Gnome folks. At least I see that in my laptop something's blocking the `handle-lid-switch` action. I only need to get rid of those "block"s.
+[Here](https://github.com/systemd/systemd/issues/7137) there's a thorough bug report that teaches me how to edit the `logind` configuration, followed by a convoluted explaination by Poettering on why systemd's behaviour is correct and passes the buck to the Gnome folks. The main point in this GitHub issue, however, is the line that allows you to inspect what systemd is blocking and why:
+``` bash
+$ systemd-inhibit --list --mode block
+...
+     Who: me (UID 1000/me, PID 1393/gsd-power)
+    What: handle-lid-switch
+     Why: Multiple displays attached
+    Mode: block
+...
+```
+*now* I understand what's really happening and what to investigate.
+
+Something's blocking the `handle-lid-switch` action. I need to get rid of those "`block`"s. I feel I'm just some DDG-searches from the solution.
 
 Following [this](https://bugs.freedesktop.org/show_bug.cgi?id=76267) and [this]() systemd issues, I decide to bite the bullet and dive into the _systemd_ configuration and `logind.conf` documentation (`man 5 logind.conf`), changing the following:
 ``` bash
