@@ -33,7 +33,7 @@ As a side note, I've discovered in the [ArchLinux wiki](https://wiki.archlinux.o
 
 `~/.config/autostart/ignore-lid-switch-tweak.desktop`
 
-a "drop-in" configuration file that will trigger the Gnome Tweaks _inhibitor_. Just wow.
+a "drop-in" configuration file that will trigger the Gnome Tweaks _inhibitor_. Well ... wow.
 
 ### Part II: the external monitor
 
@@ -67,9 +67,9 @@ Let's apply some more DDG-fu. Uhm ... more people complaining about this. I also
 
 No luck.
 
-### Part III: following _systemd_ bloody trail
+### <a name="part_iii"></a>Part III: following _systemd_ bloody trail
 
-[Here](https://github.com/systemd/systemd/issues/7137) there's a thorough bug report that teaches me how to edit the `logind` configuration, followed by a convoluted explaination by Poettering on why systemd's behaviour is correct and passes the buck to the Gnome folks. The main point in this GitHub issue, however, is the line that allows you to inspect what systemd is blocking and why:
+[Here](https://github.com/systemd/systemd/issues/7137) there's a thorough bug report that teaches me how to edit the `logind` configuration, followed by a convoluted explaination by Poettering on why systemd's behaviour is correct and passes the buck to the Gnome folks. The main getaway in this GitHub issue, however, is the line that allows you to inspect what systemd is blocking and why:
 ``` bash
 $ systemd-inhibit --list --mode block
 ...
@@ -107,6 +107,24 @@ IgnoreLid=false to IgnoreLid=true
 ```
 
 YES, it worked!
+
+Ok, so ... all is well what ends well, right?
+
+Almost.
+
+As a addendum, I've discovered some interesting things preventing suspend/sleep in Ubuntu. Aside the aforementioned 'handle-lid-switch', there are other applications blocking it.
+
+I use [Rambox](https://rambox.pro) to keep together instant messenger (IM) applications; some of them have a desktop client that is nothing but a tethered session with the smartphone. When using Rambox, this session between the two devices seems to be blocking the suspend/sleep. It took me a while to narrow down the culprit, only to realize that happened when opening a session with [Threema](http://web.threemaa.ch); here's what we see using our new [cool new trick](#part_iii) we've learned:
+``` bash
+$ systemd-inhibit --list --mode block
+...
+     Who: me (UID 1000/me, PID 2919/gnome-session-b)
+    What: shutdown:sleep
+     Why: user session inhibited
+    Mode: block
+...
+```
+You'll need to close the session in order to cut the leash and be able to suspend your laptop. This does not happen if I use the plain browser.
 
 ### Part IV: final thoughts
 
