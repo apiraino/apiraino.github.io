@@ -1,5 +1,6 @@
 ## Thoughts
 
+* 20180812 [On EMACS Rust linter suddenly chocking](ipse_dixit/emacs_rust.md)
 * 20180806 [On enabling power suspend with an external monitor attached on Ubuntu](ipse_dixit/ubuntu_gnome_power.md)
 * 20180805 [On testing locally a GitHub static website](ipse_dixit/github_pages.md)
 * 20180803 [On managing Python packages with `pipenv` instead of `pip`+`virtualenv`](ipse_dixit/pipenv.md)
