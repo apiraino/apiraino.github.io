@@ -2,7 +2,7 @@
 
 ## On EMACS Rust linter suddenly chocking
 
-### Part I: a little surprise
+### <a name="part_i"></a>Part I: a little surprise
 
 I'd spend a fair amount of time to [setup EMACS for Rust development](https://github.com/apiraino/emacs_reference/blob/master/guide.md#rust-specific-setup).
 
@@ -25,7 +25,7 @@ I'll start doing some tests randomly saving a buffer in EMACS after or before a 
 
 What in the world is triggering a **tests** run!?
 
-### Part II: the facepalm
+### <a name="part_ii"></a>Part II: the facepalm
 
 I comment out all my [customization to EMACS](https://github.com/apiraino/emacs_reference/blob/master/.emacs.d/personal/jman.el) and run on bare [Prelude](https://github.com/bbatsov/prelude).
 
@@ -69,7 +69,7 @@ If `flycheck-rust-check-tests` is set to `nil` *and* `cargo` is installed, flych
 ```
 and ... the `cargo test` little devils are not spawned anymore.
 
-### Part III: the unanswered questions
+### <a name="part_iii"></a>Part III: the unanswered questions
 
 The saying goes that if you reproduce a bug, you're halfway to its resolution. I'll add that fixing the bug takes you to a 90%; but only understanding the cause of a behaviour unlocks the real 100% achievement.
 
@@ -94,6 +94,7 @@ Setting to `nil` that variable made Flycheck switch from `cargo test` to `cargo 
 * `cargo check` is the recommended way to get [compilation warning/errors](https://github.com/flycheck/flycheck/pull/1289) and in some scenario should [speed things up](https://blog.rust-lang.org/2017/03/16/Rust-1.16.html)
 * informed me to not run `cargo build` unless I really need to
 * does not run `cargo test` to get syntax/lint errors, which was awkard and confusing in the first place
+* *BUG*: there's an old outstanding bug, due to `cargo check` metadata caching: on _--lib_ cargo projects (not _--bin_) it only shows compiler warnings _once_ after a rebuild, see [issue](https://github.com/rust-lang/cargo/issues/3624)
 
 Flycheck command before:
 
