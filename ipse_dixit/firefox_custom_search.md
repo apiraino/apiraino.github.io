@@ -67,4 +67,11 @@ Not the safest thing if you ask me: this could be used for some subtle phishing,
 
 If you don't have any hosting available, you can use one of the many ways to serve a simple HTML.
 
+Repeat for every site you want to map in custom searches, the final result for me
+looks like this:
+
+<figure>
+    <img src="/images/ff_cse_shortcuts.png">
+</figure>
+
 << [go back](/)
