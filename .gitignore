@@ -4,4 +4,4 @@ docker-entrypoint.sh
 Gemfile*
 set_env.sh
 _site
-ipse_dixit/drafts/
+_drafts/
