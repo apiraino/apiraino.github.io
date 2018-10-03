@@ -1,6 +1,7 @@
-<< [go back](/)
-
-## On locally testing a GitHub static website
+---
+layout: post
+title: "Locally testing a GitHub static website"
+---
 
 ### Part I: The "hosted" solution
 
@@ -125,5 +126,3 @@ Wow, that was some work to just switch a theme in a containerized Jekyll instanc
 See, the funny thing of all this story is that the theme works out of the box when enabled on GitHub.
 
 Now, the behaviour of the `github-metadata` package looks a bit odd, I'd like to understand where the problem is (the Ruby package? The GitHub API?). I opened an [issue on github](https://github.com/jekyll/github-metadata/issues/131) - let's see if we can get to the bottom of it.
-
-<< [go back](/)

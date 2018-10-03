@@ -1,6 +1,7 @@
-<< [go back](/)
-
-## On enabling any website search form as a Firefox custom search engine
+---
+layout: post
+title: "Enabling any website as a Firefox custom search engine"
+---
 
 I am an avid user of the Firefox [Custom Search Engine](https://support.mozilla.org/en-US/kb/use-search-bar-firefox) feature, so I'd like to add any site I use frequently that allows a search through a `GET` request, example:
 ``` curl
@@ -11,20 +12,20 @@ The Mozilla documentation details how to add new search custom engines. Basicall
 1) From the Firefox search widget, when a plus `+` icon appears as you land on your website
 
 <figure>
-    <img src="/images/ff_cse.png">
+    <img src="/assets/ff_cse.png">
 </figure>
 
 2) For websites not supporting the custom search engine feature (more on that later), you can bookmark the search URL provided by the website. Example:
 
 <figure>
-    <img src="/images/bing_cse_lol.png">
+    <img src="/assets/bing_cse_lol.png">
     <figcaption>Bing being good at ignoring OpenSearch support</figcaption>
 </figure>
 
 The procedure is explained, for example, [here](https://www-archive.mozilla.org/docs/end-user/keywords.html) and [here](http://kb.mozillazine.org/Using_keyword_searches): you basically bookmark the search page and assign it a keyword:
 
 <figure>
-    <img src="/images/bing_cse_bookmark.png">
+    <img src="/assets/bing_cse_bookmark.png">
     <figcaption>Add a bookmark with quick keyword access</figcaption>
 </figure>
 
@@ -56,7 +57,7 @@ The XML file specification is long but the bare minimum to make it work could be
 And the custom search engine is now enabled for your site.
 
 <figure>
-    <img src="/images/roll_your_own_cse.png">
+    <img src="/assets/roll_your_own_cse.png">
 </figure>
 
 Finally, these two files cannot be simply accessed from the filesystem, it must be an HTTP request. So, if you want your favorite site to support this feature, send them an email (I did) and see how they ignore your request! XD
@@ -71,7 +72,5 @@ Repeat for every site you want to map in custom searches, the final result for m
 looks like this:
 
 <figure>
-    <img src="/images/ff_cse_shortcuts.png">
+    <img src="/assets/ff_cse_shortcuts.png">
 </figure>
-
-<< [go back](/)

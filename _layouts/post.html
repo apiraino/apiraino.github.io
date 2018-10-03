@@ -1,0 +1,21 @@
+---
+layout: default
+---
+
+{% include back.html %}
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="popout">
+    <section>
+      <header class="post-header">
+        <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date_to_string }}</time></p>
+        <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
+        {% assign url = site.url | append: site.baseurl | append: post.url %}
+      </header>
+    </section>
+  </div>
+  <section class="post-content" itemprop="articleBody">
+    {{ content }}
+  </section>
+</article>
+
+{% include back.html %}

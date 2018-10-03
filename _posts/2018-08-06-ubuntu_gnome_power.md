@@ -1,13 +1,14 @@
-<< [go back](/)
-
-## On enabling power suspend with an external monitor attached on Ubuntu
+---
+layout: post
+title: "Power suspend on Ubuntu with an external monitor"
+---
 
 ### Part I: setting the basic suspend
 
 You can access the power management from the Gnome settings and set the computer to suspend after a delay (both on battery and on AC).
 
 <figure>
-    <img src="/images/gnome_suspend.png">
+    <img src="/assets/gnome_suspend.png">
     <figcaption>Gnome settings for the suspend behaviour</figcaption>
 </figure>
 
@@ -18,14 +19,14 @@ One more thing: there's a separate setting to configure the "close lid" action.
 Once, it was right with the Power settings, but at some point it has been removed.
 
 <figure>
-    <img src="/images/gpm-prefs.png">
+    <img src="/assets/gpm-prefs.png">
     <figcaption>OLD and NEW Gnome power settings</figcaption>
 </figure>
 
 Oh wait, it was not removed. Just moved to a place that only the [Tweak companion utility](https://wiki.gnome.org/Apps/Tweaks) can reach:
 
 <figure>
-    <img src="/images/gnome-tweaks-power.png">
+    <img src="/assets/gnome-tweaks-power.png">
     <figcaption>What. The. Actual. Fuck.</figcaption>
 </figure>
 
@@ -131,6 +132,3 @@ You'll need to close the session in order to cut the leash and be able to suspen
 I can only be thankful to the generosity of the collective mind, a whole lot of people, whom each bit of hint allowed to move me an inch forward to the solution, allowing me to understand and (possibly fix) the issue at hand.
 
 Complex projects not talking to each other, bad design decisions, then reverted, half-assed documentation. Volunteers doing what they can to help, sometimes doing what they want. This year will _never_ be the year of Linux, until stuff like that persists.
-
-
-<< [go back](/)

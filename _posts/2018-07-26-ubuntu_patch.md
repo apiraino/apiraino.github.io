@@ -1,6 +1,7 @@
-<< [go back](/)
-
-## On submitting a patch for an Ubuntu package
+---
+layout: post
+title: "Submitting a patch for an Ubuntu package"
+---
 
 I had the chance to peep into how an Ubuntu package is cooked and submitted: the procedure is clearly described in clear, detailed steps on the Ubuntu wiki, so this is just a summary for my own reference: I'll give a lot of details for granted.
 
@@ -34,5 +35,3 @@ and
 8. submit your patch (a .debdiff file) on Launchpad, attaching it to a bug. Await comments from the mantainers.
 
 For any question or doubt, support is available on irc.freenode.net on `#ubuntu-motu` or `ubuntu-motu@lists.ubuntu.com`.
-
-<< [go back](/)

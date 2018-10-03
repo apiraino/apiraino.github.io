@@ -1,5 +1,13 @@
 theme: jekyll-theme-hacker
 title: "localhost"
+owner: apiraino
 description: "sorting the wheat from the chaff"
 show_downloads: false # displays download button on the .io page
 repository: apiraino/apiraino.github.io
+timezone: Europe/Berlin
+
+gitlab_username: apiraino
+github_username: apiraino
+
+github:
+  show_repository_link: false

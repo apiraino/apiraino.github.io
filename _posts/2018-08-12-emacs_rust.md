@@ -1,6 +1,7 @@
-<< [go back](/)
-
-## On EMACS Rust linter suddenly chocking
+---
+layout: post
+title: "EMACS Rust linter suddenly chocking"
+---
 
 ### <a name="part_i"></a>Part I: a little surprise
 
@@ -123,5 +124,3 @@ Now, my `custom.el` has two new configs:
 Closing thoughts: an outstanding issue in the Rust world is how to speed compiling times up, but that's nothing we can do here, eventually we will get there.
 
 Oh, one last comment: I hate elisp so much that I find a perverse pleasure in understanding how it works.
-
-<< [go back](/)
