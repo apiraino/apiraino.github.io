@@ -1,5 +1,4 @@
 header {
-
     margin: 20px 0px;
 }
 
@@ -7,4 +6,8 @@ header {
     padding: 5px 0px;
     display: inline-block;
     margin: 0px;
+}
+
+li {
+    margin-bottom: 0.5em;
 }
