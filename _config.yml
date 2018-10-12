@@ -1,6 +1,8 @@
 theme: jekyll-theme-hacker
 title: "localhost"
 owner: apiraino
+email: "apiraino at pm dot me"
+gpg: "/assets/publickey.apiraino@pm.me.asc"
 description: "sorting the wheat from the chaff"
 show_downloads: false # displays download button on the .io page
 repository: apiraino/apiraino.github.io
