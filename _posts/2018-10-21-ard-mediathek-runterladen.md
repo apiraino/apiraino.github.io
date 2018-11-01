@@ -55,8 +55,8 @@ Then convert the XML to .srt (more common in video players):
 
 - [works fine!](https://gotranscript.com/subtitle-converter)
   ```
-  cat orig.srt | sed 's/10:/00:/g' | dos2unix > tmp.srt
-  mv -f tmp.srt orig.srt
+  # first fix timings
+  cat orig.xml | sed 's/="10/="00/g' > tmp.xml
   ```
 
 - [not tested](https://github.com/rg3/youtube-dl/issues/12303#issuecomment-315519815)
