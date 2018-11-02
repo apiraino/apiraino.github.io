@@ -29,9 +29,15 @@ choose the desired resolution (streams won't go beyond 1280x720 anyways), f.e.:
 
 build the download URL with:
 
-`https://pdvideosdaserste-a.akamaihd.net/de` + `/YYYY/MM/DD/<UUID>/` + `1280-1.mp4`
+`https://pdvideosdaserste-a.akamaihd.net` + `/de/YYYY/MM/DD/<UUID>/` + `1280-1.mp4`
 
-n.b. sometimes "1280x720" resolution is not explicited but the file is there as well most of the time.
+Notes:
+
+* Sometimes the path `/de` can be replaced with `/int` (check carefully the master.m3u file).
+
+* Sometimes "1280x720" resolution is not explicited but the file is there as well most of the time.
+
+* Movies rated `FSK ab 16` or `FSK ab 18` are not available before late evening. You can circumvent the block searching in the network traffic the XML file of the movie (there should be only one), that provides the needed `YYYY/MM/DD/<UUID>` and also a path to the subtitle XML file.
 
 ### <a name='part_ii'></a>Part II: Untertitel
 
@@ -47,9 +53,13 @@ get the player configuration from:
 
 then search for `_subtitleUrl` and download the XML.
 
-or:
+or you can have fun guessing the subtitle filename, they are machine generated and it's always an XML:
 
 `https://www.daserste.de/unterhaltung/serie/<fernsehserie>/videos-folgen-verpasst/<fernsehserie_folge_1>-ut100.xml`
+
+`https://www.daserste.de/unterhaltung/film/filmmittwoch-im-ersten/videos/<movie-title-slugified>-video-ut102.xml`
+
+`https://www.daserste.de/unterhaltung/film/film-im-ersten/videos/<movie-title-slugified>-video-ut100.xml`
 
 Then convert the XML to .srt (more common in video players):
 
@@ -57,8 +67,9 @@ Then convert the XML to .srt (more common in video players):
   ```
   # first fix timings
   cat orig.xml | sed 's/="10/="00/g' > tmp.xml
+  # convert XML -> SRT on that website
+  dos2unix file.srt
   ```
-
-- [not tested](https://github.com/rg3/youtube-dl/issues/12303#issuecomment-315519815)
+- You can do it using some scrips, f.e. [this one](https://github.com/rg3/youtube-dl/issues/12303#issuecomment-315519815) (not tested).
 
 thanks ARD for putting all this wealth of stuff free for everyone.
