@@ -66,7 +66,7 @@ Then convert the XML to .srt (more common in video players):
 - [works fine!](https://gotranscript.com/subtitle-converter)
   ```
   # first fix timings
-  cat orig.xml | sed 's/="10/="00/g' > tmp.xml
+  cat orig.xml | sed 's/="10:/="00:/g' | sed 's/="11:/="01:/g' > tmp.xml
   # convert XML -> SRT on that website
   dos2unix file.srt
   ```
