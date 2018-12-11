@@ -13,3 +13,6 @@ github_username: apiraino
 
 github:
   show_repository_link: false
+
+plugins:
+  - jekyll-feed
