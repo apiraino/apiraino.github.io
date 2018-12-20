@@ -126,3 +126,42 @@ Wow, that was some work to just switch a theme in a containerized Jekyll instanc
 See, the funny thing of all this story is that the theme works out of the box when enabled on GitHub.
 
 Now, the behaviour of the `github-metadata` package looks a bit odd, I'd like to understand where the problem is (the Ruby package? The GitHub API?). I opened an [issue on github](https://github.com/jekyll/github-metadata/issues/131) - let's see if we can get to the bottom of it.
+
+### Part IV: Understanding the issue (2018-12-14 UPDATE)
+
+Finally I could dig until the core.
+
+Run the Docker container in interactive mode with:
+
+``` bash
+docker run --rm -it -p 80:4000 \
+       -e JEKYLL_GITHUB_TOKEN=$GITHUB_TOKEN \
+       -v $(pwd):/site \
+       bretfisher/jekyll-serve /bin/bash
+```
+
+then run Jekyll manually with a flag tracing the crash:
+
+``` bash
+# bundle exec jekyll build --trace
+Configuration file: /site/_config.yml
+bundler: failed to load command: jekyll (/usr/local/bundle/bin/jekyll)
+Errno::ENOENT: No such file or directory - git
+  /usr/local/bundle/gems/jekyll-github-metadata-2.9.4/lib/jekyll-github-metadata/metadata_drop.rb:84:in ``'
+  /usr/local/bundle/gems/jekyll-github-metadata-2.9.4/lib/jekyll-github-metadata/metadata_drop.rb:84:in `build_revision'
+  /usr/local/bundle/gems/jekyll-3.7.3/lib/jekyll/drops/drop.rb:52:in `public_send'
+  /usr/local/bundle/gems/jekyll-3.7.3/lib/jekyll/drops/drop.rb:52:in `[]'
+...
+```
+The Ruby line failing is:
+
+``` ruby
+    82 def build_revision
+    83     @build_revision ||= begin
+=>  84        ENV["JEKYLL_BUILD_REVISION"] || `git rev-parse HEAD`.strip
+    85     end
+    86 end
+
+```
+
+Inside the container `git` is not installed, so if the env var is not set as well, here it is the crash explained.
