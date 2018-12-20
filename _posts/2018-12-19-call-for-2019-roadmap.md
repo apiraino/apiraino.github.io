@@ -42,6 +42,8 @@ What I would like to see next:
 
 ### <a id="part_iii"></a>Wishes expressed by others, that I share
 
+Basically upvoting the following:
+
 - The [async/await](https://github.com/rust-lang/rust/issues/50547) story, pretty please :^)
 - Rust on the web: I strongly advocate for that, but frameworks are still in a "0.x" state (which doesn't necessarily means they're broken, see [Rocket](https://rocket.rs) or [Actix](https://actix.rs)). I would love to see a "1.0" at some point (that includes documentation, tutorials, ...).
 - [The "boredom" of using Rust](https://www.ncameron.org/blog/rust-in-2022): a nice concept on how desirable is to be able to focus on the job at hand, without worrying about broken dependencies and nightly release of the compiler.
