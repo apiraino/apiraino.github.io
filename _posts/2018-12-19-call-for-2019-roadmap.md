@@ -36,9 +36,9 @@ What I would like to see next:
 
   I also call for a "responsible" development when people start using your libraries; case in point the recent [breaking changes on the OpenSSL crate](https://github.com/sfackler/rust-openssl/issues/987), which caused some headaches.
 
-  Some developers are producing so much good stuff that they end up not having the mental bandwidth to juggle everything. The risk here is to put the ecosystem under a bad light. People coming from the "outside" judge the ecosystem by a library or the framework at hand; how do you then explain to your CTO that a dependency of your project (deployed in production) has broken?
+- <strong>More "production" focused development</strong>: some developers are producing so much good stuff that they end up not having the mental bandwidth to juggle everything. The risk here is to put the ecosystem under a bad light. People coming from the "outside" judge the ecosystem by a library or the framework at hand; how can you use X and then explain to your CTO that a dependency of your project (deployed in production) has broken?
 
-  Frameworks often have heroic one-man-bands behind; that you meet on IRC providing support (!) answering trivial questions to newbies like me: this is really heartwarming, but not sustainable. I wish for some heavier commitment of companies on Rust projects to let developers focus on the job (and this is already happening in some cases, see [Actix](https://actix.rs)). This is for the people asking on Stack Overflow: "what's the X equivalent for Rust?".
+- <strong>Frameworks often are heroic one-man-bands efforts</strong>: from people that you even meet on IRC providing support (!) answering trivial questions to newbies like me: this is really heartwarming, but not sustainable. I wish for some heavier commitment of companies on Rust projects to let developers focus on the job (and this is already happening in some cases, see [Actix](https://actix.rs)). This is for the people asking on Stack Overflow: "what's the X equivalent for Rust?".
 
 ### <a id="part_iii"></a>Wishes expressed by others, that I share
 
@@ -54,8 +54,8 @@ Basically upvoting the following:
 
 So far, my wishlist. But I want to add a little more to the proposition: what <strong>can I do</strong> for Rust?
 
-In 2019 I will explore a bit how can I contribute to the Rust community environment; that's an area where I just moved the first steps, learned something, but I see a great potential for development.
+In 2019 I will explore a bit how can I contribute to the Rust community environment; that's an area where I just moved the first steps, learned something, and I see a great potential for development.
 
-My second goal would be to do some actual work in Rust: every developer that is being paid to do Rust development is a win for the ecosystem. Equally important is contribution to opensource projects: I mentioned all the things that need to improve: well, that's a good place to start for helping! Lots of crates have "good first issues", need documentation, examples, even issue reporting or a simple star on the repository will help.
+My second goal would be to do some actual work in Rust: every developer that is being paid to do Rust development is a win for the ecosystem. Equally important are contributions to opensource projects: I mentioned some areas that would benefit from some polishing: well, that's a great place to start for helping! Lots of crates have "good first issues", need documentation, examples, even issue reporting or a simple star on the repository will help.
 
 So, all in all, I'm sure that 2019 will build on the foundation laid by 2018. And unlike the stale joke of "the year of Linux on the desktop", I feel that 2019 will be "the year of Rust on our laptops" :-)
