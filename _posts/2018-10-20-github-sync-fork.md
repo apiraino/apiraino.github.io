@@ -34,6 +34,7 @@ $ git push origin master
 
 Now you can update your feature too:
 ``` bash
+$ git checkout <my_feature_branch>
 $ git merge master
 ```
 

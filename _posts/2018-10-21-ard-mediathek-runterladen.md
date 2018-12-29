@@ -39,6 +39,11 @@ Notes:
 
 * Movies rated `FSK ab 16` or `FSK ab 18` are not available before late evening. You can circumvent the block searching in the network traffic the XML file of the movie (there should be only one), that provides the needed `YYYY/MM/DD/<UUID>` and also a path to the subtitle XML file.
 
+To keep things easy, you can straight inspect the response for a GET that will provide everything (streams and subtitles links):
+```
+http://mediathek.daserste.de/play/media/<movie_id>?devicetype=pc&features=
+```
+
 ### <a name='part_ii'></a>Part II: Untertitel
 
 Example URL for subtitles:
