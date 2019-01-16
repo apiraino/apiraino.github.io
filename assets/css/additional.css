@@ -11,3 +11,6 @@ header {
 li {
     margin-bottom: 0.5em;
 }
+
+a:link { text-decoration: none; }
+a:hover { text-decoration: underline; }
