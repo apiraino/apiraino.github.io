@@ -16,3 +16,4 @@ github:
 
 plugins:
   - jekyll-feed
+  - jemoji
