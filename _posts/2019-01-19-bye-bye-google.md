@@ -30,10 +30,11 @@ Easier. Lot of fragmentation: to this day I wouldn't know which Google App to us
 - :white_check_mark: Contacts -> NextCloud Contacts, Davx5 + any DAV application
 - :white_check_mark: Google Calendar -> NextCloud Calendar, [Davx5](https://www.davx5.com) + any DAV application
 - :white_check_mark: Google Notes -> NextCloud Notes
+  - :white_check_mark: Can also be used as a PasteBin-like code snippets share tool
 - :white_check_mark: Pocket / any "Read It Later" apps -> NextCloud Bookmarks
 - :white_check_mark: Google Drive -> NextCloud Files
   - :white_check_mark: file sharing, permissions, expire access
-  -:white_check_mark: data encryption at rest
+  - :white_check_mark: data encryption at rest
     - :warning: encryption key not safe if server is compromised
 - :warning: Google Drive file edit -> NextCloud Collabora
 - :white_check_mark: Google Photos -> NextCloud Gallery
