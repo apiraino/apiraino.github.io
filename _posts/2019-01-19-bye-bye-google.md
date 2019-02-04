@@ -26,20 +26,22 @@ Easier. Lot of fragmentation: to this day I wouldn't know which Google App to us
 
 ### <a name='part_iii'></a>NextCloud
 
-- :white_check_mark: Feedly -> NextCloud News (+ [async python feed retriever](https://github.com/nextcloud/news-updater))
-- :white_check_mark: Contacts -> NextCloud Contacts, Davx5 + any DAV application
-- :white_check_mark: Google Calendar -> NextCloud Calendar, [Davx5](https://www.davx5.com) + any DAV application
-- :white_check_mark: Google Notes -> NextCloud Notes
+- :white_check_mark: Feedly -> [NextCloud News](https://github.com/nextcloud/news) (+ [async python feed retriever](https://github.com/nextcloud/news-updater)) + [news-android](https://github.com/nextcloud/news-android)
+  - NextCloud News unmantained
+- :white_check_mark: Contacts -> [NextCloud Contacts](https://github.com/nextcloud/contacts/), Davx5 + any DAV application
+- :white_check_mark: Google Calendar -> [NextCloud Calendar](https://github.com/nextcloud/calendar), [Davx5](https://www.davx5.com) + any DAV application
+- :white_check_mark: Google Notes -> [NextCloud Notes](https://github.com/nextcloud/notes)
   - :white_check_mark: Can also be used as a PasteBin-like code snippets share tool
-- :white_check_mark: Pocket / any "Read It Later" apps -> NextCloud Bookmarks
-- :white_check_mark: Google Drive -> NextCloud Files
+- :white_check_mark: Pocket / any "Read It Later" apps -> [NextCloud Bookmarks](https://github.com/nextcloud/bookmarks)
+  - Performance problems when many bookmarks
+- :white_check_mark: Google Drive -> NextCloud Files (out of the box)
   - :white_check_mark: file sharing, permissions, expire access
   - :white_check_mark: data encryption at rest
     - :warning: encryption key not safe if server is compromised
-- :warning: Google Drive file edit -> NextCloud Collabora
-- :white_check_mark: Google Photos -> NextCloud Gallery
+- :warning: Google Drive file edit -> [NextCloud Collabora](https://nextcloud.com/collaboraonline/)
+- :white_check_mark: Google Photos -> NextCloud Gallery (out of the box)
 
 ### <a name='part_iv'></a>What keeps me in the Google bubble
 
 - Collaboration, when required by third-parties (hardly solvable in most cases)
-- Google Maps integration in Drive (might be solvable with third-party tools)
+- Google Maps integration in Drive (might be solvable with a combo of OSM and other drawing tools)
