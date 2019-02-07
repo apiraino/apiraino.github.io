@@ -15,10 +15,10 @@ So, the client can have 2 of these variables, they choose which ones. The CTO (a
 
 Possible scenarios, as an example:
 
-- The client picks `T` + `Q` and asks for a rock-solid platform (we don't want to rethink the platform again, don't we?) in a short time because they have contacts with possible investors and don't want the lead to cool off. The development team then receives the `E` variable: that is, more effort on the project.
+- The client picks `T` + `Q` and asks for a rock-solid platform (we don't want to rethink the platform again, do we?) in a short time because they have contacts with possible investors and don't want the lead to cool down. The development team then receives the `E` variable: that is, more effort on the project.
 
 - The client picks `E` + `Q` as they only have this budget available at this time, but still would like a good platform: developers then receive `T` and choose to dedicate less time to the project and (for example) push forward other projects or go around with a bicycle chasing crows.
 
-I'm sure other (more knowledgeable) people have written entire books about this little game of "the three variables" (can't summarized in five sentences); however, sometimes you don't need to read books cover-to-cover about project management to learn how to start a conversation about a project with a prospect client and underline the basics.
+I'm sure other (more knowledgeable) people have written entire books about this little game of "the three variables" (can't detail too much in five sentences); however, sometimes you don't need to read books cover-to-cover about project management to learn how to start a conversation about a project with a prospect client and underline the basics.
 
 Also, it will quickly raise a useful warning if the client does not want to play by these rules.
