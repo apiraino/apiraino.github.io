@@ -17,3 +17,5 @@ github:
 plugins:
   - jekyll-feed
   - jemoji
+
+markdown: CommonMarkGhPages
