@@ -1,7 +1,6 @@
 # files for running site in local
-docker-compose.yml
-docker-entrypoint.sh
-Gemfile*
+Gemfile.lock
 set_env.sh
 _site
 _drafts/
+.sass-cache/
