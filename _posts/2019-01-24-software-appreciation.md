@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Appreciation for software (I): Emacs"
+title: "Appreciation for software #1: Emacs"
 ---
 
 I was reading this [blog post](https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html) on how we often forget to thank and recognize the efforts of the "unsung heroes" of the software world. I find those words truly inspiring, I also had an interaction with the author through GitHub (a very nice person, by the way).
