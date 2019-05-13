@@ -138,7 +138,7 @@ rx.attach(None, move |response_data| {
 
 ## Day 3
 
-Unfortunately I could not participate due to previous arrangements in real life.
+Unfortunately I could not participate as I was offlined due to previous arrangements.
 
 ## Day 4
 
@@ -188,7 +188,7 @@ I couldn't have asked more from a workhop.
 
 As an unexpected bonus, experienced Gtk-rs developers and maintainers were really interested in my questions and feedback to understand where the pain points were to a complete newbie with no prior experience of the toolkit. This report is also for them!
 
-<center><h3>Thank you guys, you are great!</h3></center>
+<center><h3>Thank you folks, you are great!</h3></center>
 
 ## References
 
