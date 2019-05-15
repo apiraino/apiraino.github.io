@@ -14,6 +14,10 @@ I've attended the [Rust+Gnome 2019 Hackfest](https://wiki.gnome.org/Hackfests/Ru
 
 I'll recap a bit the experience for future reference.
 
+Code for this ongoing project is hosted on [GitHub](https://github.com/apiraino/poor-postman).
+
+Now that I think of it, I would't mind pulling out a basic tutorial out of this experience.
+
 ## Assess my Rust proficiency
 
 Starting to get comfortable with Rust and its quirks, still uncomfortable with the Rust memory model. Never used GTK before, have a general idea of how a GUI application work.
