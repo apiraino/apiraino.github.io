@@ -25,3 +25,7 @@ certbot-auto certonly --expand --non-interactive --agree-tos \
     --domains \
         mydomain.com,sub1.mydomain.com,sub2.mydomain.com,sub3.mydomain.com
 ```
+
+### (20190520 UPDATE)
+
+[How to use a systemd service instead of the cronjob](https://stevenwestmoreland.com/2017/11/renewing-certbot-certificates-using-a-systemd-timer.html)
