@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Open Sesame! (RustLab &#39;19)</title>
+
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+
+
+	</head>
+	<body class="reveal-viewport theme-font-montserrat theme-color-white-blue">
+		<div class="reveal">
+			<div class="slides">
+				<section data-id="e32f756deb713a34b0ec35dca120fcb2" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="27e8f9d695b6b607e39cbb43ccd83833"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Introducing</h1>
+
+<h1>Open Taffeta</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 212px; top: 350px;" data-block-id="baa4b55395c76a4008f61908105b1065"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; font-size: 160%;">
+<p>A simple majordomo system for a coworking</p>
+
+<p> </p>
+
+<p>A Rust learning project</p>
+</div></div></section><section data-background-color="#ffffff" data-id="b0fee947edb17fdf8e92ec2194d92bbe"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="2df66ec8d85affbdeb110e65f66cec88"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>A brief whoami</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 212px; top: 210px;" data-block-id="2267f81b38b22833e462d671c3ff22a1"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Devops: Python, backend</li>
+	<li>2019 update: paid Rust projects</li>
+	<li>A little community effort: helping organizing Rust confs</li>
+	<li>@apiraino on github+gitlab</li>
+	<li>apiraino@pm.me</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="84c9922cc50186ba3b15c74354fe3bb3"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="5bbb1c191d8a20cf4252d018b4f92fda"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>The 5 questions</h1>
+
+<p>(of good journalism)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 212px; top: 280px;" data-block-id="2070a89bdf0d6c2f694a002b36664993"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>What ... is the project about</li>
+	<li>Who ... did that</li>
+	<li>Where ... it all started</li>
+	<li>Why ... did I do that</li>
+	<li>How ... is the project developed</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="695ce374a79f3cf87e9f2b8bcb76d212"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="784572335e4282fbf06d4817597afe46"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Project overview</h1>
+
+<p>(and stack used)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 779px; left: 123px; top: 280px;" data-block-id="ffe8ddbacf44e0819bc0a121b3579882"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Arduino: C-ish code on the NodeMCU</li>
+	<li>Rust: backend on a spare Raspberry Pi
+	<ul>
+		<li>1B+ (important detail...)</li>
+	</ul>
+	</li>
+	<li>Dart: mobile App (Flutter framework)</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="4fdd7c1a21e909ac1267603dd66cbe87"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="fca51022992c9e900dfe944eaccb043f"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11; font-size: 110%;">
+<h1>Arduino</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 325px; height: 605px; left: 349px; top: 140px;" data-block-id="52c6e7f8b687023d6c59c2df3af81f04"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="725" data-natural-height="1350" data-lazy-loaded="" data-src="rustlab-19/68575be055abbadee47af7e797d605aa.jpg"></div></div></section><section data-background-color="#ffffff" data-id="0fd187783e83e1a2bd2e46c18a8033af"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="302328c6ed99956613116a78364e9d9c"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11; font-size: 110%;">
+<h1>Arduino</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 469px; height: 409px; left: 24px; top: 187px;" data-block-id="fafcd08e14d792dd8822a31d253c20b1"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="1549" data-natural-height="1350" data-lazy-loaded="" data-src="rustlab-19/ea89362da7a22d4174db6da262ecead8.jpg"></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 392px; height: 568px; left: 553px; top: 140px;" data-block-id="b96ffeb1eed17d909538ad8c703c6cff"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="932" data-natural-height="1350" data-lazy-loaded="" data-src="rustlab-19/00f974e1a32adbb99396f4df33789bf9.jpg"></div></div></section><section data-background-color="#ffffff" data-id="a9a3949c29a5f12bdf21f49b1a3b14d7"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="ca6d542329acfa39f4e3ba6a651daab7"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11; font-size: 110%;">
+<h1>Arduino</h1>
+</div></div>
+
+
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 442px; height: 589px; left: 290px; top: 140px;" data-block-id="f9f71b14d27525f0de751ef6b7042be4"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="1013" data-natural-height="1350" data-lazy-loaded="" data-src="rustlab-19/b6ea663b76c9db3cafc4f3b3c33f4088.jpg"></div></div></section><section data-background-color="#ffffff" data-id="078f9b2469aed7d4c2080b0786486852"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="8c057d11d2d1dc1e7157fe362ac1ee68"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10; font-size: 110%;">
+<h1>Frontend</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 621px; left: 202px; top: 280px;" data-block-id="20ce81321528f1c8d82fa7cf71d1be37"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 120%; line-height: 2.08;" data-has-line-height="">
+<ul>
+	<li>Dart language</li>
+	<li>Flutter: easy enough to start with</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="ada7032201e1ea0df709c1f367f645af"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="ef37802af466f10694b3c6798e4f649f"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11; line-height: 1.43;" data-has-line-height="">
+<h1>Frontend</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="width: 319px; height: 568px; left: 100px; top: 200px; min-width: 4px; min-height: 4px;" data-block-id="a434cffcb6e26fba4c32fe7fa357778e"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="759" data-natural-height="1350" data-lazy-loaded="" data-src="rustlab-19/3782ab8c4d71f42557bd6d7aec87c694.png"></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 391px; height: 269px; left: 546px; top: 375px;" data-block-id="6e255943c213eaf8021a64fd74c84fd0"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="654" data-natural-height="450" data-lazy-loaded="" data-src="rustlab-19/eb07c1cd26437fc6a06ef78d58ee2c8d.png"></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 316px; top: 630px;" data-block-id="98a65353402eb9fceac926b81b756fce"><div class="sl-block-content" data-line-x1="-79" data-line-y1="25" data-line-x2="128" data-line-y2="-38" data-line-color="#5af00a" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 14;" data-line-width="18px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="207" height="63" viewbox="-79 -38 207 63"><line stroke="#5af00a" stroke-width="18" x1="-79" y1="25" x2="115" y2="-34"></line><path style="fill: rgba(0,0,0,0);" stroke="#5af00a" stroke-width="18" transform="translate(115,-34) rotate(73.072)" d="M 40.5 40.5 L 0 0 L -40.5 40.5"></path></svg></div></div></section><section data-background-color="#ffffff" data-id="dcd1231e2c17ac085e5b064206719bf8"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="573140b0ae76db452a0ace629a19cd52"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Backend</h1>
+
+<p>(Rocket)</p>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 697px; left: 164px; top: 280px;" data-block-id="dd036b2ee267016fc59398564a270939"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 2.08; font-size: 120%;" data-has-line-height="">
+<ul>
+	<li>API: auth with token (trim policy)</li>
+	<li>Admin: auth with (encrypted) cookies</li>
+	<li>serde + validator crates</li>
+	<li>backoffice admin users</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="22c16720a3532f2cd6755074a3f1d69f"><div class="sl-block" data-block-type="text" style="width: 806px; left: 109px; top: 19px; height: auto;" data-block-id="22377a8639978d7241115f39f24a95e0"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Learning the frameworks</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 409px; left: 307px; top: 280px;" data-block-id="7edbc6c69d83f7fecf25317157f6b3ac"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<p>Rocket + Diesel</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 409px; left: 307px; top: 428px;" data-block-id="6d70756edf9c9a8856e8634e9f978ab6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<p>How do they work</p>
+</div></div></section><section data-background-color="#ffffff" data-id="b71faa22dcd0a7a62945e1b2dfa408f8"><div class="sl-block" data-block-type="text" style="width: 806px; left: 109px; top: 0px; height: auto;" data-block-id="8efdfb3175cfb13e0a25441e54d28891"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>The frameworks</h1>
+
+<p>(Rocket 0.4)</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 685px; height: 606px; left: 159px; top: 162px;" data-block-id="85d7a53248975bca300034de5d8ff986"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 12; font-size: 129%;"><pre class="rust"><code data-line-numbers="3-11|13,14|16-21|1,23">let rocket = rocket::ignite()
+
+    // mount endpoint routes
+    .mount(
+        "/",
+        routes![
+            routes::all::get_index,
+            routes::users::get_user,
+            ...
+        ],
+    )
+
+    // attach DB pool
+    .manage(pool)
+
+    // catchers for HTTP errors
+    .register(catchers![
+        routes::all::not_found,
+        routes::all::not_authorized,
+        routes::all::unprocessable_entity
+    ]);
+
+Ok(rocket)
+</code></pre></div></div></section><section data-background-color="#ffffff" data-id="2ca6f17aa13f88ca2eebd067b98eb55c"><div class="sl-block" data-block-type="text" style="width: 806px; left: 109px; top: 0px; height: auto;" data-block-id="df0fca0d66d6093fd8d7e0e626911da1"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>The frameworks</h1>
+
+<p>(Rocket 0.4)</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 961px; height: 606px; left: 41px; top: 162px;" data-block-id="cfb33dffced98c97bd584ecee3d91f6b"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 12; font-size: 129%;"><pre class="rust"><code data-line-numbers="1|2-4|6-9|11-22|17,19-21">#[get("/users/&lt;user_id&gt;", format = "application/json")]
+pub fn get_user(
+        conn: db::Conn, _auth: Auth, user_id: i32)
+     -&gt; APIResponse {
+
+    let query_result: Result&lt;User, diesel::result::Error&gt; =
+        users::table
+            .filter(users::id.eq(user_id))
+            .get_result(&amp;*conn);
+
+    match query_result {
+        Err(err) =&gt; {
+            let resp_data = json!({
+                "status": "error",
+                "detail": format!("error executing query: {}", err)
+            });
+            bad_request().data(resp_data)
+        }
+        Ok(user) =&gt; ok().data(
+            json!({ "user": user }
+        )),
+    }
+}</code></pre></div></div></section><section data-background-color="#ffffff" data-id="a61c296772d446885d30df1700b252cd"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="c849991b928f63bfe1f3d0585abd2d5e"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>The frameworks</h1>
+
+<p>(Diesel 1.4)</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 780px; height: 464px; left: 158px; top: 210px;" data-block-id="36a18e76a303d8ec36562f07150b9b2c"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 12; font-size: 130%;"><pre class="rust"><code data-line-numbers="">$ tree migrations/
+migrations/
+├── 2018-06-03-132600_create_users
+│   ├── down.sql
+│   └── up.sql
+├── 2018-08-10-151755_create_doors
+│   ├── down.sql
+│   └── up.sql
+├── 2019-05-03-153648_create_userauth
+│   ├── down.sql
+│   └── up.sql
+└── 2019-05-30-233258_create_roles
+    ├── down.sql
+    └── up.sql
+
+4 directories, 8 files
+</code></pre></div></div></section><section data-background-color="#ffffff" data-id="9585adc8a2711145fd1af484cb957870"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="ffd9b7ee30de4785f612bc448f318430"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>The frameworks</h1>
+
+<p>(Diesel 1.4)</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 869px; height: 420px; left: 79px; top: 210px;" data-block-id="20b8a0aa11eb9f791880cbc88c2c1ee9"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 12; font-size: 130%;"><pre class="rust"><code data-line-numbers="1|2|3-11|13-15">#[derive(Serialize, Deserialize, Validate, Debug, Insertable)]
+#[table_name = "users"]
+pub struct UserLoginSignup&lt;'a&gt; {
+    #[validate(
+        length(min = "6", message = "Password too short"),
+        custom = "validate_pwd_strength"
+    )]
+    password: &amp;'a str,
+    #[validate(email(message = "Invalid email"))]
+    email: &amp;'a str,
+}
+
+// Validation provided by crates
+// validator = "0.8.0"
+// validator_derive = "0.8.0"</code></pre></div></div></section><section data-background-color="#ffffff" data-id="b2d139f75eebb7b35dcef9cf379009ba"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="3f6302dfd360b11eade533367d4c896f"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>The frameworks</h1>
+
+<p>(Diesel 1.4)</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 869px; height: 380px; left: 79px; top: 210px;" data-block-id="9e80d4a8e7648810db715b2f15b76bb1"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 11; font-size: 130%;"><pre class="rust"><code data-line-numbers="1-4|6|8-14">let mut new_user = UserLoginSignup { 
+                    password: user_data.password,
+                    email: user_data.email
+                };
+
+let res = new_user.validate();
+
+if res.is_err() {
+    let resp_data = json!({
+        "status":"error",
+        "detail": "Failed to create user"
+    });
+    bad_request().data(resp_data)
+}
+</code></pre></div></div></section><section data-background-color="#ffffff" data-id="420789fd422ec3635f028a75f5d5796b"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="086f853c0352c4fd8600b4996845615e"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Challenges</h1>
+
+<p>(armv6 crosscompiling)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 714px; left: 154px; top: 280px;" data-block-id="8526fdbbb482b5fcee55da9d381a593e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Crosscompile <strong>openssl</strong> and <strong>sqlite3</strong>
+</li>
+	<li>Not easy to figure out</li>
+	<li>trial and error until everything works</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="0a953a2f2ac20feaa379af20f551291c"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="5426be1d31320ad1b8e1730100dec82d"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Challenges</h1>
+
+<p>(armv6 crosscompiling)</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 869px; height: 558px; left: 77px; top: 210px;" data-block-id="c32dc7e495a063430199869df841d6f5"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 13; font-size: 145%;" data-code-wrap="true"><pre class="bash"><code data-line-numbers="1-3|5-9|10-13|15-16" data-fragment-index="0">TARGET=arm-unknown-linux-gnueabihf
+# git clone https://github.com/raspberrypi/tools
+ARMV6_LINKER=..../arm-linux-gnueabihf-gcc
+
+# compile OpenSSL
+export MACHINE=armv6 ARCH=arm CC=$ARMV6_LINKER &amp;&amp; make ...
+
+# compile Sqlite3
+./configure --enable-shared --host=arm-linux CC=$ARMV6_LINKER &amp;&amp; make -j8
+
+export OPENSSL_INCLUDE_DIR=$OPENSSL_LIB_DIR/include
+export SQLITE3_LIB_DIR=$SQLITE_SRC_DIR/.libs
+
+# compiling open-taffeta
+PKG_CONFIG_ALLOW_CROSS=1 cargo build --release --target $TARGET</code></pre></div></div></section><section data-background-color="#ffffff" data-id="cd19ceb0c9f99fbd4204eeb67e60a279"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="20a9a94376d129c5395b2030194240fa"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Challenges</h1>
+
+<p>(slow compile times)</p>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="width: 553px; height: 482px; left: 235px; top: 210px; min-width: 4px; min-height: 4px;" data-block-id="8eafde24c5ae233f209acc5ffe892505"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="413" data-natural-height="360" data-lazy-loaded="" data-src="rustlab-19/7d8b1599f8a3b2bd6941140000ab8fa4.png"></div></div></section><section data-background-color="#ffffff" data-id="fc850c6964e48ce8bb54638d651b382d"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="ddb55f8dc788b0d8cc615dccd6d2b565"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Challenges</h1>
+
+<p>(mitigation stategies)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 664px; left: 179px; top: 280px;" data-block-id="322a262b6cdbc453776e178d8d1bc5e1"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<p><span style="font-size:1.0em">Disable LTO (link-time optimization)</span></p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 826px; height: 300px; left: 98px; top: 384px;" data-block-id="91f87b23beeb6834b899e6c87a69b1e0"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 14; font-size: 140%;"><pre class="rust"><code data-line-numbers=""># https://vfoley.xyz/rust-compile-speed-tips/#avoid-lto
+
+# Cargo.toml
+[profile.dev]
+lto=false</code></pre></div></div></section><section data-background-color="#ffffff" data-id="993a53790003e1c2a7fa3cc4305cd650"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="c2716f1c6e0850f896c073ccca97fe5a"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Challenges</h1>
+
+<p>(mitigation stategies)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 664px; left: 180px; top: 280px;" data-block-id="ad680dc947e0507a780b77ad17ed40d3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<p>Split project in submodules</p>
+</div></div>
+</section><section data-background-color="#ffffff" data-id="cb50d69d5a0105cdc4f39510a2601e61"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="9b29575bd5a0112de3bd284cab74f3a7"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Challenges</h1>
+
+<p>(mitigation stategies)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 664px; left: 180px; top: 280px;" data-block-id="c4c3611249cdedb1b557382d675004c6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 2.08; font-size: 129%;" dir="ui" data-has-line-height="">
+<p><span style="font-size:1.0em">Use <em>sccache</em></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 545px; left: 240px; top: 700px;" data-block-id="b5ebbafbefd3e1135efe8a5441f3b8ab"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="font-size:0.9em">[0] github.com/mozilla/sccache/issues/457</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 211px; top: 420px;" data-block-id="3b7b39ff2ece9b38ebeeec2f7636c175"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 120%; line-height: 2.08;" data-has-line-height="">
+<p><span style="font-size:1.0em"><u>Update</u>: don't, it's broken [0]</span></p>
+
+<p><span style="font-size:1.0em"><u>Update 2</u>: use it, fixed in master</span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="b92889566513f057ee624e63af7c3565"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="72e972a5e15e186fe5b04047fea2f881"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Challenges</h1>
+
+<p>(deployment)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 684px; left: 170px; top: 280px;" data-block-id="d4290ee38f8708fc7496c531e39e43e1"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Docker on armv6</li>
+	<li>balena.io</li>
+	<li>
+<em>cargo-deb</em> to the rescue!</li>
+	<li>Deployment still not fully automated
+	<ul>
+		<li>e.g. migrations</li>
+	</ul>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="e2490832557cfdca6548be8cf79e3f3e"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="6356cc94fbcd0149a3973386b3be1bf9"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Lessons learned</h1>
+
+<p>(why you'll love Rust)</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 492px; height: 580px; left: 272px; top: 188px;" data-block-id="ac023b50d1ae39b397fb06d6b17d203d"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="1017" data-natural-height="1200" data-lazy-loaded="" data-src="rustlab-19/dcbbef3b3faa792cb4ea8e5134cc45d6.jpg"></div></div></section><section data-background-color="#ffffff" data-id="459997b89001f72da8bc006dd8d08b63"><div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 212px; top: 280px;" data-block-id="1d1213d93852b7033b1fbbe83e8e410d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Leveraging Rust strong typing and crates to deserialize data</li>
+	<li>Refactoring: finally a rewarding experience</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="314522651bb7d90da727b6a40c297198"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 12;">
+<h1>Lessons learned</h1>
+
+<p>(strong typing)</p>
+</div></div></section><section data-background-color="#ffffff" data-id="7118bd21b0e36423ddac4a493840ee1b"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="59091b872daa81ab9df4c15e6601b56b"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Lessons learned</h1>
+
+<p>(confidence)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 691px; left: 166px; top: 280px;" data-block-id="979608f0b9f64102a6409ab2470129b3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Not great for quick prototypes</li>
+	<li>Gives you confidence in your code</li>
+	<li>Speed you up in ways you might not notice</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="9489d67802311ec153072ce537192d48"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="9e17e622a2343976b6269e5edf38f7bf"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Lessons learned</h1>
+
+<p>(still on a rollercoaster)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 211px; top: 280px;" data-block-id="4c892515535d0894189d46e429151321"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Developing on nightly</li>
+	<li>Much has improved in the last six months</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="d9ec848a4fe4ae3619fb804469aa346f"><div class="sl-block" data-block-type="text" style="width: 806px; left: 109px; top: 22px; height: auto;" data-block-id="3dd855c96d0db74b11d121176ed7e0cd"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Lessons learned</h1>
+
+<p>(thoughts on security)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 212px; top: 275px;" data-block-id="2ce0e4a7681a45ab732ddc13c40cc71f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; border-width: 1px; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<p>What am I downloading?</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 869px; height: 383px; left: 79px; top: 360px;" data-block-id="c3f387075267732451edbc3b87bfddd0"><div class="sl-block-content notranslate" data-highlight-theme="a11y-light" data-code-frame="none" style="z-index: 13; font-size: 145%;" data-code-wrap="true"><pre class="bash"><code>$ cargo build
+Compiling ....
+...
+Compiling linked-hash-map v0.5.1 (https://github.com/***/linked-hash-map?rev=df27f21#df27f219)
+...
+Compiling lru-cache v0.1.0 (https://github.com/***/lru-cache?rev=b36a4d1#b36a4d1d)
+...
+Compiling jsonrpc-http-server v10.0.1 (https://github.com/***/jsonrpc?rev=7c101f83#7c101f83)
+...</code></pre></div></div></section><section data-background-color="#ffffff" data-id="ff338037152caac26340090630099428"><div class="sl-block" data-block-type="text" style="width: 806px; left: 109px; top: 22px; height: auto;" data-block-id="f686d7458d8c60569d46db3c3ae09118"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Lessons learned</h1>
+
+<p>(thoughts on security)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 760px; left: 132px; top: 280px;" data-block-id="8080a52e77b7bba86190b52faa62157c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; border-width: 1px; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>
+<em>crates.io</em> needs a package trust policy</li>
+	<li>"crate-squatting" is just waiting to happen</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="6073e982212c14b279caa48bb4ae7386"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="c7819827f1108878486574e4f3eb33cf"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Lessons learned</h1>
+
+<p>(validating your work)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 826px; left: 99px; top: 280px;" data-block-id="fb62146d396ceb92a337c3058a5f8db0"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>unittests: easy!</li>
+	<li>integration tests: easy (but not isolated)</li>
+	<li>Minor annoyance: warnings (workaround [0])</li>
+	<li>
+<em>cargo check</em> caches and hides build warnings</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 655px; left: 185px; top: 700px;" data-block-id="1c00dfdcc095816cd9410a1af7c17917"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p>[0] github.com/apiraino/rust-tests-stub-project</p>
+</div></div></section><section data-background-color="#ffffff" data-id="29f674dea3da10dc9127d675afda349e"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="99da193ccd5e5b3a8ec1ed85062bdccc"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Lessons learned</h1>
+
+<p>(validating your work)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 211px; top: 280px;" data-block-id="64702e2be9b7b22fb9d28a5b046bb5fe"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<p>CI/CD look fine</p>
+
+<ul>
+	<li>Travis</li>
+	<li>CircleCI (not tested)</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="7752dde043d54db4abd949a058bae83d"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="14c8000c225bf1de369be528e16d8313"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Lessons learned</h1>
+
+<p>(deployment)</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 690px; left: 166px; top: 280px;" data-block-id="c2b9ea4c62f22c288f2150ee212b5af2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Deploying isolated Rust application not always possible</li>
+	<li>E.g. migrations with <em>diesel-cli</em>
+	<ul>
+		<li>Reimplement your own migration scripts?</li>
+		<li>srsly?</li>
+	</ul>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="fef8062a28b1562c306edafdceab5f5c"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="a949e80b6b5eca8f9e192feb5c253613"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Wrapping up</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 212px; top: 280px;" data-block-id="538822040a80feb033744fe70cf43c0b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<ul>
+	<li>Rust as a web backend
+	<ul>
+		<li>yes. no. it depends.</li>
+	</ul>
+	</li>
+	<li>For networking application
+	<ul>
+		<li>definitively yes!</li>
+	</ul>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="de70c6239ec801f7a9bc76c3f8d526e2"><div class="sl-block" data-block-type="text" style="width: 806px; left: 108px; top: 22px; height: auto;" data-block-id="841fb6287966daf7d1ec7ebfc4a8be29"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 10;">
+<h1>Show me the code</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 869px; left: 77px; top: 280px;" data-block-id="9d419dd6a562d697c3996e9c677e68f9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 2.08; font-size: 120%;" dir="ui" data-has-line-height="">
+<p>Backend</p>
+
+<p><a href="http://github.com/apiraino/open-taffeta" target="_blank">github.com/apiraino/open-taffeta</a></p>
+
+<p>Mobile app</p>
+
+<p><a href="http://github.com/apiraino/open-taffeta-mobile-app" target="_blank">github.com/apiraino/open-taffeta-mobile-app</a></p>
+</div></div></section><section data-id="8c16ec390284343f4d22dea021da61fe" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="width: 806px; left: 109px; top: 21px; height: auto;" data-block-id="551f0a6a64f7048c8429eb28b4a0aae8"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="color: rgb(37, 37, 37); z-index: 11;">
+<h1>Thank you</h1>
+</div></div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 440px; left: 72px; top: 409px;" data-block-id="81bee7df4b7e217e670035d0aa0403a7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; font-size: 130%;">
+<ul>
+	<li>Rust Slack Italia</li>
+	<li>Rust Discord server</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 212px; top: 591px;" data-block-id="58378b20a22410d9dcc69dd42e384d87"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; font-size: 130%;">
+<p>... and you!</p>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 449px; left: 499px; top: 184px;" data-block-id="7d2494cc6f802159d7d93131b987ab19"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 130%;">
+<p><strong>CWRKNG.de</strong></p>
+
+<p>Bürogemeinschaft / Coworking in Kreuzberg</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 210px; height: 210px; left: 212px; top: 160px;" data-block-id="2b46889d7f9d6f84a74144e354cfbc12"><div class="sl-block-content" style="z-index: 15;"><img style="" data-natural-width="1350" data-natural-height="1350" data-lazy-loaded="" data-src="rustlab-19/c084976d1592f71fcb283410e67c783e.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 443px; left: 511px; top: 409px;" data-block-id="f900f3a6b0d0b96369fc8ffea2d4a5a3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 130%;" dir="ui">
+<ul>
+	<li>Diesel Gitter channel</li>
+	<li>Rocket IRC channel</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 673px; left: 176px; top: 509px;" data-block-id="85f9805c731be0edb90e719ca1a2864f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; font-size: 141%;">
+<p><span style="font-size:0.7em">&lt;insert joke about Rust community channels&gt;</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 796px; left: 115px; top: 700px;" data-block-id="ff9fe863b647611838a9a9c5675d4937"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; font-size: 110%;">
+<p>@apiraino on github+gitlab - apiraino@pm.me</p>
+</div></div></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":1541739,"slug":"rustlab-19","title":"Open Sesame! (RustLab '19)","description":"","width":1024,"height":768,"visibility":"all","published_at":"2019-06-28T10:05:53.851Z","sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/d7e23b09ab617645a58993a19b58c598/thumb.jpg?1561641974","view_count":2,"user":{"id":862129,"username":"apiraino","name":"","description":"","thumbnail_url":"https://www.gravatar.com/avatar/dcdcb057c9f0bab3f5e3d1db3f81cb0f?s=140\u0026d=https%3A%2F%2Fstatic.slid.es%2Fimages%2Fdefault-profile-picture.png","paid":true,"pro":false,"lite":true,"team_id":null,"settings":{"id":1087833,"present_controls":true,"present_upsizing":true,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null}},"background_transition":"slide","transition":"slide","theme_id":null,"theme_font":"montserrat","theme_color":"white-blue","auto_slide_interval":0,"comments_enabled":false,"forking_enabled":false,"rolling_links":false,"center":false,"shuffle":false,"should_loop":false,"share_notes":false,"slide_number":true,"slide_count":35,"rtl":false,"version":2,"collaborative":false,"deck_user_editor_limit":1,"data_updated_at":1561716411144,"font_typekit":null,"font_google":null,"time_limit":45,"upsizing_enabled":true,"notes":{"b0fee947edb17fdf8e92ec2194d92bbe":"","84c9922cc50186ba3b15c74354fe3bb3":"","695ce374a79f3cf87e9f2b8bcb76d212":"The variety of languages and the deviation from the \"standard\" reflects the experimentation.\n\nBut in the end it turned out the tools are ok for the project\n\nAnd a much larger and refined future version of it","bbd2f9d1b862404a6f442a5c208ef345":"prima di Rust guardi il version number di una libreria e quanti contributor ha il progetto\n\ncon Rust di accontenti di controllare la data dell'ultimo commit","fc850c6964e48ce8bb54638d651b382d":"","b92889566513f057ee624e63af7c3565":"hardware constraints turned out to be a great opportunity to learn a lot\n\nDocker on the raspi1 does not really work\n\nservices like balena.io didn't work on the Raspi1 (they only recently solved my issue)\n\ncannot deploy without installing a truckload of dependencies on a production environment","7118bd21b0e36423ddac4a493840ee1b":"I guess this is a common Trait for compiled languages.\n\nRarely have I seen my code fail ... once it compiles","29f674dea3da10dc9127d675afda349e":"See my example (or any other)","7752dde043d54db4abd949a058bae83d":"don't want a compiler on my production server","459997b89001f72da8bc006dd8d08b63":"Rust + serde (a de/serialization library) I can finally relax and trust my server-to-server code\n\nwhereas e.g. in Python I need to use mypy and hope that I don't forget to decorate some code path","9489d67802311ec153072ce537192d48":"As per definition: it can break. but compiler updates don't break libs anymore\n\nThe previous sentence will provoke blank stares from a Java developer","fef8062a28b1562c306edafdceab5f5c":"a basic user management backend (login/signup) system would cost too much","6073e982212c14b279caa48bb4ae7386":"Rocket does not provide a TestServer (actix does)\n\nint tests:\n\nwrite your own setup/teardown logic\n\nrun them sequentially","cd19ceb0c9f99fbd4204eeb67e60a279":"Rust helps selling solid state disks","4fdd7c1a21e909ac1267603dd66cbe87":"","0fd187783e83e1a2bd2e46c18a8033af":"","a9a3949c29a5f12bdf21f49b1a3b14d7":""}}};
+
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/reveal.min.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 1024,
+				height: 768,
+				margin: 0.05,
+				
+
+				hash: true,
+				controls: true,
+				progress: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: true,
+
+				autoSlide: 0,
+				autoSlideStoppable: true,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+
+				transition: "slide",
+				backgroundTransition: "slide",
+
+				highlight: {
+					escapeHTML: false
+				},
+
+				dependencies: [
+					{ src: 'lib/reveal-plugins/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/highlight/highlight.js' },
+					{ src: 'lib/reveal-plugins/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'lib/reveal-plugins/zoom/zoom.js', async: true }
+				]
+			});
+		</script>
+
+		
+
+	</body>
+</html>
