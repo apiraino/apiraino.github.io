@@ -376,7 +376,7 @@ fn main() {
 
 ## <a id="future-poll"></a>One more thing: running more Futures together
 
-[https://github.com/chicagohaskell/async-futures-talk/blob/master/rustlb/examples/multi-http/src/main.rs](_posts/2019-07-17-rust-future-examples.md)
+[https://github.com/chicagohaskell/async-futures-talk/blob/master/rustlb/examples/multi-http/src/main.rs](https://github.com/chicagohaskell/async-futures-talk/blob/master/rustlb/examples/multi-http/src/main.rs)
 
 # Credits
 
