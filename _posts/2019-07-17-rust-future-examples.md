@@ -7,7 +7,9 @@ Some examples of Futures I wish I'd found before (or wasn't able to find). These
 
 All examples use the [Tokio runtime](https://tokio.rs).
 
-Code is available on [Github](https://github.com/apiraino).
+All examples use the [futures crate](https://crates.io/crates/futures) v0.1.2x .
+
+Code is available on [Github](https://github.com/apiraino/rust-future-explorations).
 
 ## <a id="part_i"></a>Brief prologue: what is a Future
 
