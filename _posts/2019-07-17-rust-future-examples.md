@@ -234,7 +234,7 @@ The Hyper server has a router that recognize two endpoints:
 
 Basically the same as before but with a twist: the request router is itself a Future that resolves when the final Future is resolved.
 
-Full code of this example is [here](#). Here we have the interesting bits:
+Full code of this example is [here](https://github.com/apiraino/rust-future-explorations/tree/master/hyper-router). Here we have the interesting bits:
 
 ``` rust
 fn fetch_data() -> impl Future<Item = future::FutureResult<RespStruct, String>, Error = ()> {
