@@ -32,7 +32,7 @@ def test_1(self, server_mock):
     # other tests to check what happened after the external call was completed
 ```
 
-So, how do we put this workflow under integration tests on Rust? I looked for a mocking library but couldn't find one to be easy enough to use. The crate [mockito](https://github.com/lipanski/mockito) gets close to what I'd like a mocking library to but it can only mick an HTTP request that it's directly called from the test.
+So, how do we put this workflow under integration tests on Rust? I looked for a mocking library but couldn't find one to be easy enough to use. The crate [mockito](https://github.com/lipanski/mockito) gets close to what I'd like a mocking library to be but it can only mock an HTTP request that it's directly called from the test.
 
 The alternate approach is to roll up your sleeve and find a creative solution: for example start a proxy server that intercepts all outbound HTTP request and returns a static JSON.
 
@@ -40,7 +40,7 @@ The alternate approach is to roll up your sleeve and find a creative solution: f
 
 [mitm](https://github.com/mitmproxy/mitmproxy) is my proxy of choice when I need to inspect traffic, easy enough to get things done quickly.
 
-`mitm` can be quickly scripted to have all sorts of funny things happening! In my casew I just want the request to be intercepted and a static JSON response returned. This can be accomplished with 10 lines of python:
+`mitm` can be quickly scripted to have all sorts of funny things happening! In my case I just want the request to be intercepted and a static JSON response returned. This can be accomplished with 10 lines of python:
 
 ``` python
 from mitmproxy import http
@@ -60,7 +60,7 @@ def response(flow: http.HTTPFlow) -> None:
 
 ```
 
-Run it with and then try to call the remote endpoint:
+Run it and then try to call the remote endpoint:
 
 ``` bash
 $ mitmproxy --scripts my_script.py
@@ -77,8 +77,7 @@ Ok we have the proxy. How do we tell the Rust client to use the proxy? And since
 
 My solution, while not the cleanest, is to have a compilation flag to compile the client with or without the proxy (I use [hyper](https://hyper.rs) as http client and [hyper_proxy](https://github.com/tafia/hyper-proxy) to add a proxy).
 
-Let's a feature flag
-
+Let's add a feature flag:
 ``` toml
 # Cargo.toml
 ...
@@ -206,9 +205,9 @@ jobs:
             sh ./scripts/post-mortem.sh
 ```
 
-One more problem to solve. Like mentioned before the integration test has no way to know to report a failure, it will always succeed.
+One more problem to solve. Like mentioned before, the integration test has no way to know or report a failure, it will always succeed.
 
-The only trace I have if something breaks is inspecting the server logging (notice the `nohup` when running the Rust server). In future I'd like to integrate a serious logging facility in Rust that allows me to write a proper log file and log to syslog.
+The only trace I have if something breaks is inspecting the server logging (notice the "nohu" when running the Rust server). In future I'd like to integrate a serious logging facility in Rust that allows me to write a proper log file and log to syslog.
 
 In the meanwhile I'll just ... well ... grep through the logged stdout for a "BACKTRACE" or other markers :-)
 
