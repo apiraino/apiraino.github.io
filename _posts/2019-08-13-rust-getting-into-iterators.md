@@ -18,7 +18,7 @@ pub fn mapper(src: &Vec<SrcStruct>) -> Vec<DestStruct> {
 }
 ```
 
-This function takes as input an array of <strong>Srcstruct</strong> references and return an array of <strong>DestStruct</strong>. For each item of <SrcStruct> create a new <strong>Deststruct</strong> and adds to the array. At the end of the iteration the array is returned.
+This function takes as input an array of <strong>Srcstruct</strong> references and return an array of <strong>DestStruct</strong>. For each item of <strong>SrcStruct</strong> we create a new <strong>Deststruct</strong> and add it to the array. At the end of the iteration the array is returned.
 
 That's a pretty straightforwarded approach, which works well in most cases and looks familiar in most languages. Nobody will complain about such implementation.
 
@@ -83,4 +83,4 @@ where
 }
 ```
 
-I'd like to run some benchmarks on these two implementations (although benchmarks are like opinions: everyone has their own); unfortunately I could not figure out easily how to run benchmarks in Rust, so I'll leave a `cargo bench` setup for a later stage.
+I'd like to run some benchmarks on these two implementations (although benchmarks are like opinions: everyone has their own); unfortunately I could not figure out easily how to run benchmarks in Rust, so I'll leave a <strong>cargo bench</strong> setup for a later stage.
