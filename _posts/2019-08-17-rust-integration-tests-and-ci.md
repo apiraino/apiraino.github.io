@@ -207,7 +207,7 @@ jobs:
 
 One more problem to solve. Like mentioned before, the integration test has no way to know or report a failure, it will always succeed.
 
-The only trace I have if something breaks is inspecting the server logging (notice the "nohu" when running the Rust server). In future I'd like to integrate a serious logging facility in Rust that allows me to write a proper log file and log to syslog.
+The only trace I have if something breaks is inspecting the server logging (notice the "nohup" when running the Rust server). In future I'd like to integrate a serious logging facility in Rust that allows me to write a proper log file and log to syslog.
 
 In the meanwhile I'll just ... well ... grep through the logged stdout for a "BACKTRACE" or other markers :-)
 
@@ -226,5 +226,5 @@ Like I said, nothing here is implemented the way I'd like, but it's a start.
 
 Things I'd like to improve in the future:
 - Ideally find a serious HTTP mocking library and remove the whole proxy crutch
-- Add a logging facility, I will investigate [log4rs](https://github.com/sfackler/log4rs)
+- Add a logging facility, I will investigate [log4rs](https://github.com/sfackler/log4rs), maybe [fern](https://github.com/daboross/fern)?
 - Improve the post-mortem reporting
