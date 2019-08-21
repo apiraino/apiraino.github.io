@@ -12,5 +12,17 @@ li {
     margin-bottom: 0.5em;
 }
 
+code {
+    color: #b5e853;
+}
+
 a:link { text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+a.paragraph_link:hover {
+    visibility: visible;
+}
+
+a.paragraph_link:after:hover {
+    visibility: hidden;
+}
