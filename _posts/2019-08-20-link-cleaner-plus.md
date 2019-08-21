@@ -7,7 +7,7 @@ Here it is, published: [Link Cleaner +](https://addons.mozilla.org/en-US/firefox
 
 This is a funny (and I hope useful) project I had forked and, with the help of another friend, moved a bit forward.
 
-### <a id="part_i" href="#part_i" class="paragraph_link">&#182;</a> What is "Link Cleaner +"?
+### <a id="part_i" href="#part_i" class="header-anchor">#</a> What is "Link Cleaner +"?
 
 A Firefox extension that "cleans URLs before opening a link, removes trackers, rewrites redirects pages such as of Amazon, Facebook, Steam, Reddit and AMP URLs". As part of keeping a healthy internet browsing habit, I had discovered months ago this interesting extension (the original [Link Cleaner](https://addons.mozilla.org/en-US/firefox/addon/link-cleaner)). The GitHub page of the project, unfortunately, is riddled with issues, features requests and pull requests left unattended. So after a while we decided to fork the project and try to pick where the project left.
 
