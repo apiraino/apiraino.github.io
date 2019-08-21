@@ -19,10 +19,17 @@ code {
 a:link { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-a.paragraph_link:hover {
-    visibility: visible;
+h1:hover .header-anchor,
+h2:hover .header-anchor,
+h3:hover .header-anchor,
+h4:hover .header-anchor,
+h5:hover .header-anchor,
+h6:hover .header-anchor {
+    opacity: 1
 }
-
-a.paragraph_link:after:hover {
-    visibility: hidden;
+a.header-anchor {
+    opacity: 0
+}
+a.header-anchor:hover {
+    text-decoration: none
 }

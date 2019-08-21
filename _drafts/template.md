@@ -3,9 +3,9 @@ layout: post
 title: Post Title (C-x c)
 ---
 
-### <a name="part_i"></a>Part I
-### <a name="part_ii"></a>Part II
-### <a name="part_iii"></a>Part III
+### <a id="part_1" href="#part_1" class="header-anchor>#</a> Title 1
+### <a id="part_1" href="#part_2" class="header-anchor>#</a> Title 2
+### <a id="part_1" href="#part_3" class="header-anchor>#</a> Title 3
 
 ### Example Link
 

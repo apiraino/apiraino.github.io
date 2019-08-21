@@ -17,7 +17,7 @@ Anyway, let's a look at it works (and how I'd like to see it improved).
 
 The workflow of a browser extension is pretty much the same for Chrome and Firefox (luckily, since Firefox 57+ and WebExtensions came to the world) both APIs are pretty much the same, therefore much of the code can be shared and easily compile for both platforms.
 
-### <a id="part_ii" href="#part_ii">&#182;</a> Step 1: clean query params
+### <a id="part_ii" href="#part_ii" class="header-anchor">#</a> Step 1: clean query params
 
 We first intercept the action of opening a URL:
 
@@ -104,7 +104,7 @@ browser.webRequest.onBeforeRequest.addListener(
 );
 ```
 
-### <a id="part_iii" href="#part_iii">&#182;</a> Step 2: clean URLs
+### <a id="part_iii" href="#part_iii" class="header-anchor">#</a> Step 2: clean URLs
 
 When we want to sanitize the URL itself, we need custom rules for any URL we want to manage. Example:
 
@@ -143,7 +143,7 @@ function clean_amazon(url) {
 }
 ```
 
-### <a id="part_iv" href="#part_iv">&#182;</a> Further thoughts and a wishlist
+### <a id="part_iv" href="#part_iv" class="header-anchor">#</a> Further thoughts and a wishlist
 
 - If you squint enough at the code, you'll see that for <strong>every HTTP request the browser does, we run a lot of regexps work</strong>. If you're worried about the performance hit, then you are in good company: I'm worried, too.
 
