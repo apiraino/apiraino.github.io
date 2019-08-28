@@ -1,13 +1,13 @@
 ---
 layout: post
 title: Returning from ETHberlin Zwei
----
+--
 
 ### <a id="part_1" href="#part_1" class="header-anchor">#</a> An impostor trolling at a "Web 3.0" hackaton
 
 [ETHBerlinZwei](https://ethberlinzwei.com) was a hackaton where different teams (from many countries) had 48h to implement something on the topic blockchain (which has the unquestionable benefit of attracting a good deal of investiments sometimes without a solid business model).
 
-Well, I know nothing about blockchains and I'm behind schedule on a project, so I decided to apply to the hackaton and do some serious coding on my stuff. Two days with unlimited food, drinks, sleeping area and music. Where do I have to sign? :-) As an further bonus it's always nice to be among hackers, there's always fun stuff to learn (plus I had some friends there).
+Well, I know nothing about blockchains and I'm behind schedule on a project, so I decided to apply to the hackaton and do some serious coding on my stuff. Two days with unlimited food, drinks, sleeping area and music. Where do I have to sign? :-) As a further bonus it's always nice to be among hackers, there's always fun stuff to learn (plus I had some friends there).
 
 To my great surprise, my application was accepted (lol).
 
@@ -30,11 +30,11 @@ So far: not one line of code was written :-)
 
 Around lunch I went back to the hackaton to finally get some shit done. I kept on hitting the keyboard furiously until the following morning, occasionally eating a bite and happily overdosing on caffeine. I took a quick nap before the award ceremony.
 
-Which I didn't attend because I was tired, so I went home to have a shower. I've heard that the submissions were generally not impressive, mostly because the teams had not enough time to work on their project.
+Which I didn't attend because I was tired, so I went home to have a shower. I've heard that the submissions were generally not impressive, mostly because the teams had not enough time to work on their projects.
 
 I am happy because I've accomplished a good deal of code for my project. I've also learned some stuff about [Hyper](https://hyper.rs) (an async client/server library in Rust) which I'll probably detail at a later stage.
 
-The organization was simply amazing. During the night, volunteers filled the fridges with beverages and on the tables ther were always something to eat. During the day meals were good. Having done some work in conferences I incredibly appreciate the invisible work that these people do.
+The organization was simply amazing. During the night, volunteers filled the fridges with beverages and on the tables there were always something to eat. During the day meals were good. Having done some work in conferences I incredibly appreciate the invisible work that these people do.
 
 **At you next conference, don't forget to stop and thank a random person that is working there.** You'll make that person happy.
 
