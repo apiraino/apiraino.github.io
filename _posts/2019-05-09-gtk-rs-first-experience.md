@@ -196,7 +196,7 @@ As an unexpected bonus, experienced Gtk-rs developers and maintainers were reall
 
 ## References
 
-[RustFest 18 waorkshop on GTK-rs](https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/tree/master/src)
+[RustFest 18 workshop on GTK-rs](https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/tree/master/src)
 
 Misc [GTK applications in Rust](https://gitlab.gnome.org/World/Rust)
 
