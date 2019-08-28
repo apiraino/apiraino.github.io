@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Returning from ETHberlin Zwei
+title: Returning from EthBerlin Zwei
 --
 
 ### <a id="part_1" href="#part_1" class="header-anchor">#</a> An impostor trolling at a "Web 3.0" hackaton
