@@ -11,6 +11,8 @@ All examples use the [futures crate](https://crates.io/crates/futures) v0.1.2x.
 
 Code is available on [Github](https://github.com/apiraino/rust-future-explorations).
 
+Update: the part about Hyper has been moved [to its own article](/2019/07/18/hyper.html).
+
 ## <a id="part_i"></a>Brief prologue: what is a Future
 
 A Future is simply a plain Rust function which return type is a `Future`. I won't go in detail of what a Future is, others can explain that better than me. The standard return type is as follows:
@@ -135,180 +137,17 @@ The console output will be:
 future finished
 ```
 
-## <a id="hyper-basic"></a>Introducing Hyper 0.12
-
-Hyper is a high-performance HTTP async server and client that sits on the Tokio runtime and Future crate.
-
-The server listens for incoming connections and returns a string.
-
-``` rust
-// Notice we are using the future crate re-exported from hyper
-// use futures::future;
-use hyper::rt::Future;
-
-use hyper::service::service_fn_ok;
-use hyper::{Body, Request, Response, Server};
-
-fn main() {
-    println!("Start");
-
-    let addr = ([127, 0, 0, 1], 3000).into();
-    let server = Server::bind(&addr)
-        .serve(|| {
-            // This is the `Service` that will handle the connection.
-            // `service_fn_ok` is a helper to convert a function that
-            // returns a Response into a `Service`.
-            service_fn_ok(move |_: Request<Body>| Response::new(Body::from("Hello World!\n")))
-        })
-        .map_err(|e| eprintln!("server error: {}", e));
-
-    // runs on tokio runtime
-    println!("Listening on http://{}", addr);
-    hyper::rt::run(server);
-
-    println!("Exiting");
-}
-```
-
-## <a id="hyper-spawn"></a>Hyper spawns a Future
-
-The server listens for incoming connections and spawns the "sleep" Future seen before.
-
-Notice how che client connection is closed immediately and the Future is resolved at a later stage
-
-Do *not* use `std::thread::sleep` to add a delay, you'll end up blocking the whole Tokio runtime thread!
-
-``` rust
-fn svc_wait(t: u64) -> impl Future<Item = (), Error = ()> {
-    // code omitted for brevity
-}
-
-fn main() {
-    let addr = ([127, 0, 0, 1], 3000).into();
-    let server = Server::bind(&addr)
-        .serve(|| {
-            service_fn_ok(|req: Request<Body>| {
-                // received the client connection
-                eprintln!("Received client: {:?}", req.headers());
-                // creating the future
-                let f = svc_wait(2000);
-                // the future is run NOW
-                hyper::rt::spawn(f);
-                // the client receives immediately a reply
-                eprintln!("Sending back NOW a response to the client");
-                Response::new(Body::from("Future triggered"))
-            })
-        })
-        .map_err(|e| eprintln!("server error: {}", e));
-
-    // runs on tokio runtime
-    println!("Listening on http://{}", addr);
-    hyper::rt::run(server);
-}
-```
-
-Observe the server logging:
-
-``` bash
-# The request to the server will be immediately served, then the connection closed
-$ curl localhost:3000
-Future triggered
-
-# this is the output you'll see on the server
-$ cargo run
-Listening on http://127.0.0.1:3000
-Received client: {"host": "127.0.0.1:3000", "user-agent": "curl/7.64.0", "accept": "*/*"}
-[start] waiting...
-Sending back NOW a response to the client
-... waiting ...
-[end] waiting
-```
-
-A reply is being sent immediately to the client. The future is triggered, starts doing its "work" and finishes way after a reply is sent to the client.
-
-## <a id="hyper-spawn"></a>Hyper with a simple endpoint router, spawns different Futures
-
-The Hyper server has a router that recognize two endpoints:
-- `GET /wait`: triggers the waiting Future seen before
-- `GET /fetch`: triggers a request on a remote server
-
-Basically the same as before but with a twist: the request router is itself a Future that resolves when the final Future is resolved.
-
-Full code of this example is [here](https://github.com/apiraino/rust-future-explorations/tree/master/hyper-router). Here we have the interesting bits:
-
-``` rust
-fn fetch_data() -> impl Future<Item = future::FutureResult<RespStruct, String>, Error = ()> {
-    let uri: Uri = "http://httpbin.org/get".parse().expect("Cannot parse URL");
-    Client::new()
-        .get(uri)
-        // Future is polled here
-        .and_then(|res| {
-            // extract the body from the Response
-            res.into_body().concat2()
-        })
-        .map_err(|err| println!("error: {}", err))
-        .map(|body| {
-            // here parse the FutureResult, serialize into a validated Struct
-            let decoded: RespStruct = serde_json::from_slice(&body).expect("Couldn't deserialize");
-            future::ok(decoded)
-        })
-}
-
-fn svc_wait(t: u64) -> impl Future<Item = (), Error = ()> {
-    // code omitted for brevity
-}
-
-// Just an alias to make it more readable
-type BoxFut = Box<dyn Future<Item = Response<Body>, Error = hyper::Error> + Send>;
-
-fn service_router(req: Request<Body>) -> BoxFut {
-    let mut response = Response::new(Body::empty());
-
-    // routes the requesto to the appropriate worker
-    match (req.method(), req.uri().path()) {
-
-         // GET /wait
-        (&Method::GET, "/wait") => {
-            let r = svc_wait(1500);
-            hyper::rt::spawn(r);
-            *response.body_mut() = Body::from(format!("Triggered waiting {}ms", 1500));
-        }
-
-         // GET /fetch
-        (&Method::GET, "/fetch") => {
-            let r = fetch_data().map(|x| {
-                println!("got data: {:?}", x);
-            });
-            hyper::rt::spawn(r);
-            *response.body_mut() = Body::from("Sent request to external webservice");
-        }
-
-        // ... more routers
-
-    }
-    eprintln!("Returning a response");
-    Box::new(future::ok(response))
-}
-
-fn main() {
-    let addr = ([127, 0, 0, 1], 3000).into();
-    let server = Server::bind(&addr)
-        .serve(|| {
-            // now we spawn a Future with our request router
-            service_fn(service_router)
-        })
-        .map_err(|e| eprintln!("server error: {}", e));
-
-    println!("Listening on http://{}", addr);
-    hyper::rt::run(server);
-}
-```
+It's important to note that if you want to simulate a long-lasting async task you should *not* use `std::thread::sleep`, you'll end up blocking the whole Tokio runtime thread!
 
 ## <a id="future-poll"></a>(TODO) Manually implementing a Future
 
 Futures are cool because you "fire&forget" them. But what if we want to track their progress?
 
 We need to manually implement the `.poll()` to be able to observe the various stages.
+
+I still have to figure out how this stuff work.
+
+Here's some code pasted from elsewhere.
 
 ``` rust
 impl Future for Magazine {
