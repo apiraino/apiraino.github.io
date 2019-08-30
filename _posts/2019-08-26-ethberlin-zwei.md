@@ -36,7 +36,7 @@ I am happy because I've accomplished a good deal of code for my project. I've al
 
 The organization was simply amazing. During the night, volunteers filled the fridges with beverages and on the tables there were always something to eat. During the day meals were good. Having done some work in conferences I incredibly appreciate the invisible work that these people do.
 
-**At you next conference, don't forget to stop and thank a random person that is working there.** You'll make that person happy.
+**At your next conference, don't forget to stop and thank a random person that is working there.** You'll make that person happy.
 
 I only have a small complaint: the policy about photos was not respected by many attendees. At any given time there were people taking pictures and filming without asking permission. Whatever.
 
