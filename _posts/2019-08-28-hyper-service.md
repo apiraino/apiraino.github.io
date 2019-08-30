@@ -98,6 +98,8 @@ impl MyBackendService {
 Now let's follow the [documentation](https://docs.rs/hyper/0.12.33/hyper/service/trait.Service.html) and implement our Service:
 
 ``` rust
+use hyper::service::Service;
+
 // another shortcut to manage these long Rust type declaration...
 // basically it says: a pointer to a Future which can return either a Response or an error
 // oh, and this Future is thread safe (Send)
