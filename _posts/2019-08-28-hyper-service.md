@@ -5,7 +5,7 @@ title: "In depth with Hyper: implementing a Service"
 
 Follow-up to the previous [Hyper article](/2019/07/18/hyper.html).
 
-Quick recap: Hyper is a high-performance HTTP async server and client that sits on the Tokio runtime and Future crate. These articles refer to Hyper `v0.12.33`. Despite the early release numbers, the framework semmes to work well. Just expect the API to be unstable even between patch releases (!) (f.e. there was API breakage between `0.12.15` and `0.12.16`).
+Quick recap: Hyper is a high-performance HTTP async server + client that sits on the Tokio runtime and Future crate. These articles refer to Hyper `v0.12.33`. Despite the early release numbers, the framework seems to work well. Just expect the API to be unstable even between patch releases (!) (f.e. there was API breakage between `0.12.15` and `0.12.16`).
 
 ### <a id="part_1" href="#part_1" class="header-anchor">#</a> Implementing a `Service`
 
