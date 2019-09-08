@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Appreciation for software #5: i3 window manager"
-date: 2019-09-08
 ---
 
 If there a piece of software that screams **NEEERRRRRD** is definitively the [i3 window manager](https://i3wm.org).
