@@ -5,11 +5,11 @@ title: "Appreciation for software #5: i3 window manager"
 
 If there a piece of software that screams **NEEERRRRRD** is definitively the [i3 window manager](https://i3wm.org).
 
-Months ago I was using a vanilla Ubuntu with Gnome. Nothing to really complain about that, but I wanted something more snappy and that could solve the problem of having layers of overlapping windows, sometimes forcing me to some "long sessions" of alt-tabbing to find the lost shell, which is very distracting when you're deeply concentrated.
+Months ago I was using a vanilla Ubuntu with Gnome. Nothing to really complain about that, but I wanted something more snappy and that could solve the problem of having layers of overlapping windows, sometimes forcing me to "long sessions" of alt-tabbing to find the lost shell, which is very distracting when you're deeply concentrated.
 
 A friend of mine was proudly showing me his i3 setup, telling me all the advantages of a tiling window manager. Then I saw this weird window manager consistently  in hackerspaces, hackatons and all things starting with "hack-" so I had to try it because there could be a serious boost in productivity.
 
-After many months of test, I can finally say that I find myself at home with `i3`. It's *fast*, stable, well documented, flexible to an exent I couldn't believe possible, features are added very carefully. The reason is: if `i3` doesn't do it, write a script and a keybinding. Moreover there is a big community of aficionados that wrote scripts for everything, therefore you have a good start on how to solve the most common needs (ex. volume up and down).
+After many months of test, I can finally say that I find myself at home with `i3`. It's *fast*, stable, well documented, flexible to an extent I couldn't believe possible, features are added very carefully. The reason is: if `i3` doesn't do it, write a script and a keybinding. Moreover, there is a big community of aficionados that wrote scripts for everything, therefore you have a good start on how to solve the most common needs (ex. volume up and down).
 
 It has a very cool logo.
 
@@ -26,9 +26,9 @@ Using `i3` also means giving up to some comforts, which I am not yet ready, ther
 - The network manager applet (`nm-applet`), small, complete and it simply works
 - Sometimes I use `gnome-text-editor` :^)
 
-The second disadvantage of using a tiling window manager is that applications born to be used with floating windows a little uncomfortable (es. Gimp) or sometimes I see weird things when stupid websites open a popup for PayPal payment.
+The second disadvantage of using a tiling window manager is that applications born to be used with floating windows feels sometimes a little uncomfortable (es. Gimp); also, sometimes I see weird things when stupid websites opening popups for a PayPal payment.
 
-The natural complement of `i3` is [py3status](https://github.com/ultrabug/py3status), a python tool to manage the status bar (because `i3` itself has a little too barebone management of that). Like `i3` itself it's completely programmable through plugins, it's well documented, has a great API and comes with a ton of scripts from the community. Using `i3` with `py3status` is like heaven for those that want to customize things to the detail. And it's incredibly fun, it's like playing with Lego!
+The natural complement of `i3` is [py3status](https://github.com/ultrabug/py3status), a python tool to manage the status bar (because `i3` itself is a little too barebone at that). Like `i3` itself it's completely programmable through plugins, it's well documented, has a great API and comes with a ton of scripts from the community. Using `i3` with `py3status` is like heaven for those that want to customize things to the detail. And it's incredibly fun, it's like playing with Lego!
 
 Another tool that I find very useful is [dmenu](https://tools.suckless.org/dmenu/), a tool to directly start applications (think of using Spotlight on OSX). It replaces the application start menu of a usual window manager.
 
