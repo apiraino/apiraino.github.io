@@ -7,7 +7,7 @@ I always keep a pinned tab on my Github account, on the activity feed page. This
 
 I don't like how Github decide how to use the space here without leaving me the option to customize.
 
-As a starter, the "Explore repositories" column on the right: not only the recommendations provided are badly pulled together (typical suggestion engines trap: just because I've looked and bought a bra on your website, it doesn't mean that from now I'm interested in all sort of bras) but the column also wastes an entire +1000px using only a fistful of them! Looks like that space is only waiting for some GIFs or ads :^)
+As a starter, the "Explore repositories" column on the right: not only the recommendations provided are badly pulled together (typical suggestion engines trap: just because I've bought a bra on your website, it doesn't mean that from now on I'm interested in all sorts of bras) but the column also wastes an entire +1000px using only a fistful of them! Looks like that space is only waiting for some GIFs or ads :^)
 
 In addition, the left column with "my repositories" is not interesting either. I don't understand the sorting criteria (the most used?). Another 25% space wasted for nothing.
 
