@@ -24,7 +24,7 @@ This raises the question about how to securely delete files.
 
 There are many options, but the tool I find myself using is [srm](https://en.wikipedia.org/wiki/Srm_(Unix)) as it's a drop-in replacement for `rm`. Uses `/dev/urandom` to overwrite clustes:
 ``` bash
-$ srm -r ~/Projects/private_stuff`
+$ srm -r ~/Projects/private_stuff
 ```
 
 And finally, remember these two golden rules:

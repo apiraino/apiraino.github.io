@@ -7,17 +7,17 @@ After a couple of iterations to increasingly secure my accounts, I think I've fi
 
 The path leading to **pass** was more or less:
 
-- In the beginning, it was "saving passwords in the browser". Works fine until you realize that an attacker can access the decrypted passwords from the browser's memory because (as far as I know) passwords stays decrypted until the browser stays open.
+- In the beginning, it was "saving passwords in the browser". Works fine until you realize that an attacker can access the decrypted passwords from the browser's memory because (as far as I know) passwords stays decrypted as long as the browser stays open.
 - Then I had a quite long relationship with [KeepassXC](https://keepassxc.org) and its great [browser extension](https://github.com/keepassxreboot/keepassxc-browser); the small team working on it is amazing, but in the end I've found KeepassXC GUI cumbersome, the CLI features lagging behind and the browser extension pattern matching (to fill login fields) sometimes lackluster.
 - Finally I've looked for an offline solution, because it was the only way I could have full control.
 
 I've completely skipped the step of "online password keyrings" because I don't have enough info to assess their security. Some of them have Javascript frontends that have been exploited, then patched, then exploited again. Others seems more secure, but only because there were no public disclosure about security incidents. Besides, I can reach syncronization on different devices using another workflow (detailed later).
 
-[pass](https://www.passwordstore.org), on the other hand, is an incredibly powerful and simple tool to manage passwords. Its strength lies in being a simple tool that does *one* thing well: storing passwords. The secret of its success is the long list of ancillary tools the community have grown around it and the possibility to chain it with other tools.
+[pass](https://www.passwordstore.org), on the other hand, is an incredibly powerful and simple tool to manage passwords. Its strength lies in being a simple tool that does *one* thing well: storing passwords. The secret of its success is the long list of ancillary tools the community has grown around it and the possibility to chain it with other tools.
 
-So, the points in favor of **pass** are:
+So, the points in favor of `pass` are:
 
-- Store password offline, easily management (generate new entries, rename and edit)
+- Store passwords offline, easy management, good command line (generate new entries, rename and edit)
 - The keyring is encrypted with a GPG key you choose
 - Password entries stays encrypted at all times: you only decrypt the entry that you need (each password entry is a separate GPG file) and will briefly stay in the clipboard (45 seconds by default)
 - Git integration: syncronize the encrypted keyring on a private, hosted repo. I can move the keyring anywhere I need by cloning the repo.
