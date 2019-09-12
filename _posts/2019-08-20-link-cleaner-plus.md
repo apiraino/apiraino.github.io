@@ -5,6 +5,8 @@ title: Link Cleaner +
 
 Here it is, published: [Link Cleaner +](https://addons.mozilla.org/en-US/firefox/addon/link-cleaner-plus)
 
+Source code here: [Link Cleaner + on Github](hhttps://github.com/apiraino/link_cleane)
+
 This is a funny (and I hope useful) project I had forked and, with the help of another friend, moved a bit forward.
 
 ### <a id="part_i" href="#part_i" class="header-anchor">#</a> What is "Link Cleaner +"?
