@@ -16,16 +16,20 @@ $ git flow feature finish -k <branch_name>
 
 ### <a id="part_ii"></a>Git release
 
+Update master branch:
+
+- git checkout master
+- git merge develop
 - Ensure you don't have unstaged diffs
+
+Do the release (from master branch):
+
 - `git flow release start 0.3.0`
 - Update the CHANGELOG
 - Update the version number everywhere
 - (opt.) `git flow release publish 0.3.0`
-- `git flow release finish 0.3.0`
+- `git flow release finish 0.3.0` (will be merged in master)
 
-then, tag the release
+then, tag and push the release:
 
-``` bash
-$ git tag -a 0.3.0 -m "release 0.3.0"
-$ git push --tags
-```
+- git push --tags
