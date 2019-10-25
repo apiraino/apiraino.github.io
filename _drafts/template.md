@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Post Title (C-x c)
+date: 2019-10-21
 ---
 
 ### <a id="part_1" href="#part_1" class="header-anchor">#</a> Title 1
