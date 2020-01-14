@@ -23,7 +23,7 @@ axios
   .get(api_url)
   .then(response => {
     if (response.data !== undefined) {
-      var addComment = "<a href='" + url + "#new_comment_field' rel='nofollow' class='btn-comment'>Post a comment</a><br/><br/>(Must be logged into GitHub)"
+      var addComment = "<a href='" + url + "' rel='nofollow' class='btn-comment'>Post a comment</a><br/><br/>(Must be logged into GitHub)"
       document.getElementById('gh-comments-list').innerHTML = addComment
       this.data = response.data
       this.data.forEach(function(comment) {
