@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "2020: new year resolution"
+gist_id: f790406ad4d1cce1ad2e753575fa2fff
 ---
 
 I wrote [my wishlist for Rust](/2019/11/04/call-for-2020-roadmap.html), so I can write one for me, too.
