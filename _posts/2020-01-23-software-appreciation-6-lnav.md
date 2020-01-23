@@ -57,9 +57,6 @@ $ lnav -r /var/www/logs/https-access.log
     ...
 ```
 
-- TODO: filter all 40x errors
-- TODO: filter out multiple IPs
-
 One funny situation in which `lnav` helped me is calculating how much time I've spent on a project. I had to look at the git history because I forgot to note down the time spent on the project. No, I'm too lazy to use time-tracking applications :-)
 
 So, what I did is extracting my commits with a custom `git log` command (thanks Stack Overflow):
