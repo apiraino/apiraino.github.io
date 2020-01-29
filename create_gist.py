@@ -3,6 +3,8 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 # https://developer.github.com/v3/gists/#create-a-gist
+# Usage:
+# python create_gist.py YYYY-MM-DD-article-name.md
 
 import os
 import sys
