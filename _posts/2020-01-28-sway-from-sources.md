@@ -20,10 +20,12 @@ Finally, I saw the light, a friend of mine pointed me to [https://salsa.debian.o
 
 The workflow now looks like:
 
-- git checkout from github the \<application\> sources
-- git checkout from salsa.debian.org the whole `/debian` directory for \<application\>, save it into the sources directory
-- run the Docker container
-- pray
+1. git checkout from github the \<application\> sources
+2. git checkout from salsa.debian.org the whole `./debian` directory for \<application\>, save it into the sources directory
+3. run the Docker container
+4. pray
+
+Part of point (4) is related to the fact that the `./debian` directory might need some tweaks when compiling a different version than the sources on salsa.debian.org (more on that later).
 
 ### <a id="part_2" href="#part_2" class="header-anchor">#</a> Building the accessory packages
 
