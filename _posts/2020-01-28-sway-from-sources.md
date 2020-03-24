@@ -27,7 +27,21 @@ The workflow now looks like:
 
 Part of point (4) is related to the fact that the `./debian` directory might need some tweaks when compiling a different version than the sources on salsa.debian.org (more on that later).
 
-### <a id="part_2" href="#part_2" class="header-anchor">#</a> Building the accessory packages
+### <a id="part_1a" href="#part_1a" class="header-anchor">#</a> 20200324 UPDATE: Docker it for Ubuntu
+
+Just discovered this repo that allows building directly for Ubuntu in an easier way:
+
+[https://github.com/luispabon/sway-ubuntu-build](https://github.com/luispabon/sway-ubuntu-build)
+
+Example:
+
+``` shell
+$ git clone https://github.com/luispabon/sway-ubuntu-build && cd sway-ubuntu-build
+$ git submodule update --init --recursive mako/
+$ make mako-build-deb
+```
+
+### <a id="part_2" href="#part_2" class="header-anchor">#</a> Building accessory packages
 
 For every Sway accessory package run the container with:
 
@@ -41,6 +55,8 @@ For Waybar need I needed to hack the `debian/control` file and force an older ve
 -libfmt-dev (>=5.3.0),
 +libfmt-dev (>=5.2.1),
 ```
+
+For [bemenu](https://github.com/Cloudef/bemenu) I had to modify the PREFIX install dir in the GNUmakefile, which by default points to `/usr/local`, [this is not allowed when building Debian packages](https://unix.stackexchange.com/a/409818).
 
 ### <a id="part_3" href="#part_3" class="header-anchor">#</a> Packaging sway and wlroots library
 
@@ -123,7 +139,7 @@ total 5556
 -rw-r--r-- 1 user user   13600 Jan 28 18:08 swaybg_1.0-2_amd64.deb
 -rw-r--r-- 1 user user  278680 Jan 28 23:14 waybar_0.9.0-1_amd64.deb
 ```
-You'll notice that I've have packaged:
+You'll notice that I have packaged:
 
 - wlroots 0.1.0
 - sway 1.4
