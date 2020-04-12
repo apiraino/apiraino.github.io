@@ -206,3 +206,7 @@ org.jitsi.jicofo.Main
 --user_domain=auth.meet.yourdomain.com
 --user_password=xxxxx
 ```
+
+### <a id="part_1" href="#part_1" class="header-anchor">#</a> Ok, so how is it?
+
+I've just briefly tested with a short call and it was not bad. The video quality is amazing (also your own video stream in local, when you see yourself) not a lot stable and ofetn the quality indicator signaled a poor connection. But the quality never dropped to a freezing video stream, it just downgraded to standard quality from high quality. A first test with the mobile client didnt' work. I will do more tests in the following days.
