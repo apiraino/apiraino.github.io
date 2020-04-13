@@ -31,7 +31,7 @@ iptables -A INPUT -p udp --dport 10000:20000 -j ACCEPT
 # ... plus 80+443 for the webserver
 ```
 
-After installing the packages, the installation asks if you want to install a SSL certiticate or "I want to use my own certificate". Since I have already in place I can say no, because otherwise a lot of necessary packages will be installed. Also a lot of stuff that I don't want of a webserver (gcc, for example... 🤦‍♂️).
+After installing the packages, the installation asks if you want to install a SSL certiticate or "I want to use my own certificate". Since I have already Let's Encrypt `certbot` in place I can say no, because otherwise a lot of necessary packages will be installed. Also a lot of stuff that I don't want of a webserver (gcc, for example... 🤦‍♂️).
 
 Jitsi pulls also a number of dependencies I don't understand, like the `x11-common` and a couple of X11 libraries, `libcups` and `libavahi-*`. Those cannot be removed.
 
@@ -207,6 +207,15 @@ org.jitsi.jicofo.Main
 --user_password=xxxxx
 ```
 
-### <a id="part_1" href="#part_1" class="header-anchor">#</a> Ok, so how is it?
+### <a id="part_2" href="#part_2" class="header-anchor">#</a> Optimizations
 
-I've just briefly tested with a short call and it was not bad. The video quality is amazing (also your own video stream in local, when you see yourself) not a lot stable and ofetn the quality indicator signaled a poor connection. But the quality never dropped to a freezing video stream, it just downgraded to standard quality from high quality. A first test with the mobile client didnt' work. I will do more tests in the following days.
+```
+net.core.rmem_max=10485760
+net.core.netdev_max_backlog=100000
+```
+
+source: [here](https://github.com/jitsi/docker-jitsi-meet/pull/440#issue-402324914)
+
+### <a id="part_2" href="#part_3" class="header-anchor">#</a> Ok, so how is it?
+
+I've just briefly tested with a short call and it was not bad. The video quality is amazing (also your own video stream in local, when you see yourself) not a lot stable and often the quality indicator signaled a poor connection. But the quality never dropped to a freezing video stream, it just downgraded to standard quality from high quality. A first test with the mobile client didnt' work. I will do more tests in the following days.
