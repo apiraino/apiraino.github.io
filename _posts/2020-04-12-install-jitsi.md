@@ -218,4 +218,4 @@ source: [here](https://github.com/jitsi/docker-jitsi-meet/pull/440#issue-4023249
 
 ### <a id="part_2" href="#part_3" class="header-anchor">#</a> Ok, so how is it?
 
-I've just briefly tested with a short call and it was not bad. The video quality is amazing (also your own video stream in local, when you see yourself) not a lot stable and often the quality indicator signaled a poor connection. But the quality never dropped to a freezing video stream, it just downgraded to standard quality from high quality. A first test with the mobile client didnt' work. I will do more tests in the following days.
+I've just briefly tested with a short call and it was not bad. The video quality is amazing (also your own video stream in local, when you see yourself) not a lot stable and often the quality indicator signaled a poor connection. But the quality never dropped to a freezing video stream, it just downgraded to standard quality from high quality. A first test with the mobile client didn't work. I will do more tests in the following days.
