@@ -16,7 +16,9 @@ As usual, this is my subjective experience (right or wrong), these are my unfilt
 
 As the title suggests, I decided to try matrix, the name was cool (lol) and it seems to have the most buzz across Nerdlands.
 
-The reference implementation of the Matrix protocol is a Python3 server called [Synapse](https://github.com/matrix-org/synapse). Installing Synapse is very easy. There's a handy Docker container for a quick install. Although I usually prefer installing non-dockerized services, now I just want the convenience to throw that and play with it, so I'll go for the fastest path with a SQLite database.
+Being essentially an open protocol, one of the important foundation of Matrix is [the API documentation](https://matrix.org/docs/spec) and notably a [simple and clean client API](https://matrix.org/docs/spec/client_server/r0.6.0) to interact with your (or someone else's) server. I could hack a simple bot in a very short time using their Python async API, some [examples here](https://github.com/vranki/hemppa).
+
+The reference implementation of a server running on the Matrix protocol is a Python3 web backend called [Synapse](https://github.com/matrix-org/synapse). Installing Synapse is very easy. There's a handy Docker container for a quick install. Although I usually prefer installing non-dockerized services, now I just want the convenience to throw that and play with it, so I'll go for the fastest path with a SQLite database.
 
 I had to figure out a little bit the proxy pass-through configuration, the Synapse server needs two open ports. I think the 8448 is for the login and for federation (that is, users from other Matrix instances willing to join your instance).
 ```
@@ -37,6 +39,12 @@ Other small details to take care of, like manually enable the possibility for us
 As usual, after starting the service, first check the open ports: Synapse opens to the world the TCP/8008, the python3 server (Twisted). Let's close it immediately:
 
 `iptables -I DOCKER-USER -p tcp --dport 8008 -j DROP`
+
+Configuration and DB path:
+
+SQLite DB: `/var/lib/docker/volumes/synapse-data/_data/homeserver.db`
+
+Config file: `/var/lib/docker/volumes/synapse-data/_data/homeserver.yml`
 
 ### <a id="part_1" href="#part_1" class="header-anchor">#</a> The Matrix clients
 
