@@ -2,6 +2,10 @@ header {
     margin: 20px 0px;
 }
 
+header > h1 {
+    margin: 0px;
+}
+
 .social {
     padding: 5px 0px;
     display: inline-block;
