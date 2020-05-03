@@ -18,3 +18,17 @@ date: 2019-10-21
     <img src="/path/to/file.png">
     <figcaption>Caption of the image</figcaption>
 </figure>
+
+### Collapsible section
+
+# A collapsible section with markdown
+<details>
+  <summary>Click to expand!</summary>
+
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+
+</details>

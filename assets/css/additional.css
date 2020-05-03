@@ -37,3 +37,21 @@ a.header-anchor {
 a.header-anchor:hover {
     text-decoration: none
 }
+
+.censored {
+    box-shadow: 0 0 0 20px inset,
+                0 0 5px grey;
+    transition: box-shadow .2s;
+}
+
+.censored:hover {
+    box-shadow: 0 0 0 0 inset,
+                0 0 2px grey,
+                0 0 2px grey inset;
+    transition: box-shadow .2s;
+}
+
+.censored:hover::after {
+    transition: opacity .2s;
+    opacity: 0;
+}
