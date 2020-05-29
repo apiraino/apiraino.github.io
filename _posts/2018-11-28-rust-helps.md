@@ -5,7 +5,7 @@ title: Rust compiler friendliness #1
 
 ``` bash
 $ cargo_check
-    Checking open-taffeta v0.1.0 (/home/.../open-taffeta)
+    Checking open-taffeta v0.1.0  (/home/.../open-taffeta)
 error: can't qualify macro_rules invocation with `pub`
  --> src/config.rs:8:1
   |
