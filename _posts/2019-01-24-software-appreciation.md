@@ -17,9 +17,9 @@ Some people joke that Emacs is more of an operating system lacking a decent text
 
 Learning Emacs teaches you about more than Emacs itself: it teaches you about the quality that software can reach, the complexity and unfriendliness :-) Also a lot about how a truly open system is supposed to be.
 
-When you've been using Emacs for enough time and you need a specific tool for a job, you'll stop looking for a new tool to install: as a first thing, you'll search for an Emacs package to do that.
+After you've been using Emacs for enough time and you need a specific tool for a job, you'll stop looking for a new tool to install: as a first thing, you'll search for an Emacs package to do that.
 
-You also learn how much of the stuff you write or need can be in bare text, without binary files. You start thinking if the increasing complexity of some software is justified by actual improvements.
+You'll also learn how much of the stuff you write or need can be in bare text, without binary files. You start thinking if the increasing complexity of some software is justified by actual improvements.
 
 Emacs' history is [worth reading](https://en.wikipedia.org/wiki/Emacs) and despite an ugly icon and an [irritating language](https://xkcd.com/297/) it became one of the most long-lived software ever written; and this alone, more than 40 years later, is a remarkable achievement in itself.
 
