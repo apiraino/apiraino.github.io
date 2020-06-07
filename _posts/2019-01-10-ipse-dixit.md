@@ -1,8 +1,0 @@
----
-layout: post
-title: Ipse Dixit no. 2
----
-
-> If you want a picture of the future, imagine a boot stamping on a human face — for ever.
-
--- George Orwell, 1984
