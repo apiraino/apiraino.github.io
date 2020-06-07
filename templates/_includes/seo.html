@@ -1,0 +1,27 @@
+<!-- SEO tags -->
+{% if page %}
+{% set _title = page.title %}
+{% set _desc = page.content | truncate(length=200) | striptags %}
+{% set _link = page.permalink %}
+{% set _date = page.date %}
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="{{ _date }}" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"{{ _link | safe }}"},"@type":"BlogPosting","url":"{{_link | safe }}","headline":"{{_title}}","dateModified":"{{_date}}","datePublished":"{{_date}}","description":"{{_desc}}","@context":"https://schema.org"}</script>
+
+{% else %}
+
+{% set _title = config.title %}
+{% set _desc = config.extra.description | striptags %}
+{% set _link = config.base_url | safe %}
+<script type="application/ld+json">{"@type":"WebSite","url":"{{ _link | safe }}","name":"{{ _title }}","headline":"{{ _title }}","description":"{{ _desc }}","@context":"https://schema.org"}</script>
+{% endif %}
+
+<meta name="generator" content="{{ config.extra.seo.generator }}" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="{{ config.title }}" />
+<meta property="og:title" content="{{ _title }}" />
+<meta name="description" content="{{ _desc }}" />
+<meta property="og:description" content="{{ _desc }}" />
+<link rel="canonical" href="{{ _link | safe }}" />
+<meta property="og:url" content="{{ _link | safe }}" />
+<!-- End SEO tag -->

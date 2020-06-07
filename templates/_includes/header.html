@@ -1,0 +1,19 @@
+<section class="social">
+  <span>
+    <a href="https://gitlab.com/apiraino">
+      <img src="{{ get_url(path='assets/gitlab.png') | safe }}" alt="gitlab" />
+    </a>
+    <a href="https://github.com/apiraino">
+      <img src="{{ get_url(path='assets/github.png') | safe }}" alt="github" />
+    </a>
+    <a href="mailto:{{ config.extra.email }}">
+      <img src="{{ get_url(path='assets/email.png') | safe }}" alt="email" />
+    </a>
+    <a href="{{ get_url(path='assets/publickey.apiraino@pm.me.asc') | safe }}">
+      <img src="{{ get_url(path='assets/gpg.png') | safe }}" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="{{ get_url(path='assets/rss.png') | safe }}" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>

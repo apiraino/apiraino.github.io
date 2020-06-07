@@ -1,0 +1,27 @@
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ config.title }}</title>
+  <meta name="author" content="{{ config.extra.owner }}">
+  <meta name="description" content="{{ config.extra.description }}">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ get_url(path='assets/favicon.ico') | safe }}">
+  {# cachebust=false #}
+  {# until https://github.com/getzola/zola/issues/1054 is fixed #}
+  <link rel="stylesheet" href="{{ get_url(path='css/style.css', cachebust=false) | safe }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/additional.css', cachebust=false) | safe }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/comments.css', cachebust=false) | safe }}">
+
+  {% include "_includes/seo.html" %}
+
+  {# for posts page only #}
+  {% if page %}
+  <script src="{{ get_url(path='js/gifffer.min.js') | safe }}"></script>
+  {% endif %}
+
+  {# (maybe) add comments #}
+  {% if page.extra.gist_id %}
+  <script src="{{ get_url(path='js/axios.min.js') | safe }}"></script>
+  {% endif %}
+
+</head>

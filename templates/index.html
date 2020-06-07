@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default (value="en-US") }}">
+  {% include "_includes/head.html" %}
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">{{ config.title }}</a></h1>
+        <h2>{{ config.extra.description }}</h2>
+        {% include "_includes/header.html" %}
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        {% block content %}
+
+        <ul>
+          {% for page in paginator.pages %}
+          <li><a href="{{ page.permalink }}">{{ page.date ~ " " ~ page.title }}</a></li>
+          {% endfor %}
+        </ul>
+
+        {% if paginator.total_pages > paginator.paginate_by %}
+        {% include "_includes/paginator.html" %}
+        {% endif %}
+
+        {% endblock content %}
+      </section>
+    </div>
+
+  </body>
+</html>

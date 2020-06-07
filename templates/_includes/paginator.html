@@ -1,0 +1,10 @@
+<section>
+  <div class="pagination">
+    {% if paginator.next %}
+    <a rel="next" href="{{paginator.next}}" class="btn next"><< Older potatoes</a>
+    {% endif %}
+    {% if paginator.previous %}
+    <a rel="prev" href="{{paginator.previous}}" class="btn previous">Newer artichokes >></a>
+    {% endif %}
+  </div>
+</section>

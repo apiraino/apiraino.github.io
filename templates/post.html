@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default (value="en-US") }}">
+  {% include "_includes/head.html" %}
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">{{ config.title }}</a></h1>
+        <h2>{{ config.extra.description }}</h2>
+        {% include "_includes/header.html" %}
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        {% block content %}
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="{{ page.date | date(format="%+") }}" itemprop="datePublished">{{ page.date | date(format="%-d %B %Y") }}</time></p>
+                <h1>{{ page.title }}</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            {{ page.content | safe }}
+          </section>
+        </article>
+
+        {% if page.extra.gist_id %}
+        {% include "_includes/comments.html" %}
+        {% else %}
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        {% endif %}
+
+        {% endblock content %}
+      </section>
+    </div>
+    {% include "_includes/giffer.html" %}
+
+  </body>
+</html>

@@ -1,0 +1,24 @@
+# The URL the site will be built for
+base_url = "https://apiraino.github.io"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = true
+
+highlight_code = true
+# need this merged https://github.com/getzola/zola/pull/1055
+# highlight_theme = "railsbase16-green-screen-dark"
+
+title = "localhost"
+generate_feed = true
+
+[extra]
+
+#theme: jekyll-theme-hacker
+
+email = "apiraino at pm dot me"
+repository_name = "apiraino/apiraino.github.io"
+owner = "apiraino"
+description = "sorting the wheat from the chaff"
+
+[extra.seo]
+generator = "Zola 0.11"
