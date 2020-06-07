@@ -11,7 +11,7 @@ import sys
 import requests
 import json
 
-GITHUB_TOKEN = os.environ.get('JEKYLL_GITHUB_TOKEN', None)
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
 if not GITHUB_TOKEN:
     sys.exit('Missing Github token')
 
