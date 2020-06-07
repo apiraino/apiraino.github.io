@@ -1,6 +1,4 @@
 # files for running site in local
-Gemfile.lock
 set_env.sh
-_site
 _drafts/
-.sass-cache/
+public
