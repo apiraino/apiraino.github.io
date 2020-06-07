@@ -4,8 +4,8 @@
 
 ### Running the website on localhost with Zola
 
-- git clone git@github.com:apiraino/apiraino.github.io.git
-- zola serve
+- `$ git clone https://github.com/apiraino/apiraino.github.io.git`
+- `$ zola serve`
 - Connect to `http://127.0.0.1:1111`
 
 Github Action for deployment provided by: https://github.com/shalzz/zola-deploy-action
