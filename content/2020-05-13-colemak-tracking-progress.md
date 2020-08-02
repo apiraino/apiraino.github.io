@@ -1,7 +1,7 @@
 +++
 template = "post.html"
 title = "Tracking Colemak learning progress"
-draft = true
+draft = false
 +++
 
 Here I am tracking my progress while learning the Colemak keyboard layout.
@@ -49,7 +49,7 @@ You start doing exercises like any good schoolboy would do, after a relative sho
 Then off you go to your favourite chat and start typing to your frieds how cool i
 s. typing. using. the. new. layout. You suddenly realize you are not able anymore of thinking *and* typing. Your speed is at least halved on any hello world text you try to write without reading from a script.
 
-Not to mention when you dare to write a line of code. Half of what you write is garbage and you must rewrite it because you still don't have come to terms with mixing (old) punctuation and (new) keyboard layout.
+Not to mention when you dare to write a line of code. Half of what you write is garbage and you must rewrite it because you still don't have come to terms with mixing (old) punctuation and (new) keyboard layout. It's disappointing because it prevents you into going into "the zone", to concentrate and be productive.
 
 Luckily I notice that passing from one layout to another is effortless, I had expected my brain to refuse switching from one to another in just a couple of seconds (for example, switching spoken language takes me longer): this means that I can proficiently work during the day and in the evening exercise for half an hour or more (depending on how tired I am).
 
