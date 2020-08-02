@@ -2,7 +2,7 @@
 template = "post.html"
 title = "Enabling Emacs 24bit themes"
 [extra]
-gist_id = 95d7c232d96a43e38ee996935b44d37d
+gist_id = '95d7c232d96a43e38ee996935b44d37d'
 +++
 
 This weekend I've spent some time on [`/r/unixporn`](https://old.reddit.com/r/unixporn/) and enjoyed their beautiful desktop customizations. The next things I know is that I've ended up into another hell-hole to enable one theme on my Emacs. Let's see how deep the rabbit hole goes and summarize the keypoints learned.
