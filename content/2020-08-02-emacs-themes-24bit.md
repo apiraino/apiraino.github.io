@@ -128,3 +128,8 @@ user@localhost:~$
 You have two choices: create `~/.bash_profile` or tell Gnome Terminal to behave like a login shell which will force reading the `./profile` file. I choose the second option because I don't want another confusing file lingering around.
 
 Now all settings will survive a reboot.
+
+<figure>
+    <img src="/images/emacs-theme-04.png">
+    <figcaption>Behold the colors!</figcaption>
+</figure>
