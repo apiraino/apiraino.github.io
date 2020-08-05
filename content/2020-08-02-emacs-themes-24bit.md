@@ -133,3 +133,13 @@ Now all settings will survive a reboot.
     <img src="/images/emacs-theme-04.png">
     <figcaption>Behold the colors!</figcaption>
 </figure>
+
+### Finished?
+
+Of course not: bugs!
+
+If you followed and implemented the above steps, congratulations: I have just broke your shell when you ssh into a remote server supporting only 256 colors!
+
+You can workaround this by aliasing the old color scheme:
+
+`alias ssh256="TERM=xterm-256color ssh"`
