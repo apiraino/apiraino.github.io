@@ -138,7 +138,7 @@ Now all settings will survive a reboot.
 
 Of course not: bugs!
 
-If you followed and implemented the above steps, congratulations: I have just broke your shell when you ssh into a remote server supporting only 256 colors!
+If you followed and implemented the above steps, congratulations: I have just broke your shell when you ssh into a remote server supporting only 256 colors! The TERM environment variable is always sent.
 
 You can workaround this by aliasing the old color scheme:
 
