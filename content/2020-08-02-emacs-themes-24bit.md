@@ -143,3 +143,7 @@ If you followed and implemented the above steps, congratulations: I have just br
 You can workaround this by aliasing the old color scheme:
 
 `alias ssh256="TERM=xterm-256color ssh"`
+
+EDIT: But that will have other problems, such giving `ssh` will not autocomplete hosts anymore. So the most sensitive choice is to *not* set this configuration in the shell settings and only launch emacs with it:
+
+`alias emacs='TERM=xterm-24bit emacs'`

@@ -13,7 +13,7 @@ import json
 
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
 if not GITHUB_TOKEN:
-    sys.exit('Missing Github token')
+    sys.exit('Missing env var GITHUB_TOKEN')
 
 API_URL = 'https://api.github.com/gists'
 ARTICLE_URL = 'https://apiraino.github.io/posts'
