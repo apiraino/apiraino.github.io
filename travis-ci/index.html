@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-04" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/travis-ci/"},"@type":"BlogPosting","url":"https://apiraino.github.io/travis-ci/","headline":"Locally replicate a Travis CI build","dateModified":"2019-06-04","datePublished":"2019-06-04","description":"Lately I wanted to investigate why a Travis CI build failed.
+Instead of debugging through a lot of small trial-and-error commits, I&#x27;ve done some tests locally using Docker.
+Here I am …","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Locally replicate a Travis CI build" />
+<meta name="description" content="Lately I wanted to investigate why a Travis CI build failed.
+Instead of debugging through a lot of small trial-and-error commits, I&#x27;ve done some tests locally using Docker.
+Here I am …" />
+<meta property="og:description" content="Lately I wanted to investigate why a Travis CI build failed.
+Instead of debugging through a lot of small trial-and-error commits, I&#x27;ve done some tests locally using Docker.
+Here I am …" />
+<link rel="canonical" href="https://apiraino.github.io/travis-ci/" />
+<meta property="og:url" content="https://apiraino.github.io/travis-ci/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <a href="https://gitlab.com/apiraino">
+      <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+    </a>
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-06-04T00:00:00+00:00" itemprop="datePublished">4 June 2019</time></p>
+                <h1>Locally replicate a Travis CI build</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Lately I wanted to investigate why a Travis CI build failed.</p>
+<p>Instead of debugging through a lot of small trial-and-error commits, I've done some tests locally using Docker.</p>
+<p>Here I am basically summarizing this <a href="https://stackoverflow.com/a/49019950">Stack Overflow answer</a> with a few updates.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;">#!/bin/bash
+
+# How to reproduce locally a Travis CI build
+# source: https://stackoverflow.com/a/49019950
+
+</span><span style="color:#bf616a;">RANDOM</span><span style="color:#c0c5ce;">=$</span><span style="color:#bf616a;">$
+RAND</span><span style="color:#c0c5ce;">=$</span><span style="color:#a3be8c;">( </span><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">$</span><span style="color:#bf616a;">RANDOM </span><span style="color:#a3be8c;">)
+</span><span style="color:#bf616a;">BUILDID</span><span style="color:#c0c5ce;">=&quot;</span><span style="color:#a3be8c;">build-</span><span style="color:#c0c5ce;">$</span><span style="color:#bf616a;">RAND</span><span style="color:#c0c5ce;">&quot;
+</span><span style="color:#65737e;"># check latest instance available on
+# https://hub.docker.com/r/travisci/ci-garnet/tags/
+
+# Trusty
+# INSTANCE=&quot;travisci/ci-garnet:packer-1515445631-7dfb2e1&quot;
+# Xenial
+</span><span style="color:#bf616a;">INSTANCE</span><span style="color:#c0c5ce;">=&quot;</span><span style="color:#a3be8c;">travisci/ci-sardonyx:packer-1558623664-f909ac5</span><span style="color:#c0c5ce;">&quot;
+
+</span><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">Running </span><span style="color:#c0c5ce;">$</span><span style="color:#bf616a;">BUILDID</span><span style="color:#c0c5ce;">&quot;
+</span><span style="color:#bf616a;">docker</span><span style="color:#c0c5ce;"> run</span><span style="color:#bf616a;"> --name </span><span style="color:#c0c5ce;">$</span><span style="color:#bf616a;">BUILDID -dit </span><span style="color:#c0c5ce;">$</span><span style="color:#bf616a;">INSTANCE</span><span style="color:#c0c5ce;"> /sbin/init
+
+</span><span style="color:#65737e;"># Then enter the container
+# docker exec -it $DOCKER_CONTAINER bash
+# or
+# docker exec -it $BUILDID bash -l
+
+# su - travis
+# curl https://sh.rustup.rs -sSf | sh
+# (choose nightly)
+
+# Then execute the commands from a Travis CI build
+</span></code></pre>
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://apiraino.github.io/sitemap.xml

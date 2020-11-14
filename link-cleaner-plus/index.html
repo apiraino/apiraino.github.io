@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-20" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/link-cleaner-plus/"},"@type":"BlogPosting","url":"https://apiraino.github.io/link-cleaner-plus/","headline":"Link Cleaner +","dateModified":"2019-08-20","datePublished":"2019-08-20","description":"Here it is, published: Link Cleaner +
+Source code here: Link…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Link Cleaner +" />
+<meta name="description" content="Here it is, published: Link Cleaner +
+Source code here: Link…" />
+<meta property="og:description" content="Here it is, published: Link Cleaner +
+Source code here: Link…" />
+<link rel="canonical" href="https://apiraino.github.io/link-cleaner-plus/" />
+<meta property="og:url" content="https://apiraino.github.io/link-cleaner-plus/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <a href="https://gitlab.com/apiraino">
+      <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+    </a>
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-08-20T00:00:00+00:00" itemprop="datePublished">20 August 2019</time></p>
+                <h1>Link Cleaner +</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Here it is, published: <a href="https://addons.mozilla.org/en-US/firefox/addon/link-cleaner-plus">Link Cleaner +</a></p>
+<p>Source code here: <a href="hhttps://github.com/apiraino/link_cleane">Link Cleaner + on Github</a></p>
+<p>This is a funny (and I hope useful) project I had forked and, with the help of another friend, moved a bit forward.</p>
+<h3 id="what-is-link-cleaner"><a class="zola-anchor" href="#what-is-link-cleaner" aria-label="Anchor link for: what-is-link-cleaner">&sect;</a>
+What is &quot;Link Cleaner +&quot;?</h3>
+<p>A Firefox extension that &quot;cleans URLs before opening a link, removes trackers, rewrites redirects pages such as of Amazon, Facebook, Steam, Reddit and AMP URLs&quot;. As part of keeping a healthy internet browsing habit, I had discovered months ago this interesting extension (the original <a href="https://addons.mozilla.org/en-US/firefox/addon/link-cleaner">Link Cleaner</a>). The GitHub page of the project, unfortunately, is riddled with issues, features requests and pull requests left unattended. So after a while we decided to fork the project and try to pick where the project left.</p>
+<p>It's a work in progress, but it was important to get out a first version and then iterate.</p>
+<p>Anyway, let's a look at it works (and how I'd like to see it improved).</p>
+<p>The workflow of a browser extension is pretty much the same for Chrome and Firefox (luckily, since Firefox 57+ and WebExtensions came to the world) both APIs are pretty much the same, therefore much of the code can be shared and easily compile for both platforms.</p>
+<h3 id="step-1-clean-query-params"><a class="zola-anchor" href="#step-1-clean-query-params" aria-label="Anchor link for: step-1-clean-query-params">&sect;</a>
+Step 1: clean query params</h3>
+<p>We first intercept the action of opening a URL:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;">// Filter out utm_* query parameters
+</span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">clean_utm_req </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">build_query_param_remover</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">f_match_utm</span><span style="color:#c0c5ce;">);
+</span><span style="color:#bf616a;">browser</span><span style="color:#c0c5ce;">.webRequest.onBeforeRequest.</span><span style="color:#bf616a;">addListener</span><span style="color:#c0c5ce;">(
+    </span><span style="color:#bf616a;">clean_utm_req</span><span style="color:#c0c5ce;">,
+    {
+        urls: [&quot;</span><span style="color:#a3be8c;">&lt;all_urls&gt;</span><span style="color:#c0c5ce;">&quot;],
+        types:[&quot;</span><span style="color:#a3be8c;">main_frame</span><span style="color:#c0c5ce;">&quot;]
+    },
+    [&quot;</span><span style="color:#a3be8c;">blocking</span><span style="color:#c0c5ce;">&quot;]
+);
+</span></code></pre>
+<p>This function (shortened for clarity) cleans query params from a URL and return a clean new URL.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;">// Clean URL query params
+</span><span style="color:#b48ead;">function </span><span style="color:#8fa1b3;">link_cleaner</span><span style="color:#c0c5ce;">(orig_url, shouldRemove) {
+    </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">url </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">URL</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">orig_url</span><span style="color:#c0c5ce;">);
+    </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">ret_val </span><span style="color:#c0c5ce;">= {&#39;</span><span style="color:#a3be8c;">redirectUrl</span><span style="color:#c0c5ce;">&#39;: &#39;&#39;};
+
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.search.length &gt; </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">) {
+        </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">params </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.searchParams;
+        </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">new_params </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">URLSearchParams</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">params</span><span style="color:#c0c5ce;">);
+        </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">needs_redirect </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">;
+        </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">p </span><span style="color:#c0c5ce;">of </span><span style="color:#bf616a;">params</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">keys</span><span style="color:#c0c5ce;">()) {
+            </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">shouldRemove</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">p</span><span style="color:#c0c5ce;">)) {
+                </span><span style="color:#bf616a;">needs_redirect </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">;
+                </span><span style="color:#bf616a;">new_params</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">delete</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">p</span><span style="color:#c0c5ce;">);
+            }
+        }
+
+        </span><span style="color:#65737e;">// Original URL has been cleaned of nefarious query params
+        // A redirect URL has been created
+        </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">needs_redirect</span><span style="color:#c0c5ce;">) {
+            </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.search = </span><span style="color:#bf616a;">new_params</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">toString</span><span style="color:#c0c5ce;">();
+            </span><span style="color:#bf616a;">ret_val </span><span style="color:#c0c5ce;">= {redirectUrl: </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.href};
+        }
+
+        </span><span style="color:#65737e;">// Clean AMP url (if enabled)
+        </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">settings</span><span style="color:#c0c5ce;">[&#39;</span><span style="color:#a3be8c;">clean_amp_links</span><span style="color:#c0c5ce;">&#39;] === </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">) {
+            </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">cleaned_url </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">clean_amp</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">);
+            </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">cleaned_url</span><span style="color:#c0c5ce;">.href !== </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.href) {
+                </span><span style="color:#bf616a;">ret_val </span><span style="color:#c0c5ce;">= {redirectUrl: </span><span style="color:#bf616a;">cleaned_url</span><span style="color:#c0c5ce;">.href};
+            }
+        }
+    }
+    </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">ret_val</span><span style="color:#c0c5ce;">;
+};
+</span></code></pre>
+<p>This function is generic enough to be applied to all URLs, example: clean all <code>utm_*</code> query params:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">https://www.domain.com/page?utm_source</span><span style="color:#c0c5ce;">=</span><span style="color:#a3be8c;">mytracker
+</span></code></pre>
+<p>First we create an anonymous function with a regexp to match, then we invoke a generic query param cleaner (<code>build_query_param_remover</code>)</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">var </span><span style="color:#bf616a;">f_match_utm </span><span style="color:#c0c5ce;">= p </span><span style="color:#b48ead;">=&gt; </span><span style="color:#bf616a;">p</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">startsWith</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">utm_</span><span style="color:#c0c5ce;">&quot;);
+
+</span><span style="color:#65737e;">// a generic entrypoint to invoke the real link cleaner
+</span><span style="color:#b48ead;">function </span><span style="color:#8fa1b3;">build_query_param_remover</span><span style="color:#c0c5ce;">(shouldRemove) {
+    </span><span style="color:#b48ead;">return function</span><span style="color:#c0c5ce;">(requestDetails) {
+        </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">link_cleaner</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">requestDetails</span><span style="color:#c0c5ce;">.url, </span><span style="color:#bf616a;">shouldRemove</span><span style="color:#c0c5ce;">);
+    };
+}
+
+</span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">clean_utm_req </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">build_query_param_remover</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">f_match_utm</span><span style="color:#c0c5ce;">);
+
+</span><span style="color:#65737e;">// This is the browser listener we sniff everytime a HTTP request is about to be performed
+</span><span style="color:#bf616a;">browser</span><span style="color:#c0c5ce;">.webRequest.onBeforeRequest.</span><span style="color:#bf616a;">addListener</span><span style="color:#c0c5ce;">(
+    </span><span style="color:#bf616a;">clean_utm_req</span><span style="color:#c0c5ce;">,
+    {
+        </span><span style="color:#65737e;">// apply this rule to any URL
+        </span><span style="color:#c0c5ce;">urls: [&quot;</span><span style="color:#a3be8c;">&lt;all_urls&gt;</span><span style="color:#c0c5ce;">&quot;],
+        types:[&quot;</span><span style="color:#a3be8c;">main_frame</span><span style="color:#c0c5ce;">&quot;]
+    },
+    [&quot;</span><span style="color:#a3be8c;">blocking</span><span style="color:#c0c5ce;">&quot;]
+);
+</span></code></pre><h3 id="step-2-clean-urls"><a class="zola-anchor" href="#step-2-clean-urls" aria-label="Anchor link for: step-2-clean-urls">&sect;</a>
+Step 2: clean URLs</h3>
+<p>When we want to sanitize the URL itself, we need custom rules for any URL we want to manage. Example:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;"># from this
+</span><span style="color:#bf616a;">https://www.amazon.co.uk/Crazepony-UK-Camera-Vacuum-Plastic-Crazepony/dp/B06XPCXCSH?SubscriptionId</span><span style="color:#c0c5ce;">=</span><span style="color:#a3be8c;">AKIAILSHYYTFIVPWUY6Q</span><span style="color:#c0c5ce;">&amp;</span><span style="color:#bf616a;">...
+
+</span><span style="color:#65737e;"># into this:
+</span><span style="color:#bf616a;">https://www.amazon.co.uk/dp/B06XPCXCSH
+</span></code></pre>
+<p>(code shortened for clarity)</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">function </span><span style="color:#8fa1b3;">clean_amazon</span><span style="color:#c0c5ce;">(url) {
+    </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">new_url </span><span style="color:#c0c5ce;">= document.</span><span style="color:#bf616a;">createElement</span><span style="color:#c0c5ce;">(&#39;</span><span style="color:#a3be8c;">a</span><span style="color:#c0c5ce;">&#39;);
+    </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">slash_d_index </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">indexOf</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">/d</span><span style="color:#c0c5ce;">&quot;);
+    </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">slash_ref_index </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">indexOf</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">/ref=</span><span style="color:#c0c5ce;">&quot;, </span><span style="color:#bf616a;">slash_d_index </span><span style="color:#c0c5ce;">+ </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">);
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">slash_ref_index </span><span style="color:#c0c5ce;">&gt; </span><span style="color:#d08770;">0 </span><span style="color:#c0c5ce;">&amp;&amp; </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.length &gt; </span><span style="color:#bf616a;">slash_ref_index </span><span style="color:#c0c5ce;">+ </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">) {
+        </span><span style="color:#bf616a;">new_url</span><span style="color:#c0c5ce;">.href = </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">substring</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">slash_ref_index </span><span style="color:#c0c5ce;">+ </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">);
+    } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+        </span><span style="color:#bf616a;">url </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">URL</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">);
+        </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.search.length &gt; </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">) {
+            </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.search = &quot;&quot;;
+            </span><span style="color:#bf616a;">new_url</span><span style="color:#c0c5ce;">.href = </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">.href;
+        }
+    }
+
+    </span><span style="color:#65737e;">// scrap SEO friendly text
+    </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">dp_idx </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">new_url</span><span style="color:#c0c5ce;">.pathname.</span><span style="color:#bf616a;">indexOf</span><span style="color:#c0c5ce;">(&#39;</span><span style="color:#a3be8c;">/dp</span><span style="color:#c0c5ce;">&#39;);
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">dp_idx </span><span style="color:#c0c5ce;">&gt; </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">) {
+        </span><span style="color:#bf616a;">new_url</span><span style="color:#c0c5ce;">.pathname = </span><span style="color:#bf616a;">new_url</span><span style="color:#c0c5ce;">.pathname.</span><span style="color:#bf616a;">substring</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">dp_idx</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">new_url</span><span style="color:#c0c5ce;">.pathname.length);
+    }
+    </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">{ redirectUrl: </span><span style="color:#bf616a;">new_url</span><span style="color:#c0c5ce;">.href };
+}
+</span></code></pre><h3 id="further-thoughts-and-a-wishlist"><a class="zola-anchor" href="#further-thoughts-and-a-wishlist" aria-label="Anchor link for: further-thoughts-and-a-wishlist">&sect;</a>
+Further thoughts and a wishlist</h3>
+<ul>
+<li>
+<p>If you squint enough at the code, you'll see that for <strong>every HTTP request the browser does, we run a lot of regexps work</strong>. If you're worried about the performance hit, then you are in good company: I'm worried, too.</p>
+</li>
+<li>
+<p>Regexps are bad. I'd like to run some benchmarks to see if and how much they affect the browser performances. As a side thought, many privacy focusing extensions basically run a lot of regexps against blacklists.</p>
+<p>Some of these extensions are noticeably slowing the browsing experience. A possible solution to explore could be using some WASM code to optimize hot code paths. <a href="https://github.com/gorhill/uBlock/tree/master/src/lib/lz4">uBlock</a> and <a href="https://github.com/EFForg/https-everywhere">HTTPS Everywhere</a> already do that (I didn't check the code, therefore I cannot comment on the results).</p>
+</li>
+<li>
+<p>Manually adding rules is a time-consuming effort known to be problematic and frustrating (both for users and developers). Without trying to build a complicated tool (such as: a backoffice for end-users to add regexps to the ruleset), one can think of something to (at least) submit their wishes in form of Gihub issues or pull requests. Example: describing a workflow that would lead to an effective pull requests.</p>
+<ul>
+<li>Step 1: Identify the URL you would like to see cleaned</li>
+<li>Step 2: go to <a href="https://regex101.com">Regex 101</a> and write your rule</li>
+<li>Step 3: open a PR submitting your suggestion and a test case</li>
+<li>Step 4: the CI automatic build would tell if that breaks anything</li>
+</ul>
+<p>Such solution would not cover 100% of users, but hopefully we can drive the more technically-inclined to a faster path to merging their suggestion.</p>
+</li>
+<li>
+<p>Tests are also essential to keep performances under scrutiny.</p>
+</li>
+</ul>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

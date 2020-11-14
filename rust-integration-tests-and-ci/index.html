@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-17" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/rust-integration-tests-and-ci/"},"@type":"BlogPosting","url":"https://apiraino.github.io/rust-integration-tests-and-ci/","headline":"Integration tests in Rust and CI","dateModified":"2019-08-17","datePublished":"2019-08-17","description":"I&#x27;m writing a small service in Rust, let&#x27;s summarize how it works:
+
+A client calls my server on https:&#x2F;&#x2F;www.rustserver.com&#x2F;endpoint
+The client receives immediately…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Integration tests in Rust and CI" />
+<meta name="description" content="I&#x27;m writing a small service in Rust, let&#x27;s summarize how it works:
+
+A client calls my server on https:&#x2F;&#x2F;www.rustserver.com&#x2F;endpoint
+The client receives immediately…" />
+<meta property="og:description" content="I&#x27;m writing a small service in Rust, let&#x27;s summarize how it works:
+
+A client calls my server on https:&#x2F;&#x2F;www.rustserver.com&#x2F;endpoint
+The client receives immediately…" />
+<link rel="canonical" href="https://apiraino.github.io/rust-integration-tests-and-ci/" />
+<meta property="og:url" content="https://apiraino.github.io/rust-integration-tests-and-ci/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <a href="https://gitlab.com/apiraino">
+      <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+    </a>
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-08-17T00:00:00+00:00" itemprop="datePublished">17 August 2019</time></p>
+                <h1>Integration tests in Rust and CI</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>I'm writing a small service in Rust, let's summarize how it works:</p>
+<ol>
+<li>A client calls my server on <code>https://www.rustserver.com/endpoint</code></li>
+<li>The client receives immediately a <code>200 OK</code> to acknowledge the request</li>
+<li>The server calls external services on <code>https://ext1.domain.com</code>, <code>https://ext2.domain.com</code>, <code>https://ext3.domain.com</code>, etc.</li>
+<li>The server retrieves all the responses, do some parsing and store them somewhere</li>
+</ol>
+<p>While it's important to have unit tests for step (4), I'd also like to have integration tests and trigger the whole workflow from start to finish.</p>
+<h3 id="the-tool-i-need"><a class="zola-anchor" href="#the-tool-i-need" aria-label="Anchor link for: the-tool-i-need">&sect;</a>
+<a id="part_i"></a>The tool I need</h3>
+<p>In Python I was used to have a mocking library that allows me to define such as:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">mock
+
+@mock.</span><span style="color:#bf616a;">patch</span><span style="color:#c0c5ce;">(&#39;</span><span style="color:#a3be8c;">mybackend.application.api.call_external_server</span><span style="color:#c0c5ce;">&#39;)
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">test_1</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">server_mock</span><span style="color:#c0c5ce;">):
+
+    </span><span style="color:#65737e;"># the test client calls my endpoint
+    </span><span style="color:#c0c5ce;">resp = </span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">call_my_server</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">email</span><span style="color:#c0c5ce;">=</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.email, </span><span style="color:#bf616a;">token</span><span style="color:#c0c5ce;">=</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.tk)
+    </span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">assertEqual</span><span style="color:#c0c5ce;">(resp.status, </span><span style="color:#d08770;">200</span><span style="color:#c0c5ce;">)
+
+    </span><span style="color:#65737e;"># verify that the external server call has been really happened
+    </span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">assertEqual</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">len</span><span style="color:#c0c5ce;">(server_mock.mock_calls))
+
+    </span><span style="color:#65737e;"># other tests to check what happened after the external call was completed
+</span></code></pre>
+<p>So, how do we put this workflow under integration tests on Rust? I looked for a mocking library but couldn't find one to be easy enough to use. The crate <a href="https://github.com/lipanski/mockito">mockito</a> gets close to what I'd like a mocking library to be but it can only mock an HTTP request that it's directly called from the test.</p>
+<p>The alternate approach is to roll up your sleeve and find a creative solution: for example start a proxy server that intercepts all outbound HTTP request and returns a static JSON.</p>
+<h3 id="adding-the-man-in-the-middle"><a class="zola-anchor" href="#adding-the-man-in-the-middle" aria-label="Anchor link for: adding-the-man-in-the-middle">&sect;</a>
+<a id="part_ii"></a> Adding the man in the middle</h3>
+<p><a href="https://github.com/mitmproxy/mitmproxy">mitm</a> is my proxy of choice when I need to inspect traffic, easy enough to get things done quickly.</p>
+<p><code>mitm</code> can be quickly scripted to have all sorts of funny things happening! In my case I just want the request to be intercepted and a static JSON response returned. This can be accomplished with 10 lines of python:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">mitmproxy </span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">http
+</span><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">mitmproxy </span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">ctx
+
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">response</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">flow</span><span style="color:#c0c5ce;">: http.HTTPFlow) -&gt; </span><span style="color:#d08770;">None</span><span style="color:#c0c5ce;">:
+
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">/oauth2/v1/access_token</span><span style="color:#c0c5ce;">&#39; in flow.request.pretty_url:
+        ctk.log.</span><span style="color:#bf616a;">info</span><span style="color:#c0c5ce;">(&#39;</span><span style="color:#a3be8c;">Gotcha!</span><span style="color:#c0c5ce;">&#39;)
+        </span><span style="color:#b48ead;">with </span><span style="color:#96b5b4;">open</span><span style="color:#c0c5ce;">(&#39;</span><span style="color:#a3be8c;">static_response.json</span><span style="color:#c0c5ce;">&#39;, &#39;</span><span style="color:#a3be8c;">r</span><span style="color:#c0c5ce;">&#39;) </span><span style="color:#b48ead;">as </span><span style="color:#c0c5ce;">fp:
+            flow.response = http.HTTPResponse.</span><span style="color:#bf616a;">make</span><span style="color:#c0c5ce;">(
+                </span><span style="color:#d08770;">201</span><span style="color:#c0c5ce;">,
+                fp.</span><span style="color:#bf616a;">read</span><span style="color:#c0c5ce;">().</span><span style="color:#bf616a;">encode</span><span style="color:#c0c5ce;">(&#39;</span><span style="color:#a3be8c;">UTF-8</span><span style="color:#c0c5ce;">&#39;),
+                </span><span style="color:#bf616a;">headers</span><span style="color:#c0c5ce;">={&quot;</span><span style="color:#a3be8c;">Content-Type</span><span style="color:#c0c5ce;">&quot;: &quot;</span><span style="color:#a3be8c;">application/json</span><span style="color:#c0c5ce;">&quot;}
+            )
+        </span><span style="color:#b48ead;">return
+
+</span></code></pre>
+<p>Run it and then try to call the remote endpoint:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">$</span><span style="color:#c0c5ce;"> mitmproxy</span><span style="color:#bf616a;"> --scripts</span><span style="color:#c0c5ce;"> my_script.py
+</span></code></pre><figure>
+    <img src="/images/mitm.png">
+</figure>
+<h3 id="adding-a-proxy-in-a-rust-http-client"><a class="zola-anchor" href="#adding-a-proxy-in-a-rust-http-client" aria-label="Anchor link for: adding-a-proxy-in-a-rust-http-client">&sect;</a>
+<a id="part_iii"></a>Adding a proxy in a Rust http client</h3>
+<p>Ok we have the proxy. How do we tell the Rust client to use the proxy? And since this is only needed in tests we need a flag to enable the proxied call.</p>
+<p>My solution, while not the cleanest, is to have a compilation flag to compile the client with or without the proxy (I use <a href="https://hyper.rs">hyper</a> as http client and <a href="https://github.com/tafia/hyper-proxy">hyper_proxy</a> to add a proxy).</p>
+<p>Let's add a feature flag:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;"># Cargo.toml
+</span><span style="color:#c0c5ce;">...
+[features]
+</span><span style="color:#bf616a;">proxy_requests </span><span style="color:#c0c5ce;">= []
+</span><span style="color:#bf616a;">default </span><span style="color:#c0c5ce;">= []
+...
+</span></code></pre>
+<p>Add the proxied connection flag to the client:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">hyper::{client::HttpConnector, Body, Client};
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">hyper_proxy::ProxyConnector;
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">hyper_tls::HttpsConnector;
+
+</span><span style="color:#b48ead;">pub struct </span><span style="color:#c0c5ce;">MyClient {
+    #[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(feature = &quot;</span><span style="color:#a3be8c;">proxy_requests</span><span style="color:#c0c5ce;">&quot;)]
+    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">: Client&lt;ProxyConnector&lt;HttpConnector&gt;, Body&gt;,
+    #[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">not</span><span style="color:#c0c5ce;">(feature = &quot;</span><span style="color:#a3be8c;">proxy_requests</span><span style="color:#c0c5ce;">&quot;))]
+    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">: Client&lt;HttpsConnector&lt;HttpConnector&gt;, Body&gt;,
+}
+
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">MyClient {
+    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">new</span><span style="color:#c0c5ce;">() -&gt; </span><span style="color:#b48ead;">Self </span><span style="color:#c0c5ce;">{
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> http_connector = HttpConnector::new(</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">);
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> https_connector = HttpsConnector::new(</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">).</span><span style="color:#96b5b4;">expect</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">TLS initialization failed</span><span style="color:#c0c5ce;">&quot;);
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> proxy = {
+            </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> proxy_uri =
+                format!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">:</span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;,
+                    get_env!(&quot;</span><span style="color:#a3be8c;">PROXY_HOST</span><span style="color:#c0c5ce;">&quot;),
+                    get_env!(&quot;</span><span style="color:#a3be8c;">PROXY_PORT</span><span style="color:#c0c5ce;">&quot;)
+                ).</span><span style="color:#96b5b4;">parse</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">unwrap</span><span style="color:#c0c5ce;">();
+            </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> proxy = Proxy::new(Intercept::All, proxy_uri);
+
+            </span><span style="color:#65737e;">// My proxy is on plain HTTP
+            </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> proxy_connector = ProxyConnector::from_proxy_unsecured(http_connector, proxy);
+            proxy_connector
+        };
+
+        </span><span style="color:#65737e;">// When running tests and CI builds, run with &quot;cargo run --features=proxy_requests&quot;
+        </span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(feature = &quot;</span><span style="color:#a3be8c;">proxy_requests</span><span style="color:#c0c5ce;">&quot;)]
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> client = Client::builder().build::&lt;_, hyper::Body&gt;(proxy);
+
+        </span><span style="color:#65737e;">// In real life, server is run with &quot;cargo run&quot;
+        </span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">not</span><span style="color:#c0c5ce;">(feature = &quot;</span><span style="color:#a3be8c;">proxy_requests</span><span style="color:#c0c5ce;">&quot;))]
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> client = Client::builder().build::&lt;_, hyper::Body&gt;(https_connector);
+
+        MyClient { client }
+    }
+}
+</span></code></pre>
+<p>Let's write an integration test. This integration test is completely unaware of what's happening behind, it will always succeed. But it's useful to trigger the internal workflow.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(feature = &quot;</span><span style="color:#a3be8c;">proxy_requests</span><span style="color:#c0c5ce;">&quot;)]
+#[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_workflow</span><span style="color:#c0c5ce;">() {
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> c = utils::TestClient::new();
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> url = c.</span><span style="color:#96b5b4;">add_to_url</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">/test</span><span style="color:#c0c5ce;">&quot;).</span><span style="color:#96b5b4;">expect</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Could not generate Url</span><span style="color:#c0c5ce;">&quot;);
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> response = c.client.</span><span style="color:#96b5b4;">get</span><span style="color:#c0c5ce;">(url).</span><span style="color:#96b5b4;">send</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">expect</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Could not GET /test</span><span style="color:#c0c5ce;">&quot;);
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> resp = response.</span><span style="color:#96b5b4;">text</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">unwrap</span><span style="color:#c0c5ce;">();
+    assert!(response.</span><span style="color:#96b5b4;">status</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">is_success</span><span style="color:#c0c5ce;">(), format!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> - </span><span style="color:#d08770;">{:?}</span><span style="color:#c0c5ce;">&quot;, response.</span><span style="color:#96b5b4;">status</span><span style="color:#c0c5ce;">(), resp));
+}
+</span></code></pre>
+<p>Like mentioned in the code comments, I run tests with:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">$</span><span style="color:#c0c5ce;"> cargo run</span><span style="color:#bf616a;"> --features</span><span style="color:#c0c5ce;">=proxy_requests
+</span><span style="color:#bf616a;">$</span><span style="color:#c0c5ce;"> cargo test</span><span style="color:#bf616a;"> --features</span><span style="color:#c0c5ce;">=proxy_requests
+</span></code></pre>
+<p>Now all connections all intercepted by our man in the middle. In production I run:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">$</span><span style="color:#c0c5ce;"> cargo run
+</span></code></pre><h3 id="setup-the-ci"><a class="zola-anchor" href="#setup-the-ci" aria-label="Anchor link for: setup-the-ci">&sect;</a>
+<a id="part_iv"></a>Setup the CI</h3>
+<p>Now the last part: let's automate this and update our CI builds!</p>
+<p>I use CircleCI for this project, so I've updated the configuration file with the following items (see the comments):</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">rust-tests</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">docker</span><span style="color:#c0c5ce;">:
+      - </span><span style="color:#bf616a;">image</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">circleci/rust:latest
+    steps</span><span style="color:#c0c5ce;">:
+      - </span><span style="color:#bf616a;">... some steps ...
+      </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">download-and-install-mitm
+      </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">:
+          </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">Run mitm
+          background</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
+          </span><span style="color:#bf616a;">command</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">            # I&#39;m running the headless version of &quot;mitmproxy&quot;
+            mitmdump --scripts my_script.py
+      </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">:
+          </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">Run server
+          environment</span><span style="color:#c0c5ce;">:
+            </span><span style="color:#bf616a;">DEPLOY_MODE</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">test
+            RUST_BACKTRACE</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1
+          </span><span style="color:#bf616a;">background</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
+          </span><span style="color:#bf616a;">command</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">            # Run the backend with maximum debug logging
+            # Enable proxied requests
+            # use &quot;nohup&quot; to log the output to a file
+            RUST_LOG=my_backend=debug nohup cargo run --features=proxy_requests
+      </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">:
+          </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">Run tests
+          environment</span><span style="color:#c0c5ce;">:
+            </span><span style="color:#bf616a;">DEPLOY_MODE</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">test
+            RUST_BACKTRACE</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1
+            </span><span style="color:#bf616a;">RUST_TEST_THREADS</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1
+            </span><span style="color:#bf616a;">RUST_TEST_NOCAPTURE</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1
+          </span><span style="color:#bf616a;">command</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">            # enable the integration tests under feature flag
+            cargo test --features=proxy_requests --all
+      </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">:
+          </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">Post-mortem checks
+          command</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">            sh ./scripts/post-mortem.sh
+</span></code></pre>
+<p>One more problem to solve. Like mentioned before, the integration test has no way to know or report a failure, it will always succeed.</p>
+<p>The only trace I have if something breaks is inspecting the server logging (notice the &quot;nohup&quot; when running the Rust server). In future I'd like to integrate a serious logging facility in Rust that allows me to write a proper log file and log to syslog.</p>
+<p>In the meanwhile I'll just ... well ... grep through the logged stdout for a &quot;BACKTRACE&quot; or other markers :-)</p>
+<p>Here is what the <code>post-mortem.sh</code> does:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">RES</span><span style="color:#c0c5ce;">=$</span><span style="color:#a3be8c;">( </span><span style="color:#bf616a;">grep -c</span><span style="color:#a3be8c;"> BACKTRACE </span><span style="color:#c0c5ce;">$</span><span style="color:#bf616a;">LOGFILE </span><span style="color:#a3be8c;">)
+</span><span style="color:#b48ead;">if </span><span style="color:#96b5b4;">[ </span><span style="color:#c0c5ce;">&quot;$</span><span style="color:#bf616a;">RES</span><span style="color:#c0c5ce;">&quot; </span><span style="color:#bf616a;">-ne </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">0</span><span style="color:#c0c5ce;">&quot; </span><span style="color:#96b5b4;">] </span><span style="color:#c0c5ce;">; </span><span style="color:#b48ead;">then
+    </span><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">test(s) failed</span><span style="color:#c0c5ce;">&quot;
+    </span><span style="color:#bf616a;">cat </span><span style="color:#c0c5ce;">$</span><span style="color:#bf616a;">LOGFILE
+    </span><span style="color:#96b5b4;">exit</span><span style="color:#c0c5ce;"> 1
+</span><span style="color:#b48ead;">fi
+</span></code></pre>
+<p>Like I said, nothing here is implemented the way I'd like, but it's a start.</p>
+<p>Things I'd like to improve in the future:</p>
+<ul>
+<li>Ideally find a serious HTTP mocking library and remove the whole proxy crutch</li>
+<li>Add a logging facility, I will investigate <a href="https://github.com/sfackler/log4rs">log4rs</a>, maybe <a href="https://github.com/daboross/fern">fern</a>?</li>
+<li>Improve the post-mortem reporting</li>
+</ul>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>
