@@ -5,7 +5,7 @@ title = "Rust 2020: Discoverability"
 
 Here we come with the "Request for Comment" about Rust for the next 2020 year. I'm sure 2020 will be a great year, also because it's easy and fast to write :) My wishlist will be short and to the point.
 
-Looking back to what I wished for [2019](https://apiraino.github.io/2018/12/19/call-for-2019-roadmap.html) I'd like first to see what has changed, from my point of view:
+Looking back to what I wished for [2019](/call-for-2019-roadmap) I'd like first to see what has changed, from my point of view:
 - We now (almost) have async/await
 - I didn't see significant steps towards building a common ground, a "foundation" for Rust to manage community funding and developing initiatives. We can do better on this, in my opinion.
 - We have a couple of "big names" showing official interest in the Rust language. This is great and will lead to interesting developments and could help spinning the wheel faster. But it will also complicate things. Big names want to be assured that the Rust backbone is strong and firmly managed. Are we ready for this?
