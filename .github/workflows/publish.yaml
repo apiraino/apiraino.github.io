@@ -14,6 +14,8 @@ jobs:
       - name: Checkout master
         uses: actions/checkout@v4
       - name: Build and deploy
+        # DO NOT UPGRADE to 0.17.2 (yet)
+        # see: https://github.com/shalzz/zola-deploy-action/issues/78
         uses: shalzz/zola-deploy-action@v0.17.1
         env:
           PAGES_BRANCH: gh-pages
