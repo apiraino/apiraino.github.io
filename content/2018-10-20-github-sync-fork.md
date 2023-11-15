@@ -3,7 +3,7 @@ template = "post.html"
 title = "How to sync a GitHub fork"
 +++
 
-### <a name='part_i'></a>Part I: This is embarassing
+### <a name='part_i'></a>Part I: This is embarrassing
 
 It's easy to rebase a branch, but when it comes to GitHub forks I <strong>always</strong> forget how to do it, so I keep on checking the same GitHub guide over and over. As with any other big humanity failure, history keeps repeating itself.
 

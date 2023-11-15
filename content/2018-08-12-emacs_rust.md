@@ -94,7 +94,7 @@ Running several times in a row only *one* of these two commands doesn't invalida
 Setting to `nil` that variable made Flycheck switch from `cargo test` to `cargo check` to get errors produced the following benefits:
 * `cargo check` is the recommended way to get [compilation warning/errors](https://github.com/flycheck/flycheck/pull/1289) and in some scenario should [speed things up](https://blog.rust-lang.org/2017/03/16/Rust-1.16.html)
 * informed me to not run `cargo build` unless I really need to
-* does not run `cargo test` to get syntax/lint errors, which was awkard and confusing in the first place
+* does not run `cargo test` to get syntax/lint errors, which was awkward and confusing in the first place
 * *BUG*: there's an old outstanding bug, due to `cargo check` metadata caching: on _--lib_ cargo projects (not _--bin_) it only shows compiler warnings _once_ after a rebuild, see [issue](https://github.com/rust-lang/cargo/issues/3624)
 
 Flycheck command before:

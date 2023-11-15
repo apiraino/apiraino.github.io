@@ -5,7 +5,7 @@ title = "Installing a Matrix server"
 gist_id = "892fa8003a241a1d70d7642b63a0a5e6"
 +++
 
-In my (impossible) mission to manage my digital life without relying on third-party SaaS, another important step is a chat system. Can my usecase be accomodated with something else than Slack? Let's quickly overview the options for self-hosting, then what I've installed and how does it look like.
+In my (impossible) mission to manage my digital life without relying on third-party SaaS, another important step is a chat system. Can my usecase be accommodated with something else than Slack? Let's quickly overview the options for self-hosting, then what I've installed and how does it look like.
 
 Briefly, the options and how I feel about them as of March 2020:
 - [matrix.org](https://matrix.org): I saw a [CCC talk](https://media.ccc.de/v/35c3-9400-matrix_the_current_status_and_year_to_date) and made a note to try it. I was attracted by the global federation idea behind it. Connect your instance with other instances and bridge with third-party systems.
@@ -119,7 +119,7 @@ I tried quickly setting up a bridge towards a Slack account and I failed the gra
 
 I noticed that *no* matrix client except those from riot.im implement end-to-end (e2e) message encryption. Same story for the servers that implement the Matrix protocol. Same [for the SDK](https://matrix.org/sdks/): only the matrix team did accomplish this.
 
-At the CCC, Moxie Marlinspike from Signal gave a "controversial" talk about how a decentralized messaging system cannot work. Like it or not, he has a point: implementing e2e on a decentralized protocol is a huge pain in the ass *if* you don't want to sacrifice usability for your users. If you don't want to share your contacts with the server, fine, but then good luck porting your data to another device. You can backup on the messaging platform implicitely (like on Signal) or explicitely (like on Threema). Threema even gives you the option to backup on an offline device, which is a very good approach.
+At the CCC, Moxie Marlinspike from Signal gave a "controversial" talk about how a decentralized messaging system cannot work. Like it or not, he has a point: implementing e2e on a decentralized protocol is a huge pain in the ass *if* you don't want to sacrifice usability for your users. If you don't want to share your contacts with the server, fine, but then good luck porting your data to another device. You can backup on the messaging platform implicitly (like on Signal) or explicitly (like on Threema). Threema even gives you the option to backup on an offline device, which is a very good approach.
 
 But. My Threema contacts never backup their data when they change device and regularly lose their ThreemaID and cannot recover their account data. They have to pay for another Threema licence (!) or I need to kindly ask the support for help (!!). Because they're non-tech people used to have "magically" their contacts and important chats and important nude pics automatically synchronized. You can't even have them do a simple thing like clicking a goddamn button and backup their stuff before throwing away the old smartphone.
 

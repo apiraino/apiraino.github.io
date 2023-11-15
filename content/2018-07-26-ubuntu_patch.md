@@ -32,6 +32,6 @@ and
 5. descent into the source directory and either use `edit-patch` or `quilt` to create and apply the patch you create before
 6. sign-off the patch and fill up some paperwork (changelog and other stuff)
 7. locally build the package, install it and test if it works
-8. submit your patch (a .debdiff file) on Launchpad, attaching it to a bug. Await comments from the mantainers.
+8. submit your patch (a .debdiff file) on Launchpad, attaching it to a bug. Await comments from the maintainers.
 
 For any question or doubt, support is available on irc.freenode.net on `#ubuntu-motu` or `ubuntu-motu@lists.ubuntu.com`.

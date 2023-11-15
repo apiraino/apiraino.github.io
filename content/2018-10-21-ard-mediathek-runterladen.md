@@ -35,7 +35,7 @@ Notes:
 
 * Sometimes the path `/de` can be replaced with `/int` (check carefully the master.m3u file).
 
-* Sometimes "1280x720" resolution is not explicited but the file is there as well most of the time.
+* Sometimes "1280x720" resolution is not explicit but the file is there as well most of the time.
 
 * Movies rated `FSK ab 16` or `FSK ab 18` are not available before late evening. You can circumvent the block searching in the network traffic the XML file of the movie (there should be only one), that provides the needed `YYYY/MM/DD/<UUID>` and also a path to the subtitle XML file.
 

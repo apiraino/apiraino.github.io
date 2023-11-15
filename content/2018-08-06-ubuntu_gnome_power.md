@@ -60,7 +60,7 @@ While the majority of people were complaining that their laptop suspended when t
 
 It doesn't work.
 
-If I unplug the monitor or explicity request to suspend, it suspend-on-lid-closing works. With the external monitor attached, no way. \*sigh\*.
+If I unplug the monitor or explicitly request to suspend, it suspend-on-lid-closing works. With the external monitor attached, no way. \*sigh\*.
 
 Let's apply some more DDG-fu. Uhm ... more people complaining about this. I also see floating keywords such as _systemd_, _nvidia_, _bugs_ ... \*groan\*, I should have seen this coming.
 
@@ -70,7 +70,7 @@ No luck.
 
 ### <a name="part_iii"></a>Part III: following _systemd_ bloody trail
 
-[Here](https://github.com/systemd/systemd/issues/7137) there's a thorough bug report that teaches me how to edit the `logind` configuration, followed by a convoluted explaination by Poettering on why systemd's behaviour is correct and passes the buck to the Gnome folks. The main getaway in this GitHub issue, however, is the line that allows you to inspect what systemd is blocking and why:
+[Here](https://github.com/systemd/systemd/issues/7137) there's a thorough bug report that teaches me how to edit the `logind` configuration, followed by a convoluted explanation by Poettering on why systemd's behaviour is correct and passes the buck to the Gnome folks. The main getaway in this GitHub issue, however, is the line that allows you to inspect what systemd is blocking and why:
 ``` bash
 $ systemd-inhibit --list --mode block
 ...

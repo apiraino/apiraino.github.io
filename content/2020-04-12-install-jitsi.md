@@ -31,7 +31,7 @@ iptables -A INPUT -p udp --dport 10000:20000 -j ACCEPT
 # ... plus 80+443 for the webserver
 ```
 
-After installing the packages, the installation asks if you want to install a SSL certiticate or "I want to use my own certificate". Since I have already Let's Encrypt `certbot` in place I can say no, because otherwise a lot of necessary packages will be installed. Also a lot of stuff that I don't want of a webserver (gcc, for example... 🤦‍♂️).
+After installing the packages, the installation asks if you want to install a SSL certificate or "I want to use my own certificate". Since I have already Let's Encrypt `certbot` in place I can say no, because otherwise a lot of necessary packages will be installed. Also a lot of stuff that I don't want of a webserver (gcc, for example... 🤦‍♂️).
 
 Jitsi pulls also a number of dependencies I don't understand, like the `x11-common` and a couple of X11 libraries, `libcups` and `libavahi-*`. Those cannot be removed.
 

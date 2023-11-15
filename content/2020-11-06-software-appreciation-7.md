@@ -9,7 +9,7 @@ At its core [NoScript](https://noscript.net) blocks JavaScript from executing on
 
 During the years JavaScript became more and more widespread, ubiquitous but also more annoying and ... dangerous. A lot of tricks and malicious scripts started pestering and tricking users.
 
-With NoScript this all will disappear. Together with half of the websites becoming broken or unusuable :-)
+With NoScript this all will disappear. Together with half of the websites becoming broken or unusable :-)
 
 NoScript has a very fine-grained blocking mask that allows to singularly block scripts, objects, media files, iframes, `fetch` requests and so on ... but the single most useful one is the ability to allow scripts either permanently or temporarily for that session (and reset the permission grant when the browser is restarted). Some scripts might be needed on some websites but not on other. If I see that a scripts is used almost everywhere I just add it the permanent whitelist.
 
@@ -17,7 +17,7 @@ I have a policy of whitelisting JavaScript. Instead of choosing what to block, I
 
 But it's really a formative experience. Here are some key takeaways I could think of right now:
 - You realize that often the "full enhanced" experience that JavaScript provides is just bullshit. I put the blame on who has developed the website, not on JavaScript.
-- The amout of trackers that pile up on some websites is perplexing (load any news website and have a look at the network traffic). You realize there's something deeply broken in their business model when they feel the need to profile their users so passionately. The "free content" on Internet spoiled us and we're not paying anymore for a lot of things. This has consequences.
+- The amount of trackers piling up on some websites is perplexing (load any news website and have a look at the network traffic). You realize there's something deeply broken in their business model when they feel the need to profile their users so passionately. The "free content" on Internet spoiled us and we're not paying anymore for a lot of things. This has consequences.
 - It goes without saying that the same website without JavaScript runs faster on my computer. As a user, most of the time I accept a visually broken website until it's usable for this reason only. I don't care if it looks like shit: if it works I'm ok with that.
 - By intentionally breaking websites, you learn how they work. By allowing scripts one by one from a domain you realize what it's really needed and what is dubious stuff that apparently has no functional purpose.
 

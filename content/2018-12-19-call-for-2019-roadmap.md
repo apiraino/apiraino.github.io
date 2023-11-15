@@ -11,7 +11,7 @@ It's fun to pin today some thoughts and see in 12 months how things will have ev
 
 ### <a id="part_i"></a>First of all, the Community
 
-There a lot of take-aways after helping organizing a conference with +200 attendees, [11 talks by 12 speakers](https://twitter.com/RustFest/status/1071720864134168577), plus workshops, [Impl Days](https://rome.rustfest.eu/about_impl_days) aaaand a beautiful city to walk by night.
+There a lot of takeaways after helping organizing a conference with +200 attendees, [11 talks by 12 speakers](https://twitter.com/RustFest/status/1071720864134168577), plus workshops, [Impl Days](https://rome.rustfest.eu/about_impl_days) aaaand a beautiful city to walk by night.
 
 Where would I like the conferencing story to go? It's a bit like in a startup, where there can be experimenting, a rollercoaster where *you* decide the next move. There are basically three things I'd like to see evolving:
 
@@ -32,7 +32,7 @@ Where would I like the conferencing story to go? It's a bit like in a startup, w
 So, I'm also a developer that is getting into the Rust world and wishes to have some of the bills deliciously covered by a Rust-flavoured fragrance. 2018 was a stepstone year for the ecosystem and a lot of praise has been given to the efforts to improve the language, the libraries, the _ergonomics_ of developing in Rust.
 
 What I would like to see next:
-- <strong>Less 0.1 bit-rot</strong>: some crates that are incredibily responding to a need, are often left in poor state (mostly lacking ancilliary work, like documentation or examples) or as the language evolves, even broken.
+- <strong>Less 0.1 bit-rot</strong>: some crates that are incredibly responding to a need, are often left in poor state (mostly lacking ancillary work, like documentation or examples) or as the language evolves, even broken.
 
   I also call for a "responsible" development when people start using your libraries; case in point the recent [breaking changes on the OpenSSL crate](https://github.com/sfackler/rust-openssl/issues/987), which caused some headaches.
 

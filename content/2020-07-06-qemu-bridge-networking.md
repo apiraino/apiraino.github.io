@@ -104,7 +104,7 @@ net.ipv4.ip_forward = 1
 ...
 ```
 
-and the vitual bridge `virbr0` is enabled and autostarted (again, see above) we need to create this file:
+and the virtual bridge `virbr0` is enabled and autostarted (again, see above) we need to create this file:
 
 ```bash
 # echo "allow virbr0" > /etc/qemu/bridge.conf
