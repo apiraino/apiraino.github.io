@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-07-26" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/ubuntu-patch/"},"@type":"BlogPosting","url":"https://apiraino.github.io/ubuntu-patch/","headline":"Submitting a patch for an Ubuntu package","dateModified":"2018-07-26","datePublished":"2018-07-26","description":"I had the chance to peep into how an Ubuntu package is cooked and submitted: the procedure is clearly described in clear, detailed steps on the Ubuntu wiki, so this is just a summary for my own ref…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Submitting a patch for an Ubuntu package" />
+<meta name="description" content="I had the chance to peep into how an Ubuntu package is cooked and submitted: the procedure is clearly described in clear, detailed steps on the Ubuntu wiki, so this is just a summary for my own ref…" />
+<meta property="og:description" content="I had the chance to peep into how an Ubuntu package is cooked and submitted: the procedure is clearly described in clear, detailed steps on the Ubuntu wiki, so this is just a summary for my own ref…" />
+<link rel="canonical" href="https://apiraino.github.io/ubuntu-patch/" />
+<meta property="og:url" content="https://apiraino.github.io/ubuntu-patch/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-07-26T00:00:00+00:00" itemprop="datePublished">26 July 2018</time></p>
+                <h1>Submitting a patch for an Ubuntu package</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>I had the chance to peep into how an Ubuntu package is cooked and submitted: the procedure is clearly described in clear, detailed steps on the Ubuntu wiki, so this is just a summary for my own reference: I'll give a lot of details for granted.</p>
+<p>First of all you need a Launchpad account, with your SSH public and GPG key:</p>
+<p><a href="http://packaging.ubuntu.com/html/getting-set-up.html">http://packaging.ubuntu.com/html/getting-set-up.html</a></p>
+<p>Then you need to setup your workstation for building packages and various tooling for patching package sources:</p>
+<p><a href="http://packaging.ubuntu.com/html/fixing-a-bug.html">http://packaging.ubuntu.com/html/fixing-a-bug.html</a></p>
+<p>I don't like adding a lot of random packages to my workstation, so I wrote down all the required packages so I can replicate the environment in a virtual machine or (as Ubuntu suggests) an <a href="https://help.ubuntu.com/lts/serverguide/lxd.html">LXD container</a> - although I'll investigate if it can run GUI applications.</p>
+<p>Now, I discovered there are two ways to patch the sources of a package. One involves using <a href="https://manpages.debian.org/stretch/devscripts/edit-patch.1.en.html">edit-patch (1)</a>, as described in the previous link, the other revolves around <a href="https://manpages.debian.org/stretch/quilt/quilt.1.en.html">quilt (1)</a>, a nice tool that Andrew Morton wrote for his own purpose of maintaining patches to the Linux kernel (the <em>-mm</em> branch). Usage is detailed here:</p>
+<p><a href="https://raphaelhertzog.com/2012/08/08/how-to-use-quilt-to-manage-patches-in-debian-packages">https://raphaelhertzog.com/2012/08/08/how-to-use-quilt-to-manage-patches-in-debian-packages</a></p>
+<p>and</p>
+<p><a href="https://wiki.debian.org/UsingQuilt">https://wiki.debian.org/UsingQuilt</a></p>
+<p><code>edit-patch</code> is easier to use, but if you feel like playing with <code>quilt</code> it'll only take 5 minutes to get acquainted. So, basically the procedure consists in:</p>
+<ol>
+<li>ensure to have <code>deb-src</code> packages activated in your <code>sources.list</code>, then run <code>apt update</code></li>
+<li>create a patch containing all the changes that you want applied to the package (e.g. <code>git diff &gt; patch.diff</code>)</li>
+<li>create a work directory somewhere and <code>cd</code> into it</li>
+<li>get the sources for the package you want to update: <code>pull-lp-sources &lt;ubuntu_release&gt; &lt;package_name&gt;</code></li>
+<li>descent into the source directory and either use <code>edit-patch</code> or <code>quilt</code> to create and apply the patch you create before</li>
+<li>sign-off the patch and fill up some paperwork (changelog and other stuff)</li>
+<li>locally build the package, install it and test if it works</li>
+<li>submit your patch (a .debdiff file) on Launchpad, attaching it to a bug. Await comments from the maintainers.</li>
+</ol>
+<p>For any question or doubt, support is available on irc.freenode.net on <code>#ubuntu-motu</code> or <code>ubuntu-motu@lists.ubuntu.com</code>.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

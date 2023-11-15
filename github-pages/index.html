@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-05" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/github-pages/"},"@type":"BlogPosting","url":"https://apiraino.github.io/github-pages/","headline":"Locally testing a GitHub static website","dateModified":"2018-08-05","datePublished":"2018-08-05","description":"&amp;sect;
+Part I: The &amp;quot;hosted&amp;quot; solutio…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Locally testing a GitHub static website" />
+<meta name="description" content="&amp;sect;
+Part I: The &amp;quot;hosted&amp;quot; solutio…" />
+<meta property="og:description" content="&amp;sect;
+Part I: The &amp;quot;hosted&amp;quot; solutio…" />
+<link rel="canonical" href="https://apiraino.github.io/github-pages/" />
+<meta property="og:url" content="https://apiraino.github.io/github-pages/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-08-05T00:00:00+00:00" itemprop="datePublished">5 August 2018</time></p>
+                <h1>Locally testing a GitHub static website</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <h3 id="part-i-the-hosted-solution"><a class="zola-anchor" href="#part-i-the-hosted-solution" aria-label="Anchor link for: part-i-the-hosted-solution">&sect;</a>
+Part I: The &quot;hosted&quot; solution</h3>
+<p>Github pages are nice, behind the scene there is a <a href="https://github.com/jekyll/jekyll">jekyll</a> instance running your website/blog. Many plugins are available, you can compile HTML files out of a Markdown source you commit to the GitHub repository.</p>
+<p>But what if you want to test locally the website before committing the changes?</p>
+<p>You need to follow this tutorial <a href="https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll">on GitHub</a> and install:</p>
+<ul>
+<li>Ruby</li>
+<li><a href="https://bundler.io">Bundler</a></li>
+<li><a href="https://github.com/jekyll/jekyll">jekyll</a></li>
+</ul>
+<p>Ok, what if you don't want any of this cruft installed (<sub>because as a pythonist <em>and</em> linux user, you already have your laptop messed up enough</sub>) just for your GitHub pages?</p>
+<p>Docker to the rescue!</p>
+<ol>
+<li>
+<p>Checkout this repo: <a href="https://github.com/BretFisher/jekyll-serve">https://github.com/BretFisher/jekyll-serve</a></p>
+</li>
+<li>
+<p>copy into your repo the file <code>docker-compose.yml</code></p>
+</li>
+<li>
+<p>From your website repo dir run: <code>$ docker-compose up</code>. It will download the docker image(s), build the container and run it on <code>localhost:80</code>; wow. This command (almost) equals to the following docker bash command:</p>
+</li>
+</ol>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ docker run --rm -p 80:4000 \
+   -v $(pwd):&#x2F;site \
+   bretfisher&#x2F;jekyll-serve
+</code></pre>
+<p>It's all good but ... that docker container defaults to using the <a href="https://jekyll.github.io/minima"><code>minima</code> jekyll theme</a>. As you can see, this site is pretty different and uses <a href="https://github.com/pages-themes/hacker">the hacker theme</a>, so how to load this theme?</p>
+<h3 id="part-ii-here-be-dragons"><a class="zola-anchor" href="#part-ii-here-be-dragons" aria-label="Anchor link for: part-ii-here-be-dragons">&sect;</a>
+Part II: here be dragons</h3>
+<p>You can do that editing your <code>_config.yml</code> (create it if not present), adding (in my case) the following line:</p>
+<pre data-lang="yaml" class="language-yaml "><code class="language-yaml" data-lang="yaml">theme: jekyll-hacker-theme
+
+# other values you may already have
+title: my blog
+description: too much information
+</code></pre>
+<p>Run again the container, and ... watch it crash.</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ docker run ....
+...
+      Generating...
+jekyll 3.7.3 | Error:  No such file or directory - git
+  Liquid Exception: No such file or directory - git in &#x2F;_layouts&#x2F;default.html
+</code></pre>
+<p>I could not generate anymore the static HTML, <code>jekyll serve</code> crashes for reasons not apparent to my ruby-newbie eyes.</p>
+<p>So I tried what everyone does: trial-and-error, copy error on search engine, check stackoverflow, apply or discard patch, next error, rinse and repeat (gnawing your own teeth and mumbling 135 WTFs/minute).</p>
+<p>First batch of fixes occurred when I've understood that the docker container downloaded a nice Ruby package called <a href="https://github.com/jekyll/github-metadata"><code>github-metadata</code></a>. This package takes advantage of your remote repo to gather some info. But you need to tell it <em>what</em> your repo is. So let's fix that by adding to the <code>_config.yml</code>:</p>
+<pre data-lang="yaml" class="language-yaml "><code class="language-yaml" data-lang="yaml">repository: apiraino&#x2F;apiraino.github.io
+</code></pre>
+<p>and pass your GitHub token when you run the container:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ docker run --rm -p 80:4000 \
+   -e JEKYLL_GITHUB_TOKEN=xxx \
+   -v $(pwd):&#x2F;site \
+   bretfisher&#x2F;jekyll-serve
+</code></pre>
+<p>this is explained <a href="https://github.com/jekyll/github-metadata/blob/master/docs/configuration.md#configuration">in their documentation</a>.</p>
+<p>after a long back and forth I've finally nailed another issue: the ruby package <code>github-metadata</code> is not exporting a variable used by the <code>hacker</code> theme: <code>github.build_revision</code>, which is <a href="https://github.com/pages-themes/hacker/blob/master/_layouts/default.html#l7">required by this line of code</a>. I rolled back all the changes (yay) and verified that removing that single variable made everything work.</p>
+<p>But why did it fail?</p>
+<p>Like we said, the Ruby package takes advantage of the directive <code>repository</code> (and the GitHub token you pass to docker) to query your repo for some stuff; here's the Github documentation <a href="https://help.github.com/articles/repository-metadata-on-github-pages">about the metadata</a>. It's not clear where the fail happens: in the Ruby package or the Github API?</p>
+<p>Ok, I can live without that variable, but I can't sleep until I really fix it. What is this variable, how can I retrieve it? Turns out that the metadata <code>build_revision</code> can be recovered from your local repo with a simple <a href="https://github.com/jekyll/github-metadata/blob/master/docs/configuration.md#overrides"><code>git rev-parse HEAD</code></a>. Nice!</p>
+<p>So, let's add another environment variable to our docker command:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ docker run --rm -p 80:4000 \
+   -e JEKYLL_GITHUB_TOKEN=xxx \
+   -e JEKYLL_BUILD_REVISION=$( git rev-parse HEAD ) \
+   -v $(pwd):&#x2F;site \
+   bretfisher&#x2F;jekyll-serve
+</code></pre>
+<p>and <em>FINALLY</em> the website appeared exactly like I see it on github.</p>
+<p>The final touch? Oh, the <code>Docker compose</code> recipe we mentioned at the beginning so you don't have to remember that bash blurb. Let's amend the one provided by the <a href="https://github.com/BretFisher/jekyll-serve/blob/master/docker-compose.yml">Dockerfile maintainer</a>:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cat docker-compose.yml
+version: &#x27;3.7&#x27;
+
+services:
+  jekyll:
+    image: bretfisher&#x2F;jekyll-serve
+    volumes:
+      - .:&#x2F;site
+    ports:
+      - &#x27;80:4000&#x27;
+    environment:
+      - JEKYLL_GITHUB_TOKEN=${JEKYLL_GITHUB_TOKEN}
+      - JEKYLL_BUILD_REVISION=${JEKYLL_BUILD_REVISION}
+</code></pre>
+<p>Add those two env variables in your <code>.bashrc</code> file (or equivalent for other shells) or create a shell script to be loaded upon entering this directory:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cat set_env.sh
+#!&#x2F;usr&#x2F;bin&#x2F;env bash
+export JEKYLL_BUILD_REVISION=$( git rev-parse HEAD )
+export JEKYLL_GITHUB_TOKEN=aaabbbcccddd
+</code></pre>
+<p>now simply run the Docker orchestrator:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ docker-compose up
+</code></pre>
+<h3 id="part-iii-closing-thoughts"><a class="zola-anchor" href="#part-iii-closing-thoughts" aria-label="Anchor link for: part-iii-closing-thoughts">&sect;</a>
+Part III: closing thoughts</h3>
+<p>Wow, that was some work to just switch a theme in a containerized Jekyll instance.</p>
+<p>See, the funny thing of all this story is that the theme works out of the box when enabled on GitHub.</p>
+<p>Now, the behaviour of the <code>github-metadata</code> package looks a bit odd, I'd like to understand where the problem is (the Ruby package? The GitHub API?). I opened an <a href="https://github.com/jekyll/github-metadata/issues/131">issue on github</a> - let's see if we can get to the bottom of it.</p>
+<h3 id="part-iv-understanding-the-issue-2018-12-14-update"><a class="zola-anchor" href="#part-iv-understanding-the-issue-2018-12-14-update" aria-label="Anchor link for: part-iv-understanding-the-issue-2018-12-14-update">&sect;</a>
+Part IV: Understanding the issue (2018-12-14 UPDATE)</h3>
+<p>Finally I could dig until the core.</p>
+<p>Run the Docker container in interactive mode with:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">docker run --rm -it -p 80:4000 \
+       -e JEKYLL_GITHUB_TOKEN=$GITHUB_TOKEN \
+       -v $(pwd):&#x2F;site \
+       bretfisher&#x2F;jekyll-serve &#x2F;bin&#x2F;bash
+</code></pre>
+<p>then run Jekyll manually with a flag tracing the crash:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash"># bundle exec jekyll build --trace
+Configuration file: &#x2F;site&#x2F;_config.yml
+bundler: failed to load command: jekyll (&#x2F;usr&#x2F;local&#x2F;bundle&#x2F;bin&#x2F;jekyll)
+Errno::ENOENT: No such file or directory - git
+  &#x2F;usr&#x2F;local&#x2F;bundle&#x2F;gems&#x2F;jekyll-github-metadata-2.9.4&#x2F;lib&#x2F;jekyll-github-metadata&#x2F;metadata_drop.rb:84:in ``&#x27;
+  &#x2F;usr&#x2F;local&#x2F;bundle&#x2F;gems&#x2F;jekyll-github-metadata-2.9.4&#x2F;lib&#x2F;jekyll-github-metadata&#x2F;metadata_drop.rb:84:in `build_revision&#x27;
+  &#x2F;usr&#x2F;local&#x2F;bundle&#x2F;gems&#x2F;jekyll-3.7.3&#x2F;lib&#x2F;jekyll&#x2F;drops&#x2F;drop.rb:52:in `public_send&#x27;
+  &#x2F;usr&#x2F;local&#x2F;bundle&#x2F;gems&#x2F;jekyll-3.7.3&#x2F;lib&#x2F;jekyll&#x2F;drops&#x2F;drop.rb:52:in `[]&#x27;
+...
+</code></pre>
+<p>The Ruby line failing is:</p>
+<pre data-lang="ruby" class="language-ruby "><code class="language-ruby" data-lang="ruby">    82 def build_revision
+    83     @build_revision ||= begin
+=&gt;  84        ENV[&quot;JEKYLL_BUILD_REVISION&quot;] || `git rev-parse HEAD`.strip
+    85     end
+    86 end
+
+</code></pre>
+<p>Inside the container <code>git</code> is not installed, so if the env var is not set as well, here it is the crash explained.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

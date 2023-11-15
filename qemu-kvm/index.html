@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-02" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/qemu-kvm/"},"@type":"BlogPosting","url":"https://apiraino.github.io/qemu-kvm/","headline":"Virtualization with KVM","dateModified":"2020-05-02","datePublished":"2020-05-02","description":"The toy project for the weekend was to get rid of Virtualbox and migrate everything to KVM-based virtualization (QEMU, libvirt, Gnome Boxes). Here&#x27;s an overview of my learnings.
+&lt;h3 id=&quot;why-dum…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Virtualization with KVM" />
+<meta name="description" content="The toy project for the weekend was to get rid of Virtualbox and migrate everything to KVM-based virtualization (QEMU, libvirt, Gnome Boxes). Here&#x27;s an overview of my learnings.
+&lt;h3 id=&quot;why-dum…" />
+<meta property="og:description" content="The toy project for the weekend was to get rid of Virtualbox and migrate everything to KVM-based virtualization (QEMU, libvirt, Gnome Boxes). Here&#x27;s an overview of my learnings.
+&lt;h3 id=&quot;why-dum…" />
+<link rel="canonical" href="https://apiraino.github.io/qemu-kvm/" />
+<meta property="og:url" content="https://apiraino.github.io/qemu-kvm/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+  <script src="https://apiraino.github.io/js/axios.min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2020-05-02T00:00:00+00:00" itemprop="datePublished">2 May 2020</time></p>
+                <h1>Virtualization with KVM</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>The toy project for the weekend was to get rid of Virtualbox and migrate everything to KVM-based virtualization (QEMU, libvirt, Gnome Boxes). Here's an overview of my learnings.</p>
+<h3 id="why-dumping-proprietary-virtualization-platforms"><a class="zola-anchor" href="#why-dumping-proprietary-virtualization-platforms" aria-label="Anchor link for: why-dumping-proprietary-virtualization-platforms">&sect;</a>
+Why dumping proprietary virtualization platforms</h3>
+<p>My virtualization needs are pretty basic, I run virtual machines to try new linux distributions or to keep a couple of Windows machines for browser testing or some quaint Windows-only software. Occasionally I need to run macOS.</p>
+<p>Years ago I used to use VMware Player but it became impossible to even simply download the free player without signing in and checking hundreds of checkboxes with unintelligible corporate blurb - ok I got it you don't me to use your software anymore.</p>
+<p>So I had settled on Virtualbox because of its ease of use, but again, after being bought by Oracle things went downhill. While Virtualbox is still GPL, there are <a href="https://www.theregister.co.uk/2019/10/04/oracle_virtualbox_merula/">horror stories</a> of Virtualbox phoning home when installing the proprietary extension and calling the vultures on you to pay hefty fees. Well, <span class="censored">fuck you Oracle and all the IT companies for paying mojito drinks to managers with legacy software</span> thanks but no thanks.</p>
+<h3 id="qemu-kvm-libvirt-some-clarifications"><a class="zola-anchor" href="#qemu-kvm-libvirt-some-clarifications" aria-label="Anchor link for: qemu-kvm-libvirt-some-clarifications">&sect;</a>
+QEMU, KVM, libvirt... some clarifications</h3>
+<p><a href="https://www.linux-kvm.org/page/Main_Page">KVM</a> is an amazing piece of software. At a very high level, it's a kernel module that interfaces hardware resources directly to the virtual machines to give maximum performances. The Linux Hypervisor has then two hardware interfaces to the CPU: either Intel VT or AMD-V.</p>
+<p><a href="https://www.qemu.org">QEMU</a> is a project initially wrote by <a href="https://bellard.org">Fabrice Bellard</a> that has expanded as the virtualization solution for a <a href="https://wiki.qemu.org/Documentation/Platforms">myriad of architectures and CPUs</a> (half of them unknown to me).</p>
+<p>QEMU is a full-featured, very well-documented <em>AND</em> user-hostile command line tool, so there are frontends for the rest of us. But its job is to spin a single VM, it's the equivalent of launching VMware Player.</p>
+<p>QEMU can also run without KVM but then it gets slow on VM hungry of resources.</p>
+<p><a href="https://libvirt.org/">libvirt</a> is a VM manager (invisible to the user) akin to their closed source solutions such are Virtualbox and VMware Workstation (plus more enterprise stuff).</p>
+<p>On top of libvirt there are many GUI and command-line frontends. Perhaps <a href="https://virt-manager.org/">virt-manager</a> is one of most well-known. I've also been suggested to try <a href="https://wiki.gnome.org/Apps/Boxes">Gnome Boxes</a>, a very convenient and basic solution if you just want to quickly get started. As usual, the command line in the end is more convenient to use so I'll also mention <a href="https://libvirt.org/manpages/virsh.html">virsh</a>.</p>
+<h3 id="down-the-rabbit-hole"><a class="zola-anchor" href="#down-the-rabbit-hole" aria-label="Anchor link for: down-the-rabbit-hole">&sect;</a>
+Down the rabbit hole</h3>
+<p>So, let's get to the meat. Like I mentioned, what I wanted to accomplish is moving all my VMs under libvirt. Using Gnome Boxes to create Linux and Windows VM is very easy (click, click, yes, yes, done), so nothing to see here.</p>
+<p>Moving the macOS VM away from Virtualbox was more interesting. Thanks <a href="https://github.com/foxlet/macOS-Simple-KVM">to this repo</a> I quickly get started with a QEMU script to run macOS Catalina. But a QEMU VM is not manageable by libvirt, it must be imported, so I need an intermediate XML export file to attach the VM to libvirt. Having done that I can now see the VM from <code>virt-manager</code> but not from Gnome Boxes. Uhm ... there is also an open issue on the repo, let's see what we can do.</p>
+<p>Let's step back and first things let's familiarize with some libvirt terminology (I can see the footprint of Red Hat business jargon): a &quot;domain&quot; is a VM that can be executed under libvirt. The domain is described and imported (&quot;defined&quot;) using an XML file. The domain can then be removed and destroyed (&quot;undefined&quot;) from the VM manager.</p>
+<p>The domain XML is created using the great <code>virsh</code> command line tool. My current config is:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ virsh
+virsh # version
+Compiled against library: libvirt 5.4.0
+Using library: libvirt 5.4.0
+Using API: QEMU 5.4.0
+Running hypervisor: QEMU 4.0.0
+</code></pre>
+<p>Let's generate a domain XML from <a href="https://github.com/foxlet/macOS-Simple-KVM/blob/master/basic.sh">the QEMU shell script</a>. A snippet of the bash script:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">qemu-system-x86_64 \
+    -enable-kvm \
+    -m 2G \
+    -machine q35,accel=kvm \
+    -smp 4,cores=2 \
+    -cpu Penryn,vendor=GenuineIntel,kvm=on,+sse3,+sse4.2,....
+    ...
+</code></pre>
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/virtualization_administration_guide/sub-sect-domain_commands-converting_qemu_arguments_to_domain_xml">According to the documentation</a> I need to rewrite that script putting everything in one line and feed the new script to virsh:</p>
+<p><code>$ virsh domxml-from-native qemu-argv basic.args &gt; macos.xml</code></p>
+<p>This step took me a truckload of time because QEMU parameters do not match one-to-one to libvirt domain XML format (specs <a href="https://libvirt.org/formatdomain.html">here</a>). I had to look up a lot of errors, painfully tweak the QEMU script to get a valid XML.</p>
+<p>Also some funny WTF moments, like when I could not figure out the correct QEMU syntax to assign a drive to the correct bus. I could use the <code>index</code> parameter, for example, but how?</p>
+<p><code>-drive id=SystemDisk,if=none,index=XXX,file=MyDisk.qcow2</code></p>
+<p>well, by incrementing XXX I observed that <code>&lt;address&gt;</code> parameters are treated like a single binary number 🤦‍♂️, therefore the XML changes like this:️</p>
+<pre data-lang="xml" class="language-xml "><code class="language-xml" data-lang="xml">&quot;index=0&quot; gives &lt;address type=&#x27;drive&#x27; controller=&#x27;0&#x27; bus=&#x27;0&#x27; target=&#x27;0&#x27; unit=&#x27;0&#x27;&#x2F;&gt;
+&quot;index=1&quot; gives &lt;address type=&#x27;drive&#x27; controller=&#x27;0&#x27; bus=&#x27;0&#x27; target=&#x27;0&#x27; unit=&#x27;1&#x27;&#x2F;&gt;
+&quot;index=2&quot; gives &lt;address type=&#x27;drive&#x27; controller=&#x27;0&#x27; bus=&#x27;0&#x27; target=&#x27;1&#x27; unit=&#x27;0&#x27;&#x2F;&gt;
+&quot;index=3&quot; gives &lt;address type=&#x27;drive&#x27; controller=&#x27;0&#x27; bus=&#x27;1&#x27; target=&#x27;0&#x27; unit=&#x27;1&#x27;&#x2F;&gt;
+&quot;index=4&quot; gives &lt;address type=&#x27;drive&#x27; controller=&#x27;1&#x27; bus=&#x27;0&#x27; target=&#x27;0&#x27; unit=&#x27;0&#x27;&#x2F;&gt;
+</code></pre>
+<p>Anyway, in the end I gave up and modified directly the XML file (snippet):</p>
+<pre data-lang="xml" class="language-xml "><code class="language-xml" data-lang="xml">&lt;domain type=&#x27;kvm&#x27; xmlns:qemu=&#x27;http:&#x2F;&#x2F;libvirt.org&#x2F;schemas&#x2F;domain&#x2F;qemu&#x2F;1.0&#x27;&gt;
+  &lt;name&gt;macOS-test&lt;&#x2F;name&gt;
+  &lt;uuid&gt;bb1dee99-d97f-497f-8238-f2df783deef0&lt;&#x2F;uuid&gt;
+  &lt;memory unit=&#x27;KiB&#x27;&gt;2097152&lt;&#x2F;memory&gt;
+  &lt;currentMemory unit=&#x27;KiB&#x27;&gt;2097152&lt;&#x2F;currentMemory&gt;
+  &lt;vcpu placement=&#x27;static&#x27;&gt;4&lt;&#x2F;vcpu&gt;
+  &lt;os&gt;
+    &lt;type arch=&#x27;x86_64&#x27; machine=&#x27;pc-q35-4.0&#x27;&gt;hvm&lt;&#x2F;type&gt;
+    &lt;loader readonly=&#x27;yes&#x27; type=&#x27;pflash&#x27;&gt;OVMF_CODE.fd&lt;&#x2F;loader&gt;
+    &lt;nvram&gt;OVMF_VARS-1024x768.fd&lt;&#x2F;nvram&gt;
+    &lt;boot dev=&#x27;hd&#x27;&#x2F;&gt;
+  &lt;&#x2F;os&gt;
+  &lt;features&gt;
+  ...
+  &lt;&#x2F;features&gt;
+  ...
+</code></pre>
+<p>Now let's feed this XML into libvirt. Optionally one can also validate the XML (against <a href="https://libvirt.org/formatdomain.html">this schema</a>) while creating the VM. This command will create a new VM called &quot;macOS-test&quot;.</p>
+<p><code>virsh define macos.xml [--validate]</code></p>
+<p>XML validation often fails even if the XML is &quot;good&quot; because the parser is overly-zealous.</p>
+<p>To remove the VM, let's use the opposite command. The <code>--keep-nvram</code> is needed in case the VM has shared resources with other VMs.</p>
+<p><code>virsh undefine macOS-test [--keep-nvram]</code></p>
+<p>Of course we can now go the other way round and export a domain XML into a QEMU script (<a href="https://libvirt.org/manpages/virsh.html#domxml-from-native">docs</a>):</p>
+<p><code>virsh domxml-to-native --domain macOS-test --format qemu-argv &gt; macos.sh</code></p>
+<p>Again, <a href="https://libvirt.org/drvqemu.html#xmlexport">caveat applies</a>, the generated bash script con contain resources not available outside of libvirt 🤦‍♂️ 🤦‍♂️.</p>
+<p>So, it's clear that this conversion between QEMU bash scripts and domain XML is problematic, they recommend using it only to migrate QEMU scripts or even <a href="https://libvirt.org/drvqemu.html#xmlimport">manually craft the XML file</a> for new VMs.</p>
+<p>The XML file can also be used to move a VM around:</p>
+<p><code>virsh dumpxml macOS-test &gt; export.xml</code></p>
+<p><code>virsh create export.xml</code></p>
+<p>Finally let's spin up the VM:</p>
+<p><code>virsh start bb1dee99-d97f-497f-8238-f2df783deef0</code></p>
+<p>or kill it (forced shutdown, equals to rip the power cord):</p>
+<p><code>virsh destroy bb1dee99-d97f-497f-8238-f2df783deef0</code></p>
+<h3 id="have-the-vm-show-up-in-gnome-boxes"><a class="zola-anchor" href="#have-the-vm-show-up-in-gnome-boxes" aria-label="Anchor link for: have-the-vm-show-up-in-gnome-boxes">&sect;</a>
+Have the VM show up in Gnome Boxes</h3>
+<p>Now the virtual machine shows up in <code>virt-manager</code> but we also want to use Gnome Boxes. Why does it not appear? Uhm ... some more digging.</p>
+<p>Turns out another important piece of knowledge I was missing. A QEMU VM can run inside libvirt either as privileged user (<code>qemu:///system</code>) or as normal user (<code>qemu:///session</code>). The latter is advisable unless there are certain requirements, <a href="https://blog.wikichoon.com/2016/01/qemusystem-vs-qemusession.html">here is an article about that</a>.</p>
+<p>The reason why it didn't appear is that Gnome Boxes (when run as user) only has access to user VMs, while virt-manager shows you both, although separately.</p>
+<p>So in the end, all I needed to do was ensuring the VM was imported in libvirt userspace 🤦‍♂️🤦‍♂️🤦‍♂️, and so:</p>
+<p><code>virsh -c qemu:///session define macos.xml</code></p>
+<p>This distinction only became clear when I started using <code>virsh</code> directly, see next paragraph.</p>
+<h3 id="networking"><a class="zola-anchor" href="#networking" aria-label="Anchor link for: networking">&sect;</a>
+Networking</h3>
+<p>When you run your KVM guest as unprivileged user, by default you cannot access the virtual machine through any network interface, fullstop. And this is pretty annoying.</p>
+<p>Your only chance without going crazy with subnetworks or playing with <code>iptables</code> is to configure a bridge.</p>
+<p>Since this a topic that kept me busy for a while, it is explained in detail in a <a href="/qemu-bridge-networking">separate article</a>.</p>
+<h3 id="quick-reference-for-virsh"><a class="zola-anchor" href="#quick-reference-for-virsh" aria-label="Anchor link for: quick-reference-for-virsh">&sect;</a>
+Quick reference for virsh</h3>
+<p>ref: <a href="https://libvirt.org/manpages/virsh.html#connect">https://libvirt.org/manpages/virsh.html</a></p>
+<p>Open the virsh shell:</p>
+<p><code>$ virsh</code></p>
+<p>Connect to the hypervisor as unprivileged user:</p>
+<p><code># connect qemu:///session</code></p>
+<p>List all VMs (should see all the VMs available to this user, also those on Gnome Boxes):</p>
+<p><code># list --all</code></p>
+<p>Import a VM:</p>
+<p><code># define --file macos.xml</code></p>
+<p>The new VM should now be visible on Gnome Boxes (and <code>virt-manager</code>)</p>
+<p>Delete a VM</p>
+<p><code># undefine --domain macOS-test --keep-nvram</code></p>
+<h3 id="references"><a class="zola-anchor" href="#references" aria-label="Anchor link for: references">&sect;</a>
+References</h3>
+<p>A gazillion of links on stack overflow, Red Hat documentation, <code>man qemu-system-x86_64</code> and whatnot.</p>
+<p>Warning, <a href="https://github.com/foxlet/macOS-Simple-KVM/pull/186">registering an AppleID might get yourself banned by Tim Apple</a>, remember to change the MAC address and UUID of the machine before attempting to login/register an Apple account.</p>
+<p>Packages needed for libvirt and company:</p>
+<ul>
+<li>gnome-boxes</li>
+</ul>
+<p><code>dmeventd gnome-boxes libdevmapper-event1.02.1 libgtk-vnc-2.0-0 libgvnc-1.0-0 liblvm2cmd2.03 libosinfo-1.0-0 libosinfo-bin libphodav-2.0-0 libphodav-2.0-common libreadline5 libspice-client-glib-2.0-8 libspice-client-gtk-3.0-5 libusbredirhost1 libvirt-daemon libvirt-daemon-driver-storage-rbd libvirt-glib-1.0-0 libvirt0 lvm2 osinfo-db spice-client-glib-usb-acl-helper thin-provisioning-tools</code></p>
+<ul>
+<li>virt-viewer</li>
+</ul>
+<p><code>libgovirt-common libgovirt2 virt-viewer</code></p>
+<p>Example usage: <code>virt-viewer -c qemu:///session --domain-name debian-11-testing-bullseye</code></p>
+<ul>
+<li>virt-manager</li>
+</ul>
+<p><code>gir1.2-gtk-vnc-2.0 gir1.2-libosinfo-1.0 gir1.2-libvirt-glib-1.0 gir1.2-spiceclientglib-2.0 gir1.2-spiceclientgtk-3.0 python3-libvirt python3-libxml2 virt-manager virtinst</code></p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+  <br/><br/>
+  <div id="gh-comments-list"></div>
+</div>
+
+<script type="text/javascript">
+
+// To use Gihub comments instead of gists
+// var base_url = "https://github.com/apiraino/apiraino.github.io/issues/"
+// var base_api_url = "https://api.github.com/repos/apiraino/apiraino.github.io/issues/"
+
+// Link to create a new comment
+var base_url = "https://gist.github.com/apiraino/"
+// Link to retrieve all comments
+var base_api_url = "https://api.github.com/gists/"
+
+var url = base_url + '14a457e45cf58a9968b020ee5202298e' + '#new_comment_field'
+var api_url = base_api_url + '14a457e45cf58a9968b020ee5202298e' + '/comments'
+
+axios.defaults.headers.get['Content-Type'] = 'application/json'
+axios.defaults.headers.get['Accept'] = 'application/vnd.github.v3.html+json'
+axios
+  .get(api_url)
+  .then(response => {
+    if (response.data !== undefined) {
+      var addComment = "<a href='" + url + "' rel='nofollow' class='btn-comment'>Post a comment</a><br/><br/>(Must be logged into GitHub)"
+      document.getElementById('gh-comments-list').innerHTML = addComment
+      this.data = response.data
+      this.data.forEach(function(comment) {
+        var date = new Date(comment.created_at);
+        var t = "<div id='gh-comment'>";
+        t += "<img src='" + comment.user.avatar_url + "' width='24px'>";
+        t += "<b><a href='" + comment.user.html_url + "'>" + comment.user.login + "</a></b>";
+        t += " posted at ";
+        t += "<em>" + date.toUTCString() + "</em>";
+        t += "<div id='gh-comment-hr'></div>";
+        t += comment.body_html;
+        t += "</div>";
+        document.getElementById('gh-comments-list').innerHTML += t
+        // document.getElementById('gh-comments-list').innerText += t
+        // document.getElementById('gh-comments-list').textContent += t
+      })
+    }
+  })
+  .catch(error => {
+    console.debug('Got: ' + error)
+    if (console.response) {
+      console.debug(error.response.data.detail)
+      // document.getElementById('gh-comments-list').innerText = "text";
+      // document.getElementById('gh-comments-list').textContent = "text";
+    }
+    var errMsg = "<p class='no-comments'>Error while getting comments<br />(pls report if you see this)</p>"
+    document.getElementById('gh-comments-list').innerHTML = errMsg
+  })
+
+</script>
+
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

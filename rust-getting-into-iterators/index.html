@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-13" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/rust-getting-into-iterators/"},"@type":"BlogPosting","url":"https://apiraino.github.io/rust-getting-into-iterators/","headline":"Getting into Rust Iterators","dateModified":"2019-08-13","datePublished":"2019-08-13","description":"I&#x27;ll summarize what I&#x27;ve learned so far about Iterators.
+I had this code:
+pub fn mapper(src: &amp;am…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Getting into Rust Iterators" />
+<meta name="description" content="I&#x27;ll summarize what I&#x27;ve learned so far about Iterators.
+I had this code:
+pub fn mapper(src: &amp;am…" />
+<meta property="og:description" content="I&#x27;ll summarize what I&#x27;ve learned so far about Iterators.
+I had this code:
+pub fn mapper(src: &amp;am…" />
+<link rel="canonical" href="https://apiraino.github.io/rust-getting-into-iterators/" />
+<meta property="og:url" content="https://apiraino.github.io/rust-getting-into-iterators/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-08-13T00:00:00+00:00" itemprop="datePublished">13 August 2019</time></p>
+                <h1>Getting into Rust Iterators</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>I'll summarize what I've learned so far about Iterators.</p>
+<p>I had this code:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">pub fn mapper(src: &amp;Vec&lt;SrcStruct&gt;) -&gt; Vec&lt;DestStruct&gt; {
+    let mut objects: Vec&lt;DestStruct&gt; = vec![];
+    for course in src {
+        let item = Item::from(course);
+        let obj: DestStruct = DestStruct::new(item);
+        objects.push(obj);
+    }
+    objects
+}
+</code></pre>
+<p>This function takes as input an array of <strong>Srcstruct</strong> references and return an array of <strong>DestStruct</strong>. For each item of <strong>SrcStruct</strong> we create a new <strong>Deststruct</strong> and add it to the array. At the end of the iteration the array is returned.</p>
+<p>That's a pretty straightforwarded approach, which works well in most cases and looks familiar in most languages. Nobody will complain about such implementation.</p>
+<p>However what happens when the input array is a HUUUGE amount of data?</p>
+<p>Iterators save the day, providing a way to stream data and be treated chunk by chunk. Since my input data is basically a JSON list of records, it look like the perfect use case for iterating them one by one and keep memory usage constant.</p>
+<p>The first refactor tries to add Interators:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">pub fn mapper&lt;&#x27;a, I&gt;(src: I) -&gt; impl Iterator&lt;Item = DestStruct&gt;
+where
+    I: IntoIterator&lt;Item = &amp;&#x27;a SrcStruct&gt;,
+{
+    let objects: Vec&lt;DestStruct&gt; = src
+        .into_iter()
+        .map(|course| {
+            let res = Item::try_from(course);
+            let item = match res {
+                Ok(item) =&gt; {
+                    &#x2F;&#x2F; conversion successful
+                    item
+                }
+                Err(x) =&gt; {
+                    &#x2F;&#x2F; conversion failed! Create a placeholder
+                    Item::default()
+                }
+            };
+            DestStruct::new(item)
+        })
+        .collect();
+    objects.into_iter()
+}
+</code></pre>
+<p>The final version looks like this:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">pub fn mapper&lt;&#x27;a, I&gt;(src: I) -&gt; impl Iterator&lt;Item = ApprendoObject&gt; + &#x27;a
+where
+    I: IntoIterator&lt;Item = &amp;&#x27;a CourseResult&gt;,
+    &lt;I as std::iter::IntoIterator&gt;::IntoIter: &#x27;a,
+{
+    let objects = src.into_iter().map(|course| {
+        let res = Item::try_from(course);
+        let item = match res {
+            Ok(item) =&gt; {
+                debug!(&quot;conversion for object successful&quot;);
+                item
+            }
+            Err(x) =&gt; {
+                error!(&quot;conversion for object failed: {:?}&quot;, x);
+                &#x2F;&#x2F; and skip this object
+                let empty_item = Item::default();
+                empty_item
+            }
+        };
+        let app_obj: ApprendoObject = ApprendoObject::new(item);
+        app_obj
+    });
+    objects
+}
+</code></pre>
+<p>I'd like to run some benchmarks on these two implementations (although benchmarks are like opinions: everyone has their own); unfortunately I could not figure out easily how to run benchmarks in Rust, so I'll leave a <strong>cargo bench</strong> setup for a later stage.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

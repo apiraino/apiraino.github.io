@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-07-12" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/firefox-custom-search/"},"@type":"BlogPosting","url":"https://apiraino.github.io/firefox-custom-search/","headline":"Enabling any website as a Firefox custom search engine","dateModified":"2018-07-12","datePublished":"2018-07-12","description":"I am an avid user of the Firefox Custom Search Engine feature, so I&#x27;d like to add any site I use frequently that allows a s…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Enabling any website as a Firefox custom search engine" />
+<meta name="description" content="I am an avid user of the Firefox Custom Search Engine feature, so I&#x27;d like to add any site I use frequently that allows a s…" />
+<meta property="og:description" content="I am an avid user of the Firefox Custom Search Engine feature, so I&#x27;d like to add any site I use frequently that allows a s…" />
+<link rel="canonical" href="https://apiraino.github.io/firefox-custom-search/" />
+<meta property="og:url" content="https://apiraino.github.io/firefox-custom-search/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-07-12T00:00:00+00:00" itemprop="datePublished">12 July 2018</time></p>
+                <h1>Enabling any website as a Firefox custom search engine</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>I am an avid user of the Firefox <a href="https://support.mozilla.org/en-US/kb/use-search-bar-firefox">Custom Search Engine</a> feature, so I'd like to add any site I use frequently that allows a search through a <code>GET</code> request, example:</p>
+<pre data-lang="curl" class="language-curl "><code class="language-curl" data-lang="curl">https:&#x2F;&#x2F;www.thewebsite.com&#x2F;search?keyword=%s
+</code></pre>
+<p>The Mozilla documentation details how to add new search custom engines. Basically we have two options:</p>
+<ol>
+<li>From the Firefox search widget, when a plus <code>+</code> icon appears as you land on your website</li>
+</ol>
+<figure>
+    <img src="/images/ff_cse.png">
+</figure>
+<ol start="2">
+<li>For websites not supporting the custom search engine feature (more on that later), you can bookmark the search URL provided by the website. Example:</li>
+</ol>
+<figure>
+    <img src="/images/bing_cse_lol.png">
+    <figcaption>Bing being good at ignoring OpenSearch support</figcaption>
+</figure>
+<p>The procedure is explained, for example, <a href="https://www-archive.mozilla.org/docs/end-user/keywords.html">here</a> and <a href="http://kb.mozillazine.org/Using_keyword_searches">here</a>: you basically bookmark the search page and assign it a keyword:</p>
+<figure>
+    <img src="/images/bing_cse_bookmark.png">
+    <figcaption>Add a bookmark with quick keyword access</figcaption>
+</figure>
+<p>From now on you can perform in the URL bar searches writing the custom search engine keyword and the search terms, example: &quot;&lt;keyword&gt; funny cats&quot;, example &quot;bing funny cats&quot;.</p>
+<p>This is ok-ish, it works; if you have many sites to bookmark for fast access, it kind of clutters my bookmarks and ... it just doesn't <em>feel right</em>. I wanted to dig this thing to the core and understand what makes a website have that <code>+</code> icon appear on Firefox.</p>
+<p>Enter the <a href="https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md#version">OpenSearch Description</a> specification!</p>
+<p>Well, turns out that (of course) I just didn't discover anything special.</p>
+<p>Firefox will show your site as a potential custom search engine if the page you're visiting contains in the <code>&lt;HEAD&gt;</code> tag a reference to a properly crafted XML file, describing how to access the search function:</p>
+<pre data-lang="html" class="language-html "><code class="language-html" data-lang="html">&lt;link rel=&quot;search&quot; type=&quot;application&#x2F;opensearchdescription+xml&quot; href=&quot;&#x2F;osd.xml&quot; title=&quot;MyWebsite search!&quot;&#x2F;&gt;
+</code></pre>
+<p>The XML file specification is long but the bare minimum to make it work could be:</p>
+<pre data-lang="xml" class="language-xml "><code class="language-xml" data-lang="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;OpenSearchDescription xmlns=&quot;http:&#x2F;&#x2F;a9.com&#x2F;-&#x2F;spec&#x2F;opensearch&#x2F;1.1&#x2F;&quot;&gt;
+    &lt;ShortName&gt;MyWebsite search&lt;&#x2F;ShortName&gt;
+    &lt;Url type=&quot;text&#x2F;html&quot; template=&quot;https:&#x2F;&#x2F;www.thewebsite.com&#x2F;search?keyword={searchTerms}&quot;&#x2F;&gt;
+    &lt;Url type=&quot;application&#x2F;opensearchdescription+xml&quot; rel=&quot;self&quot; template=&quot;&#x2F;mywebsite_osd.xml&quot;&#x2F;&gt;
+    &lt;InputEncoding&gt;UTF-8&lt;&#x2F;InputEncoding&gt;
+    &lt;OutputEncoding&gt;UTF-8&lt;&#x2F;OutputEncoding&gt;
+&lt;&#x2F;OpenSearchDescription&gt;
+</code></pre>
+<p>And the custom search engine is now enabled for your site.</p>
+<figure>
+    <img src="/images/roll_your_own_cse.png">
+</figure>
+<p>Finally, these two files cannot be simply accessed from the filesystem, it must be an HTTP request. So, if you want your favorite site to support this feature, send them an email (I did) and see how they ignore your request! XD</p>
+<p>Second option is to host these two files somehere, just anywhere: Firefox won't check if the search URL you provide comes from the same hosting of your files. This means that <code>localhost:80</code> can add a custom search engine for <code>https://www.thewebsite.com/search?keyword={searchTerms}</code>.</p>
+<p>Not the safest thing if you ask me: this could be used for some subtle phishing, if you don't pay close attention to the URL that pops up (or find a way to disable the popup via CSS).</p>
+<p>If you don't have any hosting available, you can use one of the many ways to serve a simple HTML.</p>
+<p>Repeat for every site you want to map in custom searches, the final result for me
+looks like this:</p>
+<figure>
+    <img src="/images/ff_cse_shortcuts.png">
+</figure>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

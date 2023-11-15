@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-20" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/link-cleaner-plus/"},"@type":"BlogPosting","url":"https://apiraino.github.io/link-cleaner-plus/","headline":"Link Cleaner +","dateModified":"2019-08-20","datePublished":"2019-08-20","description":"Here it is, published: Link Cleaner +
+Source code here: Link…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Link Cleaner +" />
+<meta name="description" content="Here it is, published: Link Cleaner +
+Source code here: Link…" />
+<meta property="og:description" content="Here it is, published: Link Cleaner +
+Source code here: Link…" />
+<link rel="canonical" href="https://apiraino.github.io/link-cleaner-plus/" />
+<meta property="og:url" content="https://apiraino.github.io/link-cleaner-plus/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-08-20T00:00:00+00:00" itemprop="datePublished">20 August 2019</time></p>
+                <h1>Link Cleaner +</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Here it is, published: <a href="https://addons.mozilla.org/en-US/firefox/addon/link-cleaner-plus">Link Cleaner +</a></p>
+<p>Source code here: <a href="hhttps://github.com/apiraino/link_cleane">Link Cleaner + on Github</a></p>
+<p>This is a funny (and I hope useful) project I had forked and, with the help of another friend, moved a bit forward.</p>
+<h3 id="what-is-link-cleaner"><a class="zola-anchor" href="#what-is-link-cleaner" aria-label="Anchor link for: what-is-link-cleaner">&sect;</a>
+What is &quot;Link Cleaner +&quot;?</h3>
+<p>A Firefox extension that &quot;cleans URLs before opening a link, removes trackers, rewrites redirects pages such as of Amazon, Facebook, Steam, Reddit and AMP URLs&quot;. As part of keeping a healthy internet browsing habit, I had discovered months ago this interesting extension (the original <a href="https://addons.mozilla.org/en-US/firefox/addon/link-cleaner">Link Cleaner</a>). The GitHub page of the project, unfortunately, is riddled with issues, features requests and pull requests left unattended. So after a while we decided to fork the project and try to pick where the project left.</p>
+<p>It's a work in progress, but it was important to get out a first version and then iterate.</p>
+<p>Anyway, let's a look at it works (and how I'd like to see it improved).</p>
+<p>The workflow of a browser extension is pretty much the same for Chrome and Firefox (luckily, since Firefox 57+ and WebExtensions came to the world) both APIs are pretty much the same, therefore much of the code can be shared and easily compile for both platforms.</p>
+<h3 id="step-1-clean-query-params"><a class="zola-anchor" href="#step-1-clean-query-params" aria-label="Anchor link for: step-1-clean-query-params">&sect;</a>
+Step 1: clean query params</h3>
+<p>We first intercept the action of opening a URL:</p>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">&#x2F;&#x2F; Filter out utm_* query parameters
+var clean_utm_req = build_query_param_remover(f_match_utm);
+browser.webRequest.onBeforeRequest.addListener(
+    clean_utm_req,
+    {
+        urls: [&quot;&lt;all_urls&gt;&quot;],
+        types:[&quot;main_frame&quot;]
+    },
+    [&quot;blocking&quot;]
+);
+</code></pre>
+<p>This function (shortened for clarity) cleans query params from a URL and return a clean new URL.</p>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">&#x2F;&#x2F; Clean URL query params
+function link_cleaner(orig_url, shouldRemove) {
+    var url = new URL(orig_url);
+    var ret_val = {&#x27;redirectUrl&#x27;: &#x27;&#x27;};
+
+    if (url.search.length &gt; 0) {
+        var params = url.searchParams;
+        var new_params = new URLSearchParams(params);
+        var needs_redirect = false;
+        for (let p of params.keys()) {
+            if (shouldRemove(p)) {
+                needs_redirect = true;
+                new_params.delete(p);
+            }
+        }
+
+        &#x2F;&#x2F; Original URL has been cleaned of nefarious query params
+        &#x2F;&#x2F; A redirect URL has been created
+        if (needs_redirect) {
+            url.search = new_params.toString();
+            ret_val = {redirectUrl: url.href};
+        }
+
+        &#x2F;&#x2F; Clean AMP url (if enabled)
+        if (settings[&#x27;clean_amp_links&#x27;] === true) {
+            var cleaned_url = clean_amp(url);
+            if (cleaned_url.href !== url.href) {
+                ret_val = {redirectUrl: cleaned_url.href};
+            }
+        }
+    }
+    return ret_val;
+};
+</code></pre>
+<p>This function is generic enough to be applied to all URLs, example: clean all <code>utm_*</code> query params:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">https:&#x2F;&#x2F;www.domain.com&#x2F;page?utm_source=mytracker
+</code></pre>
+<p>First we create an anonymous function with a regexp to match, then we invoke a generic query param cleaner (<code>build_query_param_remover</code>)</p>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">var f_match_utm = p =&gt; p.startsWith(&quot;utm_&quot;);
+
+&#x2F;&#x2F; a generic entrypoint to invoke the real link cleaner
+function build_query_param_remover(shouldRemove) {
+    return function(requestDetails) {
+        return link_cleaner(requestDetails.url, shouldRemove);
+    };
+}
+
+var clean_utm_req = build_query_param_remover(f_match_utm);
+
+&#x2F;&#x2F; This is the browser listener we sniff everytime a HTTP request is about to be performed
+browser.webRequest.onBeforeRequest.addListener(
+    clean_utm_req,
+    {
+        &#x2F;&#x2F; apply this rule to any URL
+        urls: [&quot;&lt;all_urls&gt;&quot;],
+        types:[&quot;main_frame&quot;]
+    },
+    [&quot;blocking&quot;]
+);
+</code></pre>
+<h3 id="step-2-clean-urls"><a class="zola-anchor" href="#step-2-clean-urls" aria-label="Anchor link for: step-2-clean-urls">&sect;</a>
+Step 2: clean URLs</h3>
+<p>When we want to sanitize the URL itself, we need custom rules for any URL we want to manage. Example:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash"># from this
+https:&#x2F;&#x2F;www.amazon.co.uk&#x2F;Crazepony-UK-Camera-Vacuum-Plastic-Crazepony&#x2F;dp&#x2F;B06XPCXCSH?SubscriptionId=AKIAILSHYYTFIVPWUY6Q&amp;...
+
+# into this:
+https:&#x2F;&#x2F;www.amazon.co.uk&#x2F;dp&#x2F;B06XPCXCSH
+</code></pre>
+<p>(code shortened for clarity)</p>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">function clean_amazon(url) {
+    var new_url = document.createElement(&#x27;a&#x27;);
+    let slash_d_index = url.indexOf(&quot;&#x2F;d&quot;);
+    let slash_ref_index = url.indexOf(&quot;&#x2F;ref=&quot;, slash_d_index + 2);
+    if (slash_ref_index &gt; 0 &amp;&amp; url.length &gt; slash_ref_index + 1) {
+        new_url.href = url.substring(0, slash_ref_index + 1);
+    } else {
+        url = new URL(url);
+        if (url.search.length &gt; 0) {
+            url.search = &quot;&quot;;
+            new_url.href = url.href;
+        }
+    }
+
+    &#x2F;&#x2F; scrap SEO friendly text
+    var dp_idx = new_url.pathname.indexOf(&#x27;&#x2F;dp&#x27;);
+    if (dp_idx &gt; 0) {
+        new_url.pathname = new_url.pathname.substring(dp_idx, new_url.pathname.length);
+    }
+    return { redirectUrl: new_url.href };
+}
+</code></pre>
+<h3 id="further-thoughts-and-a-wishlist"><a class="zola-anchor" href="#further-thoughts-and-a-wishlist" aria-label="Anchor link for: further-thoughts-and-a-wishlist">&sect;</a>
+Further thoughts and a wishlist</h3>
+<ul>
+<li>
+<p>If you squint enough at the code, you'll see that for <strong>every HTTP request the browser does, we run a lot of regexps work</strong>. If you're worried about the performance hit, then you are in good company: I'm worried, too.</p>
+</li>
+<li>
+<p>Regexps are bad. I'd like to run some benchmarks to see if and how much they affect the browser performances. As a side thought, many privacy focusing extensions basically run a lot of regexps against blacklists.</p>
+<p>Some of these extensions are noticeably slowing the browsing experience. A possible solution to explore could be using some WASM code to optimize hot code paths. <a href="https://github.com/gorhill/uBlock/tree/master/src/lib/lz4">uBlock</a> and <a href="https://github.com/EFForg/https-everywhere">HTTPS Everywhere</a> already do that (I didn't check the code, therefore I cannot comment on the results).</p>
+</li>
+<li>
+<p>Manually adding rules is a time-consuming effort known to be problematic and frustrating (both for users and developers). Without trying to build a complicated tool (such as: a backoffice for end-users to add regexps to the ruleset), one can think of something to (at least) submit their wishes in form of Gihub issues or pull requests. Example: describing a workflow that would lead to an effective pull requests.</p>
+<ul>
+<li>Step 1: Identify the URL you would like to see cleaned</li>
+<li>Step 2: go to <a href="https://regex101.com">Regex 101</a> and write your rule</li>
+<li>Step 3: open a PR submitting your suggestion and a test case</li>
+<li>Step 4: the CI automatic build would tell if that breaks anything</li>
+</ul>
+<p>Such solution would not cover 100% of users, but hopefully we can drive the more technically-inclined to a faster path to merging their suggestion.</p>
+</li>
+<li>
+<p>Tests are also essential to keep performances under scrutiny.</p>
+</li>
+</ul>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-10-20" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/github-sync-fork/"},"@type":"BlogPosting","url":"https://apiraino.github.io/github-sync-fork/","headline":"How to sync a GitHub fork","dateModified":"2018-10-20","datePublished":"2018-10-20","description":"&amp;sect;
+Part I: This i…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="How to sync a GitHub fork" />
+<meta name="description" content="&amp;sect;
+Part I: This i…" />
+<meta property="og:description" content="&amp;sect;
+Part I: This i…" />
+<link rel="canonical" href="https://apiraino.github.io/github-sync-fork/" />
+<meta property="og:url" content="https://apiraino.github.io/github-sync-fork/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-10-20T00:00:00+00:00" itemprop="datePublished">20 October 2018</time></p>
+                <h1>How to sync a GitHub fork</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <h3 id="part-i-this-is-embarrassing"><a class="zola-anchor" href="#part-i-this-is-embarrassing" aria-label="Anchor link for: part-i-this-is-embarrassing">&sect;</a>
+<a name='part_i'></a>Part I: This is embarrassing</h3>
+<p>It's easy to rebase a branch, but when it comes to GitHub forks I <strong>always</strong> forget how to do it, so I keep on checking the same GitHub guide over and over. As with any other big humanity failure, history keeps repeating itself.</p>
+<p>I'm not kidding when I say this is the most repeated DuckDuckGo search I've done in 2018: <code>github rebase branch fork from master</code>.</p>
+<h3 id="part-ii-howto"><a class="zola-anchor" href="#part-ii-howto" aria-label="Anchor link for: part-ii-howto">&sect;</a>
+<a name='part_ii'></a>Part II: HOWTO</h3>
+<p>Your forked project has by default one <code>upstream</code>: the one of your fork.</p>
+<p>So, first add the original project as additional <code>upstream</code> (this needs to be done only once):</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cd coolproject_myfork
+$ git remote add upstream git@github.com:original_owner&#x2F;coolproject.git
+</code></pre>
+<p>Once the additional <code>upstream</code> is available, update you fork:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ git fetch upstream
+$ git checkout master
+$ git merge upstream&#x2F;master
+</code></pre>
+<p>push the updates to your master:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ git push origin master
+</code></pre>
+<p>Now you can update your feature too:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ git checkout &lt;my_feature_branch&gt;
+$ git merge master
+</code></pre>
+<p><a href="https://help.github.com/articles/syncing-a-fork">source</a></p>
+<h3 id="part-iii-let-s-make-things-a-bit-better"><a class="zola-anchor" href="#part-iii-let-s-make-things-a-bit-better" aria-label="Anchor link for: part-iii-let-s-make-things-a-bit-better">&sect;</a>
+<a name='part_iii'></a>Part III: Let's make things a bit better</h3>
+<p>When you're about to merge your feature branch in the main branch, it's <em>always</em> a good idea to do the opposite first: by merging the main branch into your feature branch you will ease your job in case of conflicts.</p>
+<p>In the best scenario, there's nothing else you have to do.</p>
+<p>In the worst case, if your feature branch is an unrecoverable mess or has a tormented history, you can &quot;rebase&quot; creating another feature branch from the current master and merge the messed up feature branch into the new, updated feature branch. But this is another topic. Something along this:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ git status
+On myfork
+...
+
+$ git merge master
+&lt;a mess of conflicts&gt;
+
+$ git checkout master
+$ git checkout -b myfork_take2
+$ git merge --squash --no-commit myfork
+$ git reset
+
+# and now you have your patch out of the stage and can regroup in clean commits
+# people working on the projects will thank you for keeping the git history clean
+</code></pre>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

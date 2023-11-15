@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-12-19" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/call-for-2019-roadmap/"},"@type":"BlogPosting","url":"https://apiraino.github.io/call-for-2019-roadmap/","headline":"My wishlist for Rust &#x27;19","dateModified":"2018-12-19","datePublished":"2018-12-19","description":"This isn&#x27;t exactly a blog so this won&#x27;t be exactly a &amp;quot;post&amp;quot;, but I&#x27;d like to write down my thoughts on this notepad answering the call for &lt;a href=&quot;https:&#x2F;&#x2F;blog.rust-lang.org&#x2F;2018&#x2F;12&#x2F;06&#x2F;c…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="My wishlist for Rust &#x27;19" />
+<meta name="description" content="This isn&#x27;t exactly a blog so this won&#x27;t be exactly a &amp;quot;post&amp;quot;, but I&#x27;d like to write down my thoughts on this notepad answering the call for &lt;a href=&quot;https:&#x2F;&#x2F;blog.rust-lang.org&#x2F;2018&#x2F;12&#x2F;06&#x2F;c…" />
+<meta property="og:description" content="This isn&#x27;t exactly a blog so this won&#x27;t be exactly a &amp;quot;post&amp;quot;, but I&#x27;d like to write down my thoughts on this notepad answering the call for &lt;a href=&quot;https:&#x2F;&#x2F;blog.rust-lang.org&#x2F;2018&#x2F;12&#x2F;06&#x2F;c…" />
+<link rel="canonical" href="https://apiraino.github.io/call-for-2019-roadmap/" />
+<meta property="og:url" content="https://apiraino.github.io/call-for-2019-roadmap/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-12-19T00:00:00+00:00" itemprop="datePublished">19 December 2018</time></p>
+                <h1>My wishlist for Rust &#x27;19</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>This isn't exactly a blog so this won't be exactly a &quot;post&quot;, but I'd like to write down my thoughts on this notepad answering the call for <a href="https://blog.rust-lang.org/2018/12/06/call-for-rust-2019-roadmap-blogposts.html">a wishlist for Rust 2019</a>.</p>
+<p>Opinions expressed are from the point of view of an enthusiast, Rust apprentice, that happened to be knee-deep involved in organizing the <a href="https://rome.rustfest.eu">RustFest in Rome</a>.</p>
+<p>It's fun to pin today some thoughts and see in 12 months how things will have evolved!</p>
+<h3 id="first-of-all-the-community"><a class="zola-anchor" href="#first-of-all-the-community" aria-label="Anchor link for: first-of-all-the-community">&sect;</a>
+<a id="part_i"></a>First of all, the Community</h3>
+<p>There a lot of takeaways after helping organizing a conference with +200 attendees, <a href="https://twitter.com/RustFest/status/1071720864134168577">11 talks by 12 speakers</a>, plus workshops, <a href="https://rome.rustfest.eu/about_impl_days">Impl Days</a> aaaand a beautiful city to walk by night.</p>
+<p>Where would I like the conferencing story to go? It's a bit like in a startup, where there can be experimenting, a rollercoaster where <em>you</em> decide the next move. There are basically three things I'd like to see evolving:</p>
+<ul>
+<li>
+<p>More crosstalk between conferences. Sharing know-how and resources will help organizers and new people willing to help organize an event but don't know how (hint: commitment is of the essence). This new people can then teach to others. And so on.</p>
+<p>This is why it is important to foster a network of conferences and <em>no-conf</em> initiatives to keep the fire sparkling.</p>
+</li>
+<li>
+<p>More involvement of Rust companies. Sponsors are a great resource, but they are not faceless entities whom to ask for support and then &quot;<em>thanks, see you next time</em>&quot;. They are made of very motivated people that may <strong>work with you in developing the Rust community</strong>.</p>
+<p>This is a call to involve them more. Conferences are just the tip of the iceberg of a partnership that can span the whole year: workshops, meetups, Rust companies can even host events. After all, it's in their best interest to have more Rust developers!</p>
+</li>
+<li>
+<p>A strong organization, the foundation for growth. Organizing activities for developers can quickly turn into a full-time job, it's no joke. It's called being a <em>community manager</em>. Many moons ago I've read an <a href="https://yakshav.es/sustainability/#professionalised-side-efforts">interesting take on the topic</a>. While not everyone can (or is willing to) afford this as a full-time commitment, also being part-time has its cost in terms of time and being responsive when the situation requires action.</p>
+<p>This is why it is important to build a core of people committed. The badge you earn (<em>look mom, I'm on the stage of a conference!</em>) is not free, but - hey - it's not like this is different from anything else: work needs to be done if you want the party to happen.</p>
+</li>
+</ul>
+<h3 id="more-love-to-crates"><a class="zola-anchor" href="#more-love-to-crates" aria-label="Anchor link for: more-love-to-crates">&sect;</a>
+<a id="part_ii"></a>More love to crates</h3>
+<p>So, I'm also a developer that is getting into the Rust world and wishes to have some of the bills deliciously covered by a Rust-flavoured fragrance. 2018 was a stepstone year for the ecosystem and a lot of praise has been given to the efforts to improve the language, the libraries, the <em>ergonomics</em> of developing in Rust.</p>
+<p>What I would like to see next:</p>
+<ul>
+<li>
+<p><strong>Less 0.1 bit-rot</strong>: some crates that are incredibly responding to a need, are often left in poor state (mostly lacking ancillary work, like documentation or examples) or as the language evolves, even broken.</p>
+<p>I also call for a &quot;responsible&quot; development when people start using your libraries; case in point the recent <a href="https://github.com/sfackler/rust-openssl/issues/987">breaking changes on the OpenSSL crate</a>, which caused some headaches.</p>
+</li>
+<li>
+<p><strong>More &quot;production&quot; focused development</strong>: some developers are producing so much good stuff that they end up not having the mental bandwidth to juggle everything. The risk here is to put the ecosystem under a bad light. People coming from the &quot;outside&quot; judge the ecosystem by a library or the framework at hand; how can you use X and then explain to your CTO that a dependency of your project (deployed in production) has broken?</p>
+</li>
+<li>
+<p><strong>Frameworks often are heroic one-man-bands efforts</strong>: from people that you even meet on IRC providing support (!) answering trivial questions to newbies like me: this is really heartwarming, but not sustainable. I wish for some heavier commitment of companies on Rust projects to let developers focus on the job (and this is already happening in some cases, see <a href="https://actix.rs">Actix</a>). This is for the people asking on Stack Overflow: &quot;what's the X equivalent for Rust?&quot;.</p>
+</li>
+</ul>
+<h3 id="wishes-expressed-by-others-that-i-share"><a class="zola-anchor" href="#wishes-expressed-by-others-that-i-share" aria-label="Anchor link for: wishes-expressed-by-others-that-i-share">&sect;</a>
+<a id="part_iii"></a>Wishes expressed by others, that I share</h3>
+<p>Basically upvoting the following:</p>
+<ul>
+<li>The <a href="https://github.com/rust-lang/rust/issues/50547">async/await</a> story, pretty please :^)</li>
+<li>Rust on the web: I strongly advocate for that, but frameworks are still in a &quot;0.x&quot; state (which doesn't necessarily means they're broken, see <a href="https://rocket.rs">Rocket</a> or <a href="https://actix.rs">Actix</a>). I would love to see a &quot;1.0&quot; at some point (that includes documentation, tutorials, ...).</li>
+<li><a href="https://www.ncameron.org/blog/rust-in-2022">The &quot;boredom&quot; of using Rust</a>: a nice concept on how desirable is to be able to focus on the job at hand, without worrying about broken dependencies and nightly release of the compiler.</li>
+<li>The <a href="https://cetra3.github.io/blog/rust-2019#documentation-churn">tribal knowledge</a> that is often lost on IRC logs - consequence of the &quot;one-man-band&quot; issue mentioned above.</li>
+<li>The half-life of Rust answers on Stack Overflow is short. Although updated as the compiler evolves (my infinite gratitude to those doing an amazing job there!), there are many deprecated answers, and that could be confusing. Agreed, that's a natural consequence of a rapid evolving language, but this forces me to deliberately ignore answers older than ~12 months.</li>
+</ul>
+<h3 id="ask-what-you-can-do-for-rust"><a class="zola-anchor" href="#ask-what-you-can-do-for-rust" aria-label="Anchor link for: ask-what-you-can-do-for-rust">&sect;</a>
+<a id="part_iv"></a>... ask what you can do for Rust</h3>
+<p>So far, my wishlist. But I want to add a little more to the proposition: what <strong>can I do</strong> for Rust?</p>
+<p>In 2019 I will explore a bit how can I contribute to the Rust community environment; that's an area where I just moved the first steps, learned something, and I see a great potential for development.</p>
+<p>My second goal would be to do some actual work in Rust: every developer that is being paid to do Rust development is a win for the ecosystem. Equally important are contributions to opensource projects: I mentioned some areas that would benefit from some polishing: well, that's a great place to start for helping! Lots of crates have &quot;good first issues&quot;, need documentation, examples, even issue reporting or a simple star on the repository will help.</p>
+<p>So, all in all, I'm sure that 2019 will build on the foundation laid by 2018. And unlike the stale joke of &quot;the year of Linux on the desktop&quot;, I feel that 2019 will be &quot;the year of Rust on our laptops&quot; :-)</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

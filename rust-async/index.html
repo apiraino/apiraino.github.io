@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-16" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/rust-async/"},"@type":"BlogPosting","url":"https://apiraino.github.io/rust-async/","headline":"First steps in async Rust","dateModified":"2019-07-16","datePublished":"2019-07-16","description":"&amp;sect;
+The target
+Learning how to write a simple web service in Ru…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="First steps in async Rust" />
+<meta name="description" content="&amp;sect;
+The target
+Learning how to write a simple web service in Ru…" />
+<meta property="og:description" content="&amp;sect;
+The target
+Learning how to write a simple web service in Ru…" />
+<link rel="canonical" href="https://apiraino.github.io/rust-async/" />
+<meta property="og:url" content="https://apiraino.github.io/rust-async/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-07-16T00:00:00+00:00" itemprop="datePublished">16 July 2019</time></p>
+                <h1>First steps in async Rust</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <h3 id="the-target"><a class="zola-anchor" href="#the-target" aria-label="Anchor link for: the-target">&sect;</a>
+<a id="part_i"></a>The target</h3>
+<p>Learning how to write a simple web service in Rust that performs HTTP requests.</p>
+<p>These requests should be asynchronous because we don't know when the external service will answer. Take into account also service timeouts.</p>
+<h3 id="tooling"><a class="zola-anchor" href="#tooling" aria-label="Anchor link for: tooling">&sect;</a>
+<a id="part_ii"></a>Tooling</h3>
+<p>Still not sure what to use, let's try to quickly from the bottom up:</p>
+<p>The operating system kernel has threads. When you launch a thread, then you must poll it and when it finishes you get the results.</p>
+<p>On top of the OS I need a &quot;runtime&quot;, a layer that manages the <code>.poll()</code> method. The <code>poll</code> returns either an &quot;OK&quot; or &quot;NOT YET DONE&quot; kind of response. The runtime puts to sleep this &quot;thing&quot; that polls the thread for some time, than asks again.</p>
+<p>Tipically I have a pool of these threads.</p>
+<p>An async function in Rust is abstracted as a <code>Future</code>, i.e. something that is launched and will eventually resolve to a result. A Future is polled until is resolves and returns some result (or an error). Future have been recently <a href="https://blog.rust-lang.org/2019/07/04/Rust-1.36.0.html#the-future-is-here">stabilized in Rust stable</a>.</p>
+<p>I'd like to use the soon-to-be (as of July 2019) stabilized async/await syntax. Draft of the syntax <a href="https://github.com/rust-lang/rust/issues/62149">is been published here</a>.</p>
+<h4 id="the-runtime"><a class="zola-anchor" href="#the-runtime" aria-label="Anchor link for: the-runtime">&sect;</a>
+The runtime</h4>
+<p>I ought to choose a runtime. There are two possibilities:</p>
+<ul>
+<li>
+<p><a href="https://apiraino.github.io/rust-async/tokio.rs">tokio</a>: tried to use it before we had Future and await/async available and it was impossible to grasp. Looking at the versioning, the project seems to have stalled <a href="https://www.reddit.com/r/rust/comments/c5eqj1/tokio_master_branch_switching_to_stdfuture">until recently</a>.</p>
+</li>
+<li>
+<p><a href="https://github.com/rustasync/runtime">Runtime</a>: the name of the project is confusing, the aim seems to add a thin layer to abstract the runtime and let the user choose between two runtimes: tokio and the &quot;native&quot; (Romio+Juliex) one. <a href="https://github.com/SergioBenitez/Rocket/pull/1008#issuecomment-507158310">Reading this comment</a> on the future async dor Rocket, &quot;Runtime&quot; does not looks like a sensible choice. Runtime build on two components:</p>
+<ul>
+<li><a href="https://github.com/withoutboats/romio">Romio</a>, the reactor</li>
+<li><a href="https://github.com/withoutboats/juliex">Juliex</a>, the executor</li>
+</ul>
+</li>
+</ul>
+<p>don't understand the current state of Runtime and if I should use it.</p>
+<p>[Q] <strong>Why do I, as the developer, should be concerned about choosing a runtime?</strong> : only if I'm not using a web framework that abstracts the choice for me.</p>
+<p>[Q] <strong>Do I really have to manually <code>impl Future</code> for my async methods and manage the states?</strong>: Maybe not. I can probably add a placeholder crate (https://github.com/alexcrichton/futures-await) to use today the syntax that will be stabilized tomorrow (hopefully available in Rust stable 1.38/9). But the syntax differs from that of the Runtime crate. And the crate seems to be abandoned.</p>
+<p>[Q] <strong>How does this crate fits into the picture: https://github.com/rust-lang-nursery/futures-rs</strong></p>
+<p>[Q] <strong>reqwest/hyper async clients: how do they fit into the picture?</strong>: An async client is needed to emit thread-unblocking http requests, that don't block the thread. If I run an async server (ex. Hyper), then I <em>must</em> use also an async client, too.</p>
+<h3 id="frameworks"><a class="zola-anchor" href="#frameworks" aria-label="Anchor link for: frameworks">&sect;</a>
+<a id="part_iii"></a>Frameworks</h3>
+<p>A nice to have, but I think I need something more basic, just something listening and allow some administration of the tasks. Not a user facing component.</p>
+<p><a href="https://github.com/rustasync/tide">Tide</a>: this is Flask-like light framework that uses Runtime. Develope by the async WG.</p>
+<p><a href="https://seanmonstar.com/post/176530511587/warp">warp</a>, which relies on hyper and tokio. Developed by Sean McArthur.</p>
+<p><a href="https://github.com/tower-rs/tower">tower-web</a>, a (seemingly) very early work-in-progress framework. Relies on futures 0.1 and tokio 0.1. Developed by Carl Leche.</p>
+<h3 id="special-mentions"><a class="zola-anchor" href="#special-mentions" aria-label="Anchor link for: special-mentions">&sect;</a>
+Special mentions</h3>
+<p><a href="https://actix.rs">actix-web</a>: a full-fledged web framework. Looks to be very fast not easy to grasp (especially the middleware part is confusing).</p>
+<p><a href="https://rocket.rs">rocket</a>, I already use it, it's synchronous but I believe works to make it async has started, <a href="https://github.com/SergioBenitez/Rocket/pull/1008#issuecomment-507049080">see this PR</a> (porting to hyper 0.12).</p>
+<h3 id="references"><a class="zola-anchor" href="#references" aria-label="Anchor link for: references">&sect;</a>
+<a id="part_iv"></a>References</h3>
+<ul>
+<li>
+<p><a href="https://blog.rust-lang.org/2019/07/04/Rust-1.36.0.html">Future Trait stabilized in 1.36</a></p>
+</li>
+<li>
+<p><a href="https://dev.to/gruberb/explained-how-does-async-work-in-rust-46f8">Explained: How does async work in Rust?</a></p>
+</li>
+<li>
+<p><a href="https://dev.to/gruberb/explained-rust-futures-for-web-development-a10">Futures in Rust for Web Development</a></p>
+</li>
+<li>
+<p><a href="https://areweasyncyet.rs">https://areweasyncyet.rs</a></p>
+</li>
+<li>
+<p><a href="ttps://www.reddit.com/r/rust/comments/cawahp/asyncawait_status_report_2">Async-await status report #2</a></p>
+</li>
+<li>
+<p><a href="https://discordapp.com/channels/442252698964721669/474974025454452766/598878779695300609">Discussion on Discord</a> (spoiler: no useful info gathered)</p>
+</li>
+<li>
+<p><a href="https://github.com/chicagohaskell/async-futures-talk/blob/master/rustlb/examples/multi-http/src/main.rs">How to run a set of Futures in any order</a> and <a href="https://docs.rs/futures/0.1.28/futures/stream/futures_unordered/struct.FuturesUnordered.html">caveats on polling</a>.</p>
+</li>
+</ul>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

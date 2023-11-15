@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-10-25" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/xml-parsing/"},"@type":"BlogPosting","url":"https://apiraino.github.io/xml-parsing/","headline":"XML parsing in Rust","dateModified":"2019-10-25","datePublished":"2019-10-25","description":"Did I think that XML was dead? Well, I was wrong: it isn&#x27;t. XML is here to stay with us forever. Let&#x27;s see how I parsed some XML with Rust.
+The library that seems the right tool for the job …","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="XML parsing in Rust" />
+<meta name="description" content="Did I think that XML was dead? Well, I was wrong: it isn&#x27;t. XML is here to stay with us forever. Let&#x27;s see how I parsed some XML with Rust.
+The library that seems the right tool for the job …" />
+<meta property="og:description" content="Did I think that XML was dead? Well, I was wrong: it isn&#x27;t. XML is here to stay with us forever. Let&#x27;s see how I parsed some XML with Rust.
+The library that seems the right tool for the job …" />
+<link rel="canonical" href="https://apiraino.github.io/xml-parsing/" />
+<meta property="og:url" content="https://apiraino.github.io/xml-parsing/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-10-25T00:00:00+00:00" itemprop="datePublished">25 October 2019</time></p>
+                <h1>XML parsing in Rust</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Did I think that XML was dead? Well, I was wrong: it isn't. XML is here to stay with us forever. Let's see how I parsed some XML with Rust.</p>
+<p>The library that seems the right tool for the job is <a href="https://github.com/RReverser/serde-xml-rs">serde-xml-rs</a>. Like the name suggests, it will parse an XML file and leverage Serde for the serialization.</p>
+<p>Let's say we have this file (examples from the crate's documentation).</p>
+<pre data-lang="xml" class="language-xml "><code class="language-xml" data-lang="xml">&lt;Project name=&quot;my_project&quot;&gt;
+    &lt;Item name=&quot;hello&quot; source=&quot;world.rs&quot; &#x2F;&gt;
+&lt;&#x2F;Project&gt;
+</code></pre>
+<p>Let's parse it using an XML library that leverages serde into our own Struct:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">#[derive(Debug, Deserialize)]
+struct Project {
+    pub name: String,
+    #[serde(rename = &quot;Item&quot;, default)]
+    pub items: Vec&lt;Item&gt;,
+}
+</code></pre>
+<p>Basic usage, load the whole XML file in memory and parse it:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">let s = &quot;project.xml&quot;;
+let f = File::open(s).expect(&amp;format!(&quot;Cannot open file {}&quot;, s));
+let r = BufReader::new(f);
+let prj: Project = serde_xml_rs::de::from_reader(r).unwrap();
+println!(&quot;{:?}&quot;, prj);
+</code></pre>
+<p>Note: like noted in the <a href="https://doc.rust-lang.org/std/io/struct.BufReader.html">Rust documentation</a>, in this specific case using a buffered reader (<code>std::io::BufReader</code>) does not offer significant advantages.</p>
+<p>The output will be:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cargo run
+....
+Project { name: &quot;my_project&quot;, items: [Item { name: &quot;hello&quot;, source: &quot;world.rs&quot; }] }
+</code></pre>
+<p>In my case I had a <a href="https://docs.rs/hyper/0.12.33/hyper/struct.Body.html">chunked body response</a> received from a Hyper Future so I need to jump through more hoops (I suspect I can improve on this).</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">use serde_xml_rs::from_reader;
+
+&#x2F;&#x2F; Hyper::Chunk -&gt; Bytes -&gt; &amp;str
+let b = body.into_bytes();
+let xml_str = str::from_utf8(&amp;b).unwrap();
+
+&#x2F;&#x2F; deserialize the slice into a Project
+let project: Project = serde_xml_rs::from_str(xml_str).unwrap();
+</code></pre>
+<p>Now, parsing with serde sometimes is boring. When the parsing fails error messages are not always useful.</p>
+<p>Let's add <a href="https://github.com/dtolnay/path-to-error">Serde path to error</a> to the recipe: a crate that tries to point you where exactly the parsing fails.</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">...
+
+&#x2F;&#x2F; create an instance of the deserializer suitable for serde_path_to_error
+let jd = &amp;mut serde_xml_rs::de::Deserializer::new(r);
+let result: Result&lt;Project, _&gt; = serde_path_to_error::deserialize(jd);
+if let Err(err) = result {
+    let path = err.path().to_string();
+    panic!(&quot;Could not deserialize at: {}&quot;, path);
+}
+</code></pre>
+<p>So the final result would look like something like this:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">let s = &quot;project.xml&quot;;
+let f = File::open(s).expect(&amp;format!(&quot;Cannot open file {}&quot;, s));
+let r = BufReader::new(f);
+let jd = &amp;mut serde_xml_rs::de::Deserializer::new_from_reader(r);
+let result: Result&lt;Project, _&gt; = serde_path_to_error::deserialize(jd);
+assert_eq!(result.is_ok());
+</code></pre>
+<p>Warning: <code>serde_xml</code> has some limitations. For example one thing that bit me is that it does not parse <a href="https://github.com/RReverser/serde-xml-rs/issues/64">XML tags with namespaces</a>. That could be a serious limitation in some contexts.</p>
+<h3 id="closing-thoughts"><a class="zola-anchor" href="#closing-thoughts" aria-label="Anchor link for: closing-thoughts">&sect;</a>
+Closing thoughts</h3>
+<p>Parsing XML is ugly because XML tried (and failed) to conquer the world. So it has been filled with all kind of extensions and shit.</p>
+<p>I wouldn't say that Rust is the ideal tool for parsing XML, other languages (and libraries) can run circles around this tool I've tried, but what I gain here is an implicit and strict type-checking of the XML parsed.</p>
+<p>In the end, after playing a bit with all this, I just dumped everything and used the <a href="https://docs.rs/rss/1.8.0/rss">rss</a> crate, since all I had to do was parsing a RSS feed (lol).</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

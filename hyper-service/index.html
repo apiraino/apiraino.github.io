@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-28" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/hyper-service/"},"@type":"BlogPosting","url":"https://apiraino.github.io/hyper-service/","headline":"In depth with Hyper: implementing a Service","dateModified":"2019-08-28","datePublished":"2019-08-28","description":"Follow-up to the previous Hyper article.
+Quick recap: Hyper is a high-performance HTTP async server + client that sits on the Tokio runtime and Future cr…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="In depth with Hyper: implementing a Service" />
+<meta name="description" content="Follow-up to the previous Hyper article.
+Quick recap: Hyper is a high-performance HTTP async server + client that sits on the Tokio runtime and Future cr…" />
+<meta property="og:description" content="Follow-up to the previous Hyper article.
+Quick recap: Hyper is a high-performance HTTP async server + client that sits on the Tokio runtime and Future cr…" />
+<link rel="canonical" href="https://apiraino.github.io/hyper-service/" />
+<meta property="og:url" content="https://apiraino.github.io/hyper-service/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-08-28T00:00:00+00:00" itemprop="datePublished">28 August 2019</time></p>
+                <h1>In depth with Hyper: implementing a Service</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Follow-up to the previous <a href="/2019/07/18/hyper.html">Hyper article</a>.</p>
+<p>Quick recap: Hyper is a high-performance HTTP async server + client that sits on the Tokio runtime and Future crate. These articles refer to Hyper <code>v0.12.33</code>. Despite the early release numbers, the framework seems to work well. Just expect the API to be unstable even between patch releases (!) (f.e. there was API breakage between <code>0.12.15</code> and <code>0.12.16</code>).</p>
+<h3 id="implementing-a-service"><a class="zola-anchor" href="#implementing-a-service" aria-label="Anchor link for: implementing-a-service">&sect;</a>
+Implementing a <code>Service</code></h3>
+<p>What is a Service? It's the basic router that handles all requests. You don't need to know a lot about it because in general you can use the <a href="https://docs.rs/hyper/0.12.33/hyper/service/fn.service_fn.html">service_fn</a> and it will does all the job for you, see <a href="/2019/07/18/hyper.html">previous article</a>.</p>
+<p>Here a succint overview (from the sources) of what a <code>Service</code> is:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">pub trait Service {
+    &#x2F;&#x2F;&#x2F; The `Payload` body of the `http::Request`.
+    type ReqBody: Payload;
+
+    &#x2F;&#x2F;&#x2F; The `Payload` body of the `http::Response`.
+    type ResBody: Payload;
+
+    &#x2F;&#x2F;&#x2F; The error type that can occur within this `Service`.
+    type Error: Into&lt;Box&lt;dyn StdError + Send + Sync&gt;&gt;;
+
+    &#x2F;&#x2F;&#x2F; The `Future` returned by this `Service`.
+    type Future: Future&lt;Item=Response&lt;Self::ResBody&gt;, Error=Self::Error&gt;;
+
+    &#x2F;&#x2F;&#x2F; Returns `Ready` when the service is able to process requests.
+    fn poll_ready(&amp;mut self) -&gt; Poll&lt;(), Self::Error&gt; {
+        Ok(Async::Ready(()))
+    }
+
+    &#x2F;&#x2F;&#x2F; Calls this `Service` with a request, returning a `Future` of the response.
+    fn call(&amp;mut self, req: Request&lt;Self::ReqBody&gt;) -&gt; Self::Future;
+}
+</code></pre>
+<p>But what if we want to implement our own <code>Service</code>? And why would we want to do this?</p>
+<p>I think (not 100% sure, though) the answer is if you want to factor in your router additional features.</p>
+<p>For example, some endpoints need to do some work on a database. I need a connection to a database. One can simply open a connection on every request and close it once the job is done, but that would be extremely expensive.</p>
+<p>How about we add a pool of database connections? Each request would pick one connection from the pool, do their job and return the connection to the pool once the job is done.</p>
+<h3 id="getting-a-handle-from-a-database"><a class="zola-anchor" href="#getting-a-handle-from-a-database" aria-label="Anchor link for: getting-a-handle-from-a-database">&sect;</a>
+Getting a handle from a database</h3>
+<p>The only good crate I know for doing database connection pooling is <a href="https://crates.io/crates/r2d2">r2d2</a>. Let's see how we initialize the pool. Luckily this seems to be boilerplate I've everywhere so we'll just copy and paste and it'll just work.</p>
+<p>I use Postgres so all the Diesel Traits are declined for this DB, but you can choose MySQL or SQLite3 and this code will change very little (I love Diesel). Not sure it makes sense to have a pool of Sqlite3 connections, though :-p</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">use diesel::pg::PgConnection;
+use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
+
+&#x2F;&#x2F; This is our pooled connection
+struct Conn(pub PooledConnection&lt;ConnectionManager&lt;PgConnection&gt;&gt;);
+
+&#x2F;&#x2F; This is a shortcut for the Postgres pool
+type PostgresPool = Pool&lt;ConnectionManager&lt;PgConnection&gt;&gt;;
+
+&#x2F;&#x2F; implementing Deref will ensure we retrieve the actual DB driver
+&#x2F;&#x2F; inside the Connection
+&#x2F;&#x2F; see: https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;std&#x2F;ops&#x2F;trait.Deref.html
+impl Deref for Conn {
+    type Target = PgConnection;
+
+    &#x2F;&#x2F; I don&#x27;t understand if inlining give an actual advantage
+    #[inline(always)]
+    fn deref(&amp;self) -&gt; &amp;Self::Target {
+        &amp;self.0
+    }
+}
+
+pub struct MyBackendService {
+    &#x2F;&#x2F; our DB connections pool
+    pub db_pool: PostgresPool,
+}
+
+impl MyBackendService {
+
+    &#x2F;&#x2F; This is a helper function to retrieve a connection from the pool
+    pub fn get_conn(&amp;self) -&gt; Option&lt;Conn&gt; {
+        match self.db_pool.get() {
+            Ok(conn) =&gt; {
+                Some(Conn(conn))
+            }
+            Err(err) =&gt; {
+                None
+            }
+        }
+    }
+}
+</code></pre>
+<p>Now let's follow the <a href="https://docs.rs/hyper/0.12.33/hyper/service/trait.Service.html">documentation</a> and implement our Service:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">use hyper;
+use hyper::service::Service;
+
+&#x2F;&#x2F; another shortcut to manage these long Rust type declaration...
+&#x2F;&#x2F; basically it says: a pointer to a Future which can return either a Response or an error
+&#x2F;&#x2F; oh, and this Future is thread safe (Send)
+type BoxFut = Box&lt;dyn Future&lt;Item = hyper::Response&lt;Body&gt;, Error = hyper::Error&gt; + Send&gt;;
+
+impl Service for MyBackendService {
+    type ReqBody = Body;
+    type ResBody = Body;
+    type Error = hyper::Error;
+    type Future = BoxFut;
+
+    &#x2F;&#x2F; Minimal request responder
+    fn call(&amp;mut self, request: hyper::Request&lt;Self::ReqBody&gt;) -&gt; Self::Future {
+        Box::new(
+            future::ok(
+                Response::builder()
+                    .status(StatusCode::OK)
+                    .body(Body::empty()
+                ).unwrap(),
+         ))
+    }
+}
+</code></pre>
+<p>Notice we need to use the <code>Send</code> Trait? Here are the <a href="https://doc.rust-lang.org/nomicon/send-and-sync.html">docs here</a>. I don't know how ot use it but the compiler told me so :-)</p>
+<p>Well, now we have our service that always return a 200 to any request.</p>
+<p>Now let's build everything and run it. We need to adapt the code seen in the previous article:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">    let addr = ([127, 0, 0, 1], 3000).into();
+
+    &#x2F;&#x2F; implement a service from a simple function
+    &#x2F;&#x2F; let server = Server::bind(&amp;addr)
+    &#x2F;&#x2F;     .serve(|| service_fn(my_function_tralala))
+    &#x2F;&#x2F;     .map_err(|e| eprintln!(&quot;server error: {}&quot;, e));
+
+    &#x2F;&#x2F; reimplement using a Service
+    let server = Server::bind(&amp;addr)
+        .serve(move || {
+            let db_url = &quot;postgres:&#x2F;&#x2F;usr:pwd@127.0.0.1&#x2F;db_name&quot;;
+            let manager = ConnectionManager::&lt;PgConnection&gt;::new(db_url);
+            let pool = Pool::new(manager).expect(&quot;cannot create db pool&quot;);
+            futures::future::ok::&lt;MyBackendService, hyper::Error&gt;(MyBackendservice { db_pool: pool })
+        })
+        .map_err(|e| eprintln!(&quot;server error: {}&quot;, e));
+
+    &#x2F;&#x2F; runs on tokio runtime
+    hyper::rt::run(server);
+</code></pre>
+<p>Now let's see how an endpoint using a DB connection would look like. Again, refer to the previous article on how routing works:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">impl Service for MyBackendService {
+    ...
+
+    fn call(&amp;mut self, request: hyper::Request&lt;Self::ReqBody&gt;) -&gt; Self::Future {
+
+        (&amp;Method::GET, &quot;&#x2F;test&quot;) =&gt; {
+            let db_conn = db_pool.get_conn().expect(&quot;Failed to get DB handle&quot;);
+            let fut = future_that_does_a_query(&amp;db_conn);
+            Box::new(
+                future::ok(
+                    Response::builder()
+                        .status(StatusCode::OK)
+                        .body(Body::empty()
+                    ).unwrap(),
+             ))
+        }
+
+    }
+}
+</code></pre>
+<p>Now when this endpoint is called the client will immediatly receive a 200 OK and our microserver has all the time to do its things. Which translates to: &quot;ok, I got your task request and I'll do it eventually, now move along and don't stand in the queue. Next one, please!&quot;</p>
+<h3 id="level-up-async-db-connections"><a class="zola-anchor" href="#level-up-async-db-connections" aria-label="Anchor link for: level-up-async-db-connections">&sect;</a>
+Level up: async DB connections</h3>
+<p>Ok, now we should have saved a lot of resources by using a connection pool.</p>
+<p>Let's go to the next problem. <code>r2d2</code> provides a <em>synchronous</em> pool of connections but our microserver is <em>asynchronous</em>. What that means is that if we have to perform a &quot;blocking&quot; operation (HTTP request, DB query, read a file, anything that must stop the code waiting for something), the whole Future will be blocked until I didn't finish reading that 100mb file!</p>
+<p>This is where things get hairy (and not everything is really clear to me).</p>
+<p>I searched for an <em>asynchronous</em> DB pool, not much choice out there at this time. I tried using <a href="https://crates.io/crates/bb8">bb8</a> but I wasn't even able to compile it on a new project. I've <a href="https://github.com/khuey/bb8/issues/32">opened an issue</a> full of questions and parked the crate for the moment.</p>
+<p>So how can we implement a non-blocking database handling?</p>
+<p>Let's jump to the <a href="/2019/08/29/hyper-threadpool.html">next article to find out</a>  (not ready yet, so you'll get a 404 ^_^)</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

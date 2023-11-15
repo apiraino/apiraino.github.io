@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-11-04" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/call-for-2020-roadmap/"},"@type":"BlogPosting","url":"https://apiraino.github.io/call-for-2020-roadmap/","headline":"Rust 2020: Discoverability","dateModified":"2019-11-04","datePublished":"2019-11-04","description":"Here we come with the &amp;quot;Request for Comment&amp;quot; about Rust for the next 2020 year. I&#x27;m sure 2020 will be a great year, also because it&#x27;s easy and fast to write :) My wishlist will be short an…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Rust 2020: Discoverability" />
+<meta name="description" content="Here we come with the &amp;quot;Request for Comment&amp;quot; about Rust for the next 2020 year. I&#x27;m sure 2020 will be a great year, also because it&#x27;s easy and fast to write :) My wishlist will be short an…" />
+<meta property="og:description" content="Here we come with the &amp;quot;Request for Comment&amp;quot; about Rust for the next 2020 year. I&#x27;m sure 2020 will be a great year, also because it&#x27;s easy and fast to write :) My wishlist will be short an…" />
+<link rel="canonical" href="https://apiraino.github.io/call-for-2020-roadmap/" />
+<meta property="og:url" content="https://apiraino.github.io/call-for-2020-roadmap/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-11-04T00:00:00+00:00" itemprop="datePublished">4 November 2019</time></p>
+                <h1>Rust 2020: Discoverability</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Here we come with the &quot;Request for Comment&quot; about Rust for the next 2020 year. I'm sure 2020 will be a great year, also because it's easy and fast to write :) My wishlist will be short and to the point.</p>
+<p>Looking back to what I wished for <a href="/call-for-2019-roadmap">2019</a> I'd like first to see what has changed, from my point of view:</p>
+<ul>
+<li>We now (almost) have async/await</li>
+<li>I didn't see significant steps towards building a common ground, a &quot;foundation&quot; for Rust to manage community funding and developing initiatives. We can do better on this, in my opinion.</li>
+<li>We have a couple of &quot;big names&quot; showing official interest in the Rust language. This is great and will lead to interesting developments and could help spinning the wheel faster. But it will also complicate things. Big names want to be assured that the Rust backbone is strong and firmly managed. Are we ready for this?</li>
+<li>I have landed in 2019 my first Rust job, it's a great achievement for me and for the community (like I wrote: &quot;every developer that is being paid to do Rust development is a win for the ecosystem.&quot;) and I am extremely grateful to the people mentoring and helping me in this journey.</li>
+</ul>
+<p>So, what would be my wishlist for 2020?</p>
+<p>I can only reiterate how important these points are:</p>
+<ul>
+<li>
+<p><strong>Release crates with decent documentation and examples</strong>: if you want people to enjoy using your crate, discoverability is at least equally important as the code itself. The <code>README</code> file is the frontline of your crate. Make it shine, make it clear, have people understand at a glance what it's about. Don't give for granted that everyone knows what you know. There's no reason to be dismissive towards your audience; be humble and upfront on what the crate does, its current status and your plans. If it's an experiment, be upfront about that.</p>
+<p>Would you buy a book with no table of contents or a brief summary on the story on the cover?</p>
+</li>
+<li>
+<p><strong>Don't like a crate? Open a PR. Open an issue. Add or improve documentation. Add or improve the examples.</strong> If every crate user contributed a small documentation/example PR, the whole Rust ecosystem would be so much better and discoverable than it is now.</p>
+</li>
+</ul>
+<p>There are many people working hard to give us some wonderful tooling, many of them working in the shadow because they have not a &quot;stage-persona&quot; on social media. Do something for them, acknowledge their work, help and improve where you can. Do we want a really inclusive community? Lets' don't forget about them and acknowledge their work. Even a simple &quot;thank you&quot; is important.</p>
+<p>I read this list again and I see that a single point still stands: the Rust language and its ecosystem are already so rich that I wouldn't know what else to ask besides being a bit more polished and stable. Therefore I turn the question to: ask yourself what <strong>you</strong> can do for the Rust community and its ecosystem, rather what Rust can do for you.</p>
+<p>Because asking is nice, but asking after you've concretely done something is even better.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

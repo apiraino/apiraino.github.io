@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-04-08" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/software-appreciation-3/"},"@type":"BlogPosting","url":"https://apiraino.github.io/software-appreciation-3/","headline":"Appreciation for software #3: pass","dateModified":"2019-04-08","datePublished":"2019-04-08","description":"After a couple of iterations to increasingly secure my accounts, I think I&#x27;ve finally found the sweet spot between ease of use and features.
+The path leading to pass was mor…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Appreciation for software #3: pass" />
+<meta name="description" content="After a couple of iterations to increasingly secure my accounts, I think I&#x27;ve finally found the sweet spot between ease of use and features.
+The path leading to pass was mor…" />
+<meta property="og:description" content="After a couple of iterations to increasingly secure my accounts, I think I&#x27;ve finally found the sweet spot between ease of use and features.
+The path leading to pass was mor…" />
+<link rel="canonical" href="https://apiraino.github.io/software-appreciation-3/" />
+<meta property="og:url" content="https://apiraino.github.io/software-appreciation-3/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-04-08T00:00:00+00:00" itemprop="datePublished">8 April 2019</time></p>
+                <h1>Appreciation for software #3: pass</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>After a couple of iterations to increasingly secure my accounts, I think I've finally found the sweet spot between ease of use and features.</p>
+<p>The path leading to <strong>pass</strong> was more or less:</p>
+<ul>
+<li>In the beginning, it was &quot;saving passwords in the browser&quot;. Works fine until you realize that an attacker can access the decrypted passwords from the browser's memory because (as far as I know) passwords stays decrypted as long as the browser stays open.</li>
+<li>Then I had a quite long relationship with <a href="https://keepassxc.org">KeepassXC</a> and its great <a href="https://github.com/keepassxreboot/keepassxc-browser">browser extension</a>; the small team working on it is amazing, but in the end I've found KeepassXC GUI cumbersome, the CLI features lagging behind and the browser extension pattern matching (to fill login fields) sometimes lackluster.</li>
+<li>Finally I've looked for an offline solution, because it was the only way I could have full control.</li>
+</ul>
+<p>I've completely skipped the step of &quot;online password keyrings&quot; because I don't have enough info to assess their security. Some of them have Javascript frontends that have been exploited, then patched, then exploited again. Others seems more secure, but only because there were no public disclosure about security incidents. Besides, I can reach syncronization on different devices using another workflow (detailed later).</p>
+<p><a href="https://www.passwordstore.org">pass</a>, on the other hand, is an incredibly powerful and simple tool to manage passwords. Its strength lies in being a simple tool that does <em>one</em> thing well: storing passwords. The secret of its success is the long list of ancillary tools the community has grown around it and the possibility to chain it with other tools.</p>
+<p>So, the points in favor of <code>pass</code> are:</p>
+<ul>
+<li>Store passwords offline, easy management, good command line (generate new entries, rename and edit)</li>
+<li>The keyring is encrypted with a GPG key you choose</li>
+<li>Password entries stays encrypted at all times: you only decrypt the entry that you need (each password entry is a separate GPG file) and will briefly stay in the clipboard (45 seconds by default)</li>
+<li>Git integration: syncronize the encrypted keyring on a private, hosted repo. I can move the keyring anywhere I need by cloning the repo.</li>
+<li><code>i3wm</code> integration with <a href="https://git.zx2c4.com/password-store/tree/contrib/dmenu">passmenu</a>: a useful script to access the keyring from <code>dmenu</code></li>
+<li>Easy OTP generation <a href="https://github.com/tadfisher/pass-otp">using a plugin</a></li>
+</ul>
+<p>The last point, although admittedly very useful, should not be evangelized as it defeats the purpose of OTP token generation (i.e. keep the OTP seeds separated from the device that stores the passwords).</p>
+<p>The topic has also been discussed by the team providing the <a href="https://github.com/browserpass/browserpass-extension/issues/76">browser extension</a> and finally decided to externalize this feature, leaving the decision to the user.</p>
+<p>Lately I've equipped myself with a Yubikey, and discovered that I can further enhance this scenario using a seemingly convoluted workflow, but it should balance ease of use and security. More on that in a separate article.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

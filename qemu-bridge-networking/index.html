@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-06" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/qemu-bridge-networking/"},"@type":"BlogPosting","url":"https://apiraino.github.io/qemu-bridge-networking/","headline":"Bridge networking with QEMU based VM (KVM)","dateModified":"2020-07-06","datePublished":"2020-07-06","description":"After learning how to create KVM based virtual machines, I had to figure out how to access them from a network interface, not only from a GUI. Turns out I had opened another can of worms.
+As…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Bridge networking with QEMU based VM (KVM)" />
+<meta name="description" content="After learning how to create KVM based virtual machines, I had to figure out how to access them from a network interface, not only from a GUI. Turns out I had opened another can of worms.
+As…" />
+<meta property="og:description" content="After learning how to create KVM based virtual machines, I had to figure out how to access them from a network interface, not only from a GUI. Turns out I had opened another can of worms.
+As…" />
+<link rel="canonical" href="https://apiraino.github.io/qemu-bridge-networking/" />
+<meta property="og:url" content="https://apiraino.github.io/qemu-bridge-networking/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2020-07-06T00:00:00+00:00" itemprop="datePublished">6 July 2020</time></p>
+                <h1>Bridge networking with QEMU based VM (KVM)</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>After learning how to create KVM based virtual machines, I had to figure out how to access them from a network interface, not only from a GUI. Turns out I had opened another can of worms.</p>
+<p>As mentioned in my <a href="/qemu-kvm">previous article</a>, once you setup your QEMU/KVM virtual machine, you can only interact with it with a user interface, be it an opaque and arcane QEMU launch script, Gnome Boxes or <code>virt-manager</code>.</p>
+<p>But unless your virtual machine runs with root permission (in the <code>qemu:///system</code> space), you will not be able to access it by any other mean. It is often underestimated the importance of running virtual machines as unprivileged user. The <a href="https://wiki.debian.org/KVM#Setting_up_bridge_networking">official Debian Wiki</a>, for example, completely ignores this topic.</p>
+<p>By default, a virtual machine will be created with a 'usermode' QEMU networking device:</p>
+<figure>
+    <figcaption>The 'usermode' networking device</figcaption>
+    <img src="/images/virt-manager-usermode-networking.png">
+</figure>
+<p>Before explaining the solution, I'll try to sum up all the symptoms and cues to actually understand what's happening. I will describe either by using <code>virsh</code> (command-line tool) and <code>virt-manager</code> (the GUI tool), both great tools.</p>
+<p>When you install QEMU and <code>libvirtd</code> you should have a default virtual network interface available, but only in the <code>qemu:///system</code> space. If you connect to the user space (<code>qemu:///session</code>), it's not there anymore.</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ virsh
+virsh # net-list
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+
+virsh # net-info --network default
+Name:           default
+UUID:           c1e51079-7727-4c3d-846e-3179f56fe94f
+Active:         yes
+Persistent:     yes
+Autostart:      yes
+Bridge:         virbr0
+
+virsh # connect qemu:&#x2F;&#x2F;&#x2F;session
+
+virsh # net-list
+ Name   State   Autostart   Persistent
+----------------------------------------
+
+virsh #
+</code></pre>
+<figure>
+    <figcaption>The same info from virt-manager</figcaption>
+    <img src="/images/net-list-virt-manager.png">
+</figure>
+<p>You will notice that the virtual network bridge interface is <code>virbr0</code> (<code>vir</code>-tual <code>br</code>-igde, if it helps) and assigns a DHCP address from a pool of a /24 class. More info can be obtained with:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ brctl show
+bridge name	bridge id		STP enabled	interfaces
+virbr0		8000.52540099f456	yes		virbr0-nic
+</code></pre>
+<p>or</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ bridge link show virbr0
+5: virbr0-nic: &lt;BROADCAST,MULTICAST&gt; mtu 1500 master virbr0 state disabled priority 32 cost 100
+</code></pre>
+<p>or</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ ip addr show virbr0
+4: virbr0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link&#x2F;ether 52:54:00:99:f4:56 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1&#x2F;24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+</code></pre>
+<p>In case this network is not available it can be created by following instructions such as <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/virtualization_host_configuration_and_guest_installation_guide/chap-virtualization_host_configuration_and_guest_installation_guide-network_configuration">these</a> or <a href="https://blog.programster.org/kvm-missing-default-network">these</a>.</p>
+<p>The RedHat <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/virtualization_host_configuration_and_guest_installation_guide/chap-virtualization_host_configuration_and_guest_installation_guide-network_configuration">documentation</a> explains how to create a bridge but lacks an important detail: how to use it with an unprivileged QEMU VM!</p>
+<h3 id="the-problem"><a class="zola-anchor" href="#the-problem" aria-label="Anchor link for: the-problem">&sect;</a>
+The problem</h3>
+<p>So, the current situation is that our VM can access the &quot;internet&quot; but is isolated from us. When you run your KVM guest as unprivileged user, you cannot use the <code>default</code> network bridge, no matter if your user belongs to the <code>kvm</code> or <code>libvirt</code> groups, it's simply impossible.</p>
+<p>Again, from the <a href="https://wiki.libvirt.org/page/FAQ#What_is_the_difference_between_qemu:.2F.2F.2Fsystem_and_qemu:.2F.2F.2Fsession.3F_Which_one_should_I_use.3F">libvirt documentation</a>:</p>
+<blockquote>
+<p>qemu:///session has a serious drawback: since the libvirtd instance does not have sufficient privileges, the only out of the box network option is qemu's usermode networking, which has nonobvious limitations, so its usage is discouraged.</p>
+</blockquote>
+<p>Why is it discouraged? Basically because it's an unoptimized implementation of a tcp/ip stack in QEMU, here are <a href="https://jonaspfannschmidt.com/libvirt_session.html">some reasons why</a>: in short, it's just a pass-through for the guest to access external resources.</p>
+<h3 id="host-to-guest-networking"><a class="zola-anchor" href="#host-to-guest-networking" aria-label="Anchor link for: host-to-guest-networking">&sect;</a>
+host-to-guest networking</h3>
+<p>Your only chance to access the VM vithout going crazy creating subnetworks of fiddling with <code>iptables</code> (there are some answers around on this but I don't like them) is by using <code>qemu-bridge-helper</code>, as explained in <a href="https://mike42.me/blog/2019-08-how-to-use-the-qemu-bridge-helper-on-debian-10">this article</a>.</p>
+<p>With this missing piece of info in our hands, it's now easy to fix.</p>
+<p>Note: as of July, 2020 the above article and the official documentation have some inaccuracies that are here fixed (along with some small optimizations).</p>
+<p>Assuming that ipv4 forwarding has been enabled (see previous documentation):</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cat &#x2F;etc&#x2F;sysctl.conf
+...
+net.ipv4.ip_forward = 1
+...
+</code></pre>
+<p>and the virtual bridge <code>virbr0</code> is enabled and autostarted (again, see above) we need to create this file:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash"># echo &quot;allow virbr0&quot; &gt; &#x2F;etc&#x2F;qemu&#x2F;bridge.conf
+# chown root:kvm &#x2F;etc&#x2F;qemu&#x2F;bridge.conf
+# chmod 0660 &#x2F;etc&#x2F;qemu&#x2F;bridge.conf
+</code></pre>
+<p>This file will set an ACL telling QEMU that the <code>virbr0</code> interface should be whitelisted. By default all the rest is blacklisted (details <a href="https://wiki.qemu.org/Features/HelperNetworking">here</a>).</p>
+<p>Then you should have installed <code>qemu-bridge-helper</code>, available in the <code>qemu-system-common</code> package (for Debian based Linux distributions). Ensure that it has the <code>suid</code> bit set:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash"># chmod u+s &#x2F;usr&#x2F;lib&#x2F;qemu&#x2F;qemu-bridge-helper
+</code></pre>
+<p>If you try starting your unprivileged VM without setting the suid bit, you will get a permission error:</p>
+<blockquote>
+<p>Error starting domain: internal error: /usr/lib/qemu/qemu-bridge-helper --use-vnet --br=virbr0 --fd=24: failed to communicate with bridge helper: Transport endpoint is not connected
+stderr=failed to create tun device: Operation not permitted</p>
+</blockquote>
+<p>Now you should be able to start your virtual machine and get to the console. Login and configure the networking device on the guest to ensure the DHCP is getting an address (how to do that is distro-specific, so I won't detail it here) and check what's going on the host:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ journalctl -t dnsmasq-dhcp -f
+-- Logs begin at Fri 2019-06-21 21:08:01 CEST. --
+Jul 06 10:53:55 host dnsmasq-dhcp[1350]: read &#x2F;var&#x2F;lib&#x2F;libvirt&#x2F;dnsmasq&#x2F;default.hostsfile
+Jul 06 11:18:14 host dnsmasq-dhcp[1350]: DHCPDISCOVER(virbr0) 52:54:00:53:52:b1
+Jul 06 11:18:14 host dnsmasq-dhcp[1350]: DHCPOFFER(virbr0) 192.168.122.62 52:54:00:53:52:b1
+Jul 06 11:18:14 host dnsmasq-dhcp[1350]: DHCPREQUEST(virbr0) 192.168.122.62 52:54:00:53:52:b1
+Jul 06 11:18:14 host dnsmasq-dhcp[1350]: DHCPACK(virbr0) 192.168.122.62 52:54:00:53:52:b1 guestvm
+</code></pre>
+<p>seems like <code>guestvm</code> is receiving an ip address! Let's go back to the guest.</p>
+<figure>
+    <figcaption>The guest received an IP address</figcaption>
+    <img src="/images/qemu-guest-ip-addr.png">
+</figure>
+<p>Now we are able to access the guest (let's say we enable SSH on it) and the guest still have access to the world.</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">user@host$ ssh 192.168.122.62
+user@192.168.122.62&#x27;s password:
+Linux guestvm 4.19.0-9-amd64 #1 SMP Debian 4.19.118-2+deb10u1 (2020-06-07) x86_64
+user@nyarlathoep:~$
+</code></pre>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

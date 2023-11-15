@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-17" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/rust-future-examples/"},"@type":"BlogPosting","url":"https://apiraino.github.io/rust-future-examples/","headline":"Writing Rust Futures in 2019","dateModified":"2019-07-17","datePublished":"2019-07-17","description":"Some examples of Futures I wish I&#x27;d found before (or wasn&#x27;t able to find). These examples are almost just copy and paste from various places, so the resources are there, I just needed to figure out…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Writing Rust Futures in 2019" />
+<meta name="description" content="Some examples of Futures I wish I&#x27;d found before (or wasn&#x27;t able to find). These examples are almost just copy and paste from various places, so the resources are there, I just needed to figure out…" />
+<meta property="og:description" content="Some examples of Futures I wish I&#x27;d found before (or wasn&#x27;t able to find). These examples are almost just copy and paste from various places, so the resources are there, I just needed to figure out…" />
+<link rel="canonical" href="https://apiraino.github.io/rust-future-examples/" />
+<meta property="og:url" content="https://apiraino.github.io/rust-future-examples/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-07-17T00:00:00+00:00" itemprop="datePublished">17 July 2019</time></p>
+                <h1>Writing Rust Futures in 2019</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Some examples of Futures I wish I'd found before (or wasn't able to find). These examples are almost just copy and paste from various places, so the resources are there, I just needed to figure out the bigger picture.</p>
+<p>All examples use the <a href="https://tokio.rs">Tokio runtime</a>.</p>
+<p>All examples use the <a href="https://crates.io/crates/futures">futures crate</a> v0.1.2x.</p>
+<p>Code is available on <a href="https://github.com/apiraino/rust-future-explorations">Github</a>.</p>
+<p>Update: the part about Hyper has been moved <a href="/2019/07/18/hyper.html">to its own article</a>.</p>
+<h2 id="brief-prologue-what-is-a-future"><a class="zola-anchor" href="#brief-prologue-what-is-a-future" aria-label="Anchor link for: brief-prologue-what-is-a-future">&sect;</a>
+<a id="part_i"></a>Brief prologue: what is a Future</h2>
+<p>A Future is simply a plain Rust function which return type is a <code>Future</code>. I won't go in detail of what a Future is, others can explain that better than me. The standard return type is as follows:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn something() -&gt; impl Future&lt;Item = (), Error = ()&gt;
+    &#x2F;&#x2F; do something...
+}
+</code></pre>
+<p>That reads as: return a <code>Future</code> which contains an <code>Item</code> or an <code>Error</code>.</p>
+<p><code>Item</code> can also be an integer:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn something() -&gt; impl Future&lt;Item = i32, Error = ()&gt;
+    &#x2F;&#x2F; do something...
+}
+</code></pre>
+<p>Or the <code>Error</code> can be something more useful:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn something() -&gt; impl Future&lt;Item = i32, Error = String&gt;
+    &#x2F;&#x2F; do something...
+}
+</code></pre>
+<p>or a custom type:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">struct MyStruct {
+    name: String,
+    age: i32
+}
+
+fn something() -&gt; impl Future&lt;Item = MyStruct, Error = ()&gt; {
+    &#x2F;&#x2F; do something...
+}
+</code></pre>
+<p>Now let's see some basic examples. We'll be just scratching the surface of what can be accomplished with Futures.</p>
+<h2 id="your-first-future"><a class="zola-anchor" href="#your-first-future" aria-label="Anchor link for: your-first-future">&sect;</a>
+<a id="first-future"></a> Your first Future</h2>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn my_fut() -&gt; impl Future&lt;Item = (), Error = ()&gt; {
+    println!(&quot;running my_fut&quot;);
+    future::ok(())
+}
+
+fn main() {
+    &#x2F;&#x2F; the Future returns a unit
+    tokio::run(my_fut());
+}
+</code></pre>
+<p>Console output is:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cargo run
+running my_fut
+</code></pre>
+<h2 id="a-future-that-returns-an-integer"><a class="zola-anchor" href="#a-future-that-returns-an-integer" aria-label="Anchor link for: a-future-that-returns-an-integer">&sect;</a>
+<a id="simple-future"></a>A Future that returns an integer</h2>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn my_fut() -&gt; impl Future&lt;Item = i32, Error = ()&gt; {
+    println!(&quot;running my_fut&quot;);
+    future::ok(42)
+}
+
+fn main() {
+
+    &#x2F;&#x2F; run the Future, forget about it
+    tokio::run(my_fut());
+
+    &#x2F;&#x2F; run the future, inspect the return value
+    let f = my_fut().map(|x| {
+        println!(&quot;future resolved: {}&quot;, x);
+        ()
+    });
+    tokio::run(f);
+}
+</code></pre>
+<p>Console output is:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cargo run
+running my_fut
+future resolved: 42
+</code></pre>
+<h2 id="a-future-that-sleeps-for-1-second"><a class="zola-anchor" href="#a-future-that-sleeps-for-1-second" aria-label="Anchor link for: a-future-that-sleeps-for-1-second">&sect;</a>
+<a id="sleeping-future"></a>A Future that sleeps for 1 second</h2>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn svc_wait(t: u64) -&gt; impl Future&lt;Item = (), Error = ()&gt; {
+    println!(&quot;[start] waiting...&quot;);
+    let when = Instant::now() + Duration::from_millis(t);
+    Delay::new(when)
+        .map_err(|e| panic!(&quot;timer failed; err={:?}&quot;, e))
+        .and_then(|_| {
+            println!(&quot;[end] waiting&quot;);
+            Ok(())
+        })
+}
+
+fn main() {
+    &#x2F;&#x2F; Future returns a ()
+    let f = svc_wait(1000).map(|_| {
+        println!(&quot;future finished&quot;);
+        ()
+    });
+    tokio::run(f);
+}
+</code></pre>
+<p>The console output will be:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">[start] waiting...
+... 1 sec ...
+[end] waiting
+future finished
+</code></pre>
+<p>It's important to note that if you want to simulate a long-lasting async task you should <em>not</em> use <code>std::thread::sleep</code>, you'll end up blocking the whole Tokio runtime thread!</p>
+<h2 id="todo-manually-implementing-a-future"><a class="zola-anchor" href="#todo-manually-implementing-a-future" aria-label="Anchor link for: todo-manually-implementing-a-future">&sect;</a>
+<a id="future-poll"></a>(TODO) Manually implementing a Future</h2>
+<p>Futures are cool because you &quot;fire&amp;forget&quot; them. But what if we want to track their progress?</p>
+<p>We need to manually implement the <code>.poll()</code> to be able to observe the various stages.</p>
+<p>I still have to figure out how this stuff work.</p>
+<p>Here's some code pasted from elsewhere.</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">impl Future for Magazine {
+    &#x2F;&#x2F; here we return a single byte
+    type Item = u8;
+    type Error = io::Error;
+
+    &#x2F;&#x2F; this method is getting called from the runtime. Everytime we can read
+    &#x2F;&#x2F; a byte into the buffer, we return `Async::Ready`
+    fn poll(&amp;mut self) -&gt; Poll&lt;Self::Item, Self::Error&gt; {
+        let mut buffer = [0;1];
+        match self.0.poll_read(&amp;mut buf) {
+            Ok(Async::Ready(_num_bytes_read)) =&gt; Ok(Async::Ready(buffer[0])),
+            Ok(Async::NotReady) =&gt; Ok(Async::NotReady),
+            Err(e) =&gt; Err(e)
+        }
+    }
+}
+</code></pre>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">struct AwakeFuture {
+    name: String,
+    count: i32,
+}
+
+impl AwakeFuture {
+    fn new(name: String) -&gt; AwakeFuture {
+        AwakeFuture { name, count: 0 }
+    }
+}
+
+impl Future for AwakeFuture {
+    type Item = i32;
+    type Error = ();
+
+    fn poll(&amp;mut self) -&gt; Poll&lt;Self::Item, Self::Error&gt; {
+        match self.count {
+            3 =&gt; {
+                eprintln!(
+                    &quot;[{}] Future {} has finished counting&quot;,
+                    self.count, self.name
+                );
+                Ok(Async::Ready(self.count))
+            }
+            _ =&gt; {
+                eprintln!(&quot;[{}] Future {} is not yet ready ...&quot;, self.count, self.name);
+                &#x2F;&#x2F; FIXME: I&#x27;m afraid this won&#x27;t ever work
+                self.count += 1;
+                Ok(Async::NotReady)
+            }
+        }
+    }
+}
+
+fn main() {
+    let awake_future = AwakeFuture::new(String::from(&quot;awake-future&quot;));
+    tokio::run(awake_future.map(|x| {
+        eprint!(&quot;x={:?}&quot;, x);
+        ()
+    }));
+}
+</code></pre>
+<h2 id="one-more-thing-running-more-futures-together"><a class="zola-anchor" href="#one-more-thing-running-more-futures-together" aria-label="Anchor link for: one-more-thing-running-more-futures-together">&sect;</a>
+<a id="future-poll"></a>One more thing: running more Futures together</h2>
+<p><a href="https://github.com/chicagohaskell/async-futures-talk/blob/master/rustlb/examples/multi-http/src/main.rs">https://github.com/chicagohaskell/async-futures-talk/blob/master/rustlb/examples/multi-http/src/main.rs</a></p>
+<h1 id="credits"><a class="zola-anchor" href="#credits" aria-label="Anchor link for: credits">&sect;</a>
+Credits</h1>
+<p>Thanks to my friends of <a href="https://rustrome.github.io">Rust Rome</a> for the incredbile support and for answering all my questions.</p>
+<p>Thanks to <a href="https://github.com/gruberb">Bastian Gruber</a> for his wonderful tutorials: namely <a href="https://dev.to/gruberb/explained-rust-futures-for-web-development-a10">this</a> and <a href="https://dev.to/gruberb/explained-rust-futures-for-web-development-a10">this</a>.</p>
+<p>And don't forget <a href="https://github.com/hyperium/hyper/blob/master/examples">the Hyper examples</a>.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-23" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/emacs-new-config/"},"@type":"BlogPosting","url":"https://apiraino.github.io/emacs-new-config/","headline":"Refactored Emacs config","dateModified":"2020-05-23","datePublished":"2020-05-23","description":"I&#x27;ve completely reworked my Emacs config. I&#x27;ve been using the excellent uber-package Prelude for years, but like many big monolithic installations y…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Refactored Emacs config" />
+<meta name="description" content="I&#x27;ve completely reworked my Emacs config. I&#x27;ve been using the excellent uber-package Prelude for years, but like many big monolithic installations y…" />
+<meta property="og:description" content="I&#x27;ve completely reworked my Emacs config. I&#x27;ve been using the excellent uber-package Prelude for years, but like many big monolithic installations y…" />
+<link rel="canonical" href="https://apiraino.github.io/emacs-new-config/" />
+<meta property="og:url" content="https://apiraino.github.io/emacs-new-config/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2020-05-23T00:00:00+00:00" itemprop="datePublished">23 May 2020</time></p>
+                <h1>Refactored Emacs config</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>I've completely reworked my Emacs config. I've been using the excellent uber-package <a href="https://github.com/bbatsov/prelude">Prelude</a> for years, but like many big monolithic installations you don't know if you really need everything. Also, although very customizable, I had found two 'core' packages I could not disable without touching the core files, which I didn't want to.</p>
+<p>So, I've started from scratch, read one by one all the packages I had installed before and one by one installed and configured each package I wanted to keep. I've learned a lot about a packages and how to tailor your own Emacs. I'm tired and I hate emacs eLisp and probably I did not yet finish, but I still <a href="/2019/01/24/software-appreciation.html">even more</a> amazed by this surprising piece of software and the incredible community behind.</p>
+<p>Just for the record a clean Prelude installation is ~25Mb, now my whole Emacs installation (included compiled packages) floats around 8.5mb. My entire Emacs configuration file is under 11kb, 6kb (!) without comments. The Emacs binary is around 38mb stripped.</p>
+<pre><code>$ du -sk .emacs.d
+8656   .emacs.d
+$ du -sk .emacs.d.prelude&#x2F;
+25760  .emacs.d.prelude&#x2F;
+</code></pre>
+<p>I challenge anyone to show me an entire IDE, organizer, TODO list, email client, IRC client, <a href="https://www.emacswiki.org/emacs/EmacsDoctor">psycotherapist</a> and much more in such a small bundle. </p>
+<p>If the world ended, it can be rebuild using Emacs, the basic building block of anything.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

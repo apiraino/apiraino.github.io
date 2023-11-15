@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-03" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/pipenv/"},"@type":"BlogPosting","url":"https://apiraino.github.io/pipenv/","headline":"Managing Python projects with pipenv","dateModified":"2018-08-03","datePublished":"2018-08-03","description":"Pipenv: https:&#x2F;&#x2F;docs.pipenv.org
+Pipenv automatically creates a virtualenv, downloads the python version you&#x27;re interested in, all in two commands. It is…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Managing Python projects with pipenv" />
+<meta name="description" content="Pipenv: https:&#x2F;&#x2F;docs.pipenv.org
+Pipenv automatically creates a virtualenv, downloads the python version you&#x27;re interested in, all in two commands. It is…" />
+<meta property="og:description" content="Pipenv: https:&#x2F;&#x2F;docs.pipenv.org
+Pipenv automatically creates a virtualenv, downloads the python version you&#x27;re interested in, all in two commands. It is…" />
+<link rel="canonical" href="https://apiraino.github.io/pipenv/" />
+<meta property="og:url" content="https://apiraino.github.io/pipenv/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-08-03T00:00:00+00:00" itemprop="datePublished">3 August 2018</time></p>
+                <h1>Managing Python projects with pipenv</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Pipenv: <a href="https://docs.pipenv.org">https://docs.pipenv.org</a></p>
+<p>Pipenv automatically creates a virtualenv, downloads the python version you're interested in, all in two commands. It is the recommended package manager, due to replace <code>pip</code>.</p>
+<p>Before, I've been installing python version with <code>pyenv</code>:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ pyenv install 3.6.4
+$ pyenv install 3.5.4
+$ pyenv install 2.7.14
+</code></pre>
+<p>Install Pipenv globally:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ sudo -H pip install pipenv
+</code></pre>
+<p>Now I can use <code>pipenv</code> to install the python version <em>and</em> create the virtualenv:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cd ~&#x2F;myprojects&#x2F;prj_name&#x2F;
+$ pipenv --python 2.7
+</code></pre>
+<p>A file <code>Pipfile</code> is being created:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cat Pipfile
+[dev-packages]
+&quot;flake8&quot; = &quot;&gt;=3.3.0,&lt;4&quot;
+pytest = &quot;*&quot;
+mock = &quot;*&quot;
+
+[packages]
+django==2.0
+
+[scripts]
+tests = &quot;bash .&#x2F;run-tests.sh&quot;
+</code></pre>
+<p><code>[dev-packages]</code> are for development only (e.g. <code>mock</code>, <code>flake8</code>, <code>pytest</code>, ...), <code>[packages]</code> are your project real dependencies and <code>[scripts]</code> are script bindings (e.g. to execute commands).</p>
+<p>Add project dependencies with:</p>
+<pre><code>pipenv install &lt;pkg_name&gt;
+</code></pre>
+<p>or simply edit the <code>Pipfile</code>.</p>
+<p>If you're migrating from a project using <code>pip</code> and the usual <code>requirements.txt</code> file, simply use <code>pipenv install</code> to automatically read that file, install the packages and create/update the <code>Pipenv</code> file. You can install from a specifif pip file with:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">pipenv install --dev -r requirements&#x2F;dev.txt
+</code></pre>
+<p>After having installed all the packages, create a <code>Pipfile.lock</code> snapshot of the packages installed, each identified by a hash:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ pipenv lock
+</code></pre>
+<p>Check updates for installed packages: <code>$ pipenv update --outdated</code></p>
+<p>Update a package (will only update <code>Pipfile.lock</code>): <code>$ pipenv update &lt;pkg&gt;</code></p>
+<p>Update all packages (will only update <code>Pipfile.lock</code>): <code>$ pipenv update</code></p>
+<h2 id="links"><a class="zola-anchor" href="#links" aria-label="Anchor link for: links">&sect;</a>
+Links</h2>
+<p>Command reference: <a href="https://github.com/pyenv/pyenv/blob/master/COMMANDS.md#pyenv-install">https://github.com/pyenv/pyenv/blob/master/COMMANDS.md#pyenv-install</a></p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

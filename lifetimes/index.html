@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-04" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/lifetimes/"},"@type":"BlogPosting","url":"https://apiraino.github.io/lifetimes/","headline":"Lifetimes and strings in Rust","dateModified":"2019-06-04","datePublished":"2019-06-04","description":"Today I&#x27;ve finally cleared a couple of basic concepts about &amp;amp;str (string slice) and String (string) in Rust. Let&#x27;s very briefly recap.
+Let&#x27;s see the following c…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Lifetimes and strings in Rust" />
+<meta name="description" content="Today I&#x27;ve finally cleared a couple of basic concepts about &amp;amp;str (string slice) and String (string) in Rust. Let&#x27;s very briefly recap.
+Let&#x27;s see the following c…" />
+<meta property="og:description" content="Today I&#x27;ve finally cleared a couple of basic concepts about &amp;amp;str (string slice) and String (string) in Rust. Let&#x27;s very briefly recap.
+Let&#x27;s see the following c…" />
+<link rel="canonical" href="https://apiraino.github.io/lifetimes/" />
+<meta property="og:url" content="https://apiraino.github.io/lifetimes/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-06-04T00:00:00+00:00" itemprop="datePublished">4 June 2019</time></p>
+                <h1>Lifetimes and strings in Rust</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Today I've finally cleared a couple of basic concepts about <code>&amp;str</code> (string slice) and <code>String</code> (string) in Rust. Let's very briefly recap.</p>
+<p>Let's see the following code snippet:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn get_str&lt;&#x27;a&gt;() -&gt; &amp;&#x27;a str {
+    let s = String::from(&quot;ok&quot;);
+    &amp;s.to_owned()
+}
+
+fn main() {
+    println!(&quot;{}&quot;, get_str());
+}
+</code></pre>
+<p>This won't compile:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">error[E0515]: cannot return reference to temporary value
+ --&gt; src&#x2F;main.rs:3:5
+  |
+3 |     &amp;s.to_owned()
+  |     ^------------
+  |     ||
+  |     |temporary value created here
+  |     returns a reference to data owned by the current function
+</code></pre>
+<p>and here is why. When we run the application we need to consider how the stack memory works:</p>
+<ol>
+<li>we are in the <code>main</code> body</li>
+<li>we invoke <code>get_str()</code></li>
+<li>The function <code>get_str()</code> is allocated on the stack</li>
+<li>When we return from <code>get_str()</code> the stack will be freed and everything allocated inside will be destroyed</li>
+</ol>
+<p>Rust will block you and here's why it won't even compile! It's warning you (&quot;a reference to data owned by the current function&quot;) that it won't allow you to return a pointer (<code>&amp;str</code>) to a deallocated memory location.</p>
+<p>Inside <code>get_str()</code> we are allocating a new chunk of memory on the stack. This memory location cannot be referenced outside of <code>get_str()</code>, once we return.</p>
+<p>The only solution to this is to fix as follows:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn get_str() -&gt; String {
+    let s = String::from(&quot;ok&quot;);
+    s
+}
+
+fn main() {
+    println!(&quot;{}&quot;, get_str());
+}
+</code></pre>
+<p>So, as a rule of thumb it's always better to use <code>&amp;str</code> when passing strings around, if the content is meant to be read-only, it's equivalent to doing:</p>
+<pre data-lang="c" class="language-c "><code class="language-c" data-lang="c">char *ptr = malloc(10);
+ptr[0] = &#x27;\0&#x27;;
+</code></pre>
+<p>But be careful when you're returning a <code>&amp;str</code> allocated inside a function. That won't be allowed.</p>
+<p>Unless you bind that <code>&amp;str</code> to a parameter lifetime: you explicit the fact that the <code>&amp;str</code> the function receives, will outlive the function:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn get_str&lt;&#x27;a&gt;(mut s: &amp;&#x27;a str) -&gt; &amp;&#x27;a str {
+    println!(&quot;{}&quot;, s);
+    s = &quot;new value&quot;;
+    &amp;s
+}
+
+fn main() {
+    println!(&quot;{}&quot;, get_str(&quot;old value&quot;));
+}
+</code></pre>
+<p>This will print:</p>
+<pre><code>$ .&#x2F;target&#x2F;debug&#x2F;test
+old value
+new value
+</code></pre>
+<p>The <code>&amp;str</code> is allocated outside the function and even though it's modified inside it, we're allowed to return the pointer; or simply use the <code>String</code> object (like said before).</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

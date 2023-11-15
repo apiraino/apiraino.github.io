@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-12" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/emacs-rust/"},"@type":"BlogPosting","url":"https://apiraino.github.io/emacs-rust/","headline":"EMACS Rust linter suddenly chocking","dateModified":"2018-08-12","datePublished":"2018-08-12","description":"&amp;sect;
+Part I: a little surpri…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="EMACS Rust linter suddenly chocking" />
+<meta name="description" content="&amp;sect;
+Part I: a little surpri…" />
+<meta property="og:description" content="&amp;sect;
+Part I: a little surpri…" />
+<link rel="canonical" href="https://apiraino.github.io/emacs-rust/" />
+<meta property="og:url" content="https://apiraino.github.io/emacs-rust/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-08-12T00:00:00+00:00" itemprop="datePublished">12 August 2018</time></p>
+                <h1>EMACS Rust linter suddenly chocking</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <h3 id="part-i-a-little-surprise"><a class="zola-anchor" href="#part-i-a-little-surprise" aria-label="Anchor link for: part-i-a-little-surprise">&sect;</a>
+<a name="part_i"></a>Part I: a little surprise</h3>
+<p>I'd spend a fair amount of time to <a href="https://github.com/apiraino/emacs_reference/blob/master/guide.md#rust-specific-setup">setup EMACS for Rust development</a>.</p>
+<p>All of a sudden, I've recently realized I could not run <code>cargo build</code> easily anymore, I often had this message:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cargo build
+    Blocking waiting for file lock on build directory
+</code></pre>
+<p>and there I had to wait for long (like, a full minute!).</p>
+<p>Ooook, let's spend some quality-time debugging <strong>*groan</strong>*</p>
+<p>So, where do we start? The message, of course. <a href="https://github.com/rust-lang/rust-mode/issues/181#issuecomment-319161568">Here</a> I see someone is experiencing the same symptoms with another setup. The message <em>lingo</em> basically says there are concurrent tasks attempting to compile sources. Uhm ... and who is the other ghost compiling process?</p>
+<p>I'll start doing some tests randomly saving a buffer in EMACS after or before a fresh build. After a while I see that simply opening a file in a buffer is triggering a chain reaction of <code>cargo test</code> processes:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">&#x2F;home&#x2F;me&#x2F;.rustup&#x2F;toolchains&#x2F;nightly-x86_64-unknown-linux-gnu&#x2F;bin&#x2F;cargo test --no-run --bin my_rust_project --message-format=json
+&#x2F;home&#x2F;me&#x2F;.rustup&#x2F;toolchains&#x2F;nightly-x86_64-unknown-linux-gnu&#x2F;bin&#x2F;cargo test --no-run --lib --message-format=json
+</code></pre>
+<p>What in the world is triggering a <strong>tests</strong> run!?</p>
+<h3 id="part-ii-the-facepalm"><a class="zola-anchor" href="#part-ii-the-facepalm" aria-label="Anchor link for: part-ii-the-facepalm">&sect;</a>
+<a name="part_ii"></a>Part II: the facepalm</h3>
+<p>I comment out all my <a href="https://github.com/apiraino/emacs_reference/blob/master/.emacs.d/personal/jman.el">customization to EMACS</a> and run on bare <a href="https://github.com/bbatsov/prelude">Prelude</a>.</p>
+<p>Still tests running when I open a file.</p>
+<p>Damn, ok let's patiently comment all the Prelude modules and see which one is triggering this. Turns out that <em>any</em> modules I have enabled triggers this behaviour, so there must be a common module above all.</p>
+<p>Fast-forward: the culprit is the <code>prelude-programming</code> module, namely this piece of code:</p>
+<pre data-lang="elisp" class="language-elisp "><code class="language-elisp" data-lang="elisp">(if (fboundp &#x27;global-flycheck-mode)
+    (global-flycheck-mode +1)
+  (add-hook &#x27;prog-mode-hook &#x27;flycheck-mode))
+</code></pre>
+<p>What does Flycheck know about Rust? A syntax checker that triggers tests? <strong>*sigh</strong>*</p>
+<p>So after some more research, I see that Flycheck <em>does</em> know Jack <a href="http://www.flycheck.org/en/latest/languages.html#rust">about Rust</a> and in a way I didn't expect: a <code>flycheck-rust-check-tests</code> config parameter.</p>
+<p>This parameter has been added <a href="https://github.com/flycheck/flycheck/blob/7a7a358b6232cff6a2f0f80f8c8b314e505b8c56/CHANGES.old#L376">many moons ago</a> (in 2014) when the project was not even on GitHub so I don't have a diff or an issue to refer to. Let's have a look at the <a href="https://github.com/flycheck/flycheck/blob/master/flycheck.el#L9477"><code>flycheck.el</code></a> elisp code:</p>
+<pre data-lang="elisp" class="language-elisp "><code class="language-elisp" data-lang="elisp">(flycheck-def-option-var flycheck-rust-check-tests t (rust-cargo rust)
+  &quot;Whether to check test code in Rust.
+
+For the `rust&#x27; checker: When non-nil, `rustc&#x27; is passed the
+`--test&#x27; flag, which will check any code marked with the
+`#[cfg(test)]&#x27; attribute and any functions marked with
+`#[test]&#x27;. Otherwise, `rustc&#x27; is not passed `--test&#x27; and test
+code will not be checked.  Skipping `--test&#x27; is necessary when
+using `#![no_std]&#x27;, because compiling the test runner requires
+`std&#x27;.
+
+For the `rust-cargo&#x27; checker: When non-nil, calls `cargo test
+--no-run&#x27; instead of `cargo check&#x27;.&quot;
+  :type &#x27;boolean
+  :safe #&#x27;booleanp
+  :package-version &#x27;(&quot;flycheck&quot; . &quot;0.19&quot;))
+</code></pre>
+<p>If <code>flycheck-rust-check-tests</code> is set to <code>nil</code> <em>and</em> <code>cargo</code> is installed, flycheck will execute <code>cargo test --no-run</code> instead of <code>cargo check</code>. Let's do this and add a line to the Rust prelude module (<code>prelude-rust.el</code>) trying to mute that parameter:</p>
+<pre data-lang="elisp" class="language-elisp "><code class="language-elisp" data-lang="elisp">(setq flycheck-rust-check-tests nil)
+</code></pre>
+<p>and ... the <code>cargo test</code> little devils are not spawned anymore.</p>
+<h3 id="part-iii-the-unanswered-questions"><a class="zola-anchor" href="#part-iii-the-unanswered-questions" aria-label="Anchor link for: part-iii-the-unanswered-questions">&sect;</a>
+<a name="part_iii"></a>Part III: the unanswered questions</h3>
+<p>The saying goes that if you reproduce a bug, you're halfway to its resolution. I'll add that fixing the bug takes you to a 90%; but only understanding the cause of a behaviour unlocks the real 100% achievement.</p>
+<p>So what triggered such a <code>cargo test</code> frenzy? Has it ever always been there, just unnoticed?</p>
+<p>The most likely answer is that Flycheck run <code>cargo test</code> and I manually run <code>cargo build</code> from the command line. Each of these two commands invalidates the compiled cache, so what happened is something like this:</p>
+<ul>
+<li>Open file in buffer (<code>cargo test</code> triggered, slow run unnoticed)</li>
+<li>code-code-code</li>
+<li>Save buffer (<code>cargo test</code> triggered: fast run)</li>
+<li>from CLI run <code>cargo build</code> to run my application (slow run)</li>
+<li><em>/me wtf?!</em></li>
+</ul>
+<p>and then:</p>
+<ul>
+<li>code-code-code</li>
+<li>Save buffer (<code>cargo test</code> triggered: slow run unnoticed)</li>
+<li>from CLI run <code>cargo build</code> (message warning about concurrent build)</li>
+<li><em>/me wtf?!</em> again</li>
+</ul>
+<p>Running several times in a row only <em>one</em> of these two commands doesn't invalidate the build cache, so the issue doesn't happen.</p>
+<p>Setting to <code>nil</code> that variable made Flycheck switch from <code>cargo test</code> to <code>cargo check</code> to get errors produced the following benefits:</p>
+<ul>
+<li><code>cargo check</code> is the recommended way to get <a href="https://github.com/flycheck/flycheck/pull/1289">compilation warning/errors</a> and in some scenario should <a href="https://blog.rust-lang.org/2017/03/16/Rust-1.16.html">speed things up</a></li>
+<li>informed me to not run <code>cargo build</code> unless I really need to</li>
+<li>does not run <code>cargo test</code> to get syntax/lint errors, which was awkward and confusing in the first place</li>
+<li><em>BUG</em>: there's an old outstanding bug, due to <code>cargo check</code> metadata caching: on <em>--lib</em> cargo projects (not <em>--bin</em>) it only shows compiler warnings <em>once</em> after a rebuild, see <a href="https://github.com/rust-lang/cargo/issues/3624">issue</a></li>
+</ul>
+<p>Flycheck command before:</p>
+<pre><code>cargo test --no-run --lib --message-format=json
+</code></pre>
+<p>and after:</p>
+<pre><code>cargo check --lib --message-format=json
+</code></pre>
+<p>Finally, let's ensure this won't happen again - let's save this in my custom EMACS config:</p>
+<pre><code>M-x flycheck-rust-check-tests
+</code></pre>
+<p>set the value to <code>nil</code>, then save to <code>~/.emacs.d/personal/custom.el</code>. This improve upon the previous solution as now I don't need to customize <code>prelude-rust.el</code> anymore.</p>
+<p>Second step, disable <code>rust</code> from the list of checkers:</p>
+<pre><code>M-x flycheck-disabled-checkers
+</code></pre>
+<p>Now, my <code>custom.el</code> has two new configs:</p>
+<pre data-lang="elisp" class="language-elisp "><code class="language-elisp" data-lang="elisp"> &#x27;(flycheck-disabled-checkers (quote (rust)))
+ &#x27;(flycheck-rust-check-tests nil)
+</code></pre>
+<p>Closing thoughts: an outstanding issue in the Rust world is how to speed compiling times up, but that's nothing we can do here, eventually we will get there.</p>
+<p>Oh, one last comment: I hate elisp so much that I find a perverse pleasure in understanding how it works.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

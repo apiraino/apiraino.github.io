@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-02-01" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/flutter-first-impressions/"},"@type":"BlogPosting","url":"https://apiraino.github.io/flutter-first-impressions/","headline":"Flutter: basically upselling Firebase services","dateModified":"2019-02-01","datePublished":"2019-02-01","description":"(the future is here and it&#x27;s scary)
+First impressions after trying Flutter (that is: a completely different thing I usually develop with).
+In two or three days, I went from zero (i.e.…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Flutter: basically upselling Firebase services" />
+<meta name="description" content="(the future is here and it&#x27;s scary)
+First impressions after trying Flutter (that is: a completely different thing I usually develop with).
+In two or three days, I went from zero (i.e.…" />
+<meta property="og:description" content="(the future is here and it&#x27;s scary)
+First impressions after trying Flutter (that is: a completely different thing I usually develop with).
+In two or three days, I went from zero (i.e.…" />
+<link rel="canonical" href="https://apiraino.github.io/flutter-first-impressions/" />
+<meta property="og:url" content="https://apiraino.github.io/flutter-first-impressions/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-02-01T00:00:00+00:00" itemprop="datePublished">1 February 2019</time></p>
+                <h1>Flutter: basically upselling Firebase services</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>(the future is here and it's scary)</p>
+<p>First impressions after trying Flutter (that is: a completely different thing I usually develop with).</p>
+<p>In two or three days, I went from zero (i.e. install Android Studio and copy-paste the first tutorial) to a complete (albeit simple) app with multiple screens (&quot;Activities&quot;, in Android parlance), routers and some advanced features like asyncronous network fetching (using <code>Future</code>) and background tasks (the <code>compute</code> keyword).</p>
+<p>I'd say the worst obstacle was rewiring my brain to use Android Studio.</p>
+<p>Having a look at the stacktrace of a simple &quot;file not found&quot; error, gives an idea of the layers upon which you're building your application (and I suspect that much more is hidden, I don't even see the Java underlying exception!) before getting to the actionable &quot;levers&quot;:</p>
+<details><summary>Click to expand this blurb</summary>
+<p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">Performing hot restart...
+Syncing files to device Android SDK built for x86...
+Restarted application in 1,546ms.
+I&#x2F;flutter (23143): got tap
+I&#x2F;flutter (23143): ══╡ EXCEPTION CAUGHT BY IMAGE RESOURCE SERVICE ╞════════════════════════════════════════════════════
+I&#x2F;flutter (23143): The following assertion was thrown resolving an image codec:
+I&#x2F;flutter (23143): Unable to load asset: assets&#x2F;rooms&#x2F;item4.jpg
+I&#x2F;flutter (23143):
+I&#x2F;flutter (23143): When the exception was thrown, this was the stack:
+I&#x2F;flutter (23143): #0      PlatformAssetBundle.load (package:flutter&#x2F;src&#x2F;services&#x2F;asset_bundle.dart:221:7)
+I&#x2F;flutter (23143): &lt;asynchronous suspension&gt;
+I&#x2F;flutter (23143): #1      AssetBundleImageProvider._loadAsync (package:flutter&#x2F;src&#x2F;painting&#x2F;image_provider.dart:429:44)
+I&#x2F;flutter (23143): &lt;asynchronous suspension&gt;
+I&#x2F;flutter (23143): #2      AssetBundleImageProvider.load (package:flutter&#x2F;src&#x2F;painting&#x2F;image_provider.dart:414:14)
+I&#x2F;flutter (23143): #3      ImageProvider.resolve.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter&#x2F;src&#x2F;painting&#x2F;image_provider.dart:267:86)
+I&#x2F;flutter (23143): #4      ImageCache.putIfAbsent (package:flutter&#x2F;src&#x2F;painting&#x2F;image_cache.dart:143:20)
+I&#x2F;flutter (23143): #5      ImageProvider.resolve.&lt;anonymous closure&gt; (package:flutter&#x2F;src&#x2F;painting&#x2F;image_provider.dart:267:63)
+I&#x2F;flutter (23143): #6      SynchronousFuture.then (package:flutter&#x2F;src&#x2F;foundation&#x2F;synchronous_future.dart:38:29)
+I&#x2F;flutter (23143): #7      ImageProvider.resolve (package:flutter&#x2F;src&#x2F;painting&#x2F;image_provider.dart:265:30)
+I&#x2F;flutter (23143): #8      _ImageState._resolveImage (package:flutter&#x2F;src&#x2F;widgets&#x2F;image.dart:630:20)
+I&#x2F;flutter (23143): #9      _ImageState.didChangeDependencies (package:flutter&#x2F;src&#x2F;widgets&#x2F;image.dart:605:5)
+I&#x2F;flutter (23143): #10     StatefulElement._firstBuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3846:12)
+I&#x2F;flutter (23143): #11     ComponentElement.mount (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3696:5)
+I&#x2F;flutter (23143): #12     Element.inflateWidget (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2950:14)
+I&#x2F;flutter (23143): #13     Element.updateChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2753:12)
+I&#x2F;flutter (23143): #14     SingleChildRenderObjectElement.mount (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:4860:14)
+I&#x2F;flutter (23143): #15     Element.inflateWidget (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2950:14)
+I&#x2F;flutter (23143): #16     Element.updateChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2753:12)
+I&#x2F;flutter (23143): #17     SingleChildRenderObjectElement.mount (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:4860:14)
+I&#x2F;flutter (23143): #18     Element.inflateWidget (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2950:14)
+I&#x2F;flutter (23143): #19     Element.updateChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2753:12)
+I&#x2F;flutter (23143): #20     ComponentElement.performRebuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3732:16)
+I&#x2F;flutter (23143): #21     Element.rebuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3547:5)
+I&#x2F;flutter (23143): #22     ComponentElement._firstBuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3701:5)
+I&#x2F;flutter (23143): #23     ComponentElement.mount (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3696:5)
+I&#x2F;flutter (23143): #24     Element.inflateWidget (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2950:14)
+I&#x2F;flutter (23143): #25     Element.updateChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2753:12)
+I&#x2F;flutter (23143): #26     ComponentElement.performRebuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3732:16)
+I&#x2F;flutter (23143): #27     Element.rebuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3547:5)
+I&#x2F;flutter (23143): #28     ComponentElement._firstBuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3701:5)
+I&#x2F;flutter (23143): #29     ComponentElement.mount (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3696:5)
+I&#x2F;flutter (23143): #30     ParentDataElement.mount (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:4047:11)
+I&#x2F;flutter (23143): #31     Element.inflateWidget (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2950:14)
+I&#x2F;flutter (23143): #32     Element.updateChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2753:12)
+I&#x2F;flutter (23143): #33     ComponentElement.performRebuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3732:16)
+I&#x2F;flutter (23143): #34     Element.rebuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3547:5)
+I&#x2F;flutter (23143): #35     ComponentElement._firstBuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3701:5)
+I&#x2F;flutter (23143): #36     StatefulElement._firstBuild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3848:11)
+I&#x2F;flutter (23143): #37     ComponentElement.mount (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:3696:5)
+I&#x2F;flutter (23143): #38     Element.inflateWidget (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2950:14)
+I&#x2F;flutter (23143): #39     Element.updateChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2753:12)
+I&#x2F;flutter (23143): #40     SliverMultiBoxAdaptorElement.updateChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;sliver.dart:1028:36)
+I&#x2F;flutter (23143): #41     SliverMultiBoxAdaptorElement.createChild.&lt;anonymous closure&gt; (package:flutter&#x2F;src&#x2F;widgets&#x2F;sliver.dart:1013:20)
+I&#x2F;flutter (23143): #42     BuildOwner.buildScope (package:flutter&#x2F;src&#x2F;widgets&#x2F;framework.dart:2266:19)
+I&#x2F;flutter (23143): #43     SliverMultiBoxAdaptorElement.createChild (package:flutter&#x2F;src&#x2F;widgets&#x2F;sliver.dart:1006:11)
+I&#x2F;flutter (23143): #44     RenderSliverMultiBoxAdaptor._createOrObtainChild.&lt;anonymous closure&gt; (package:flutter&#x2F;src&#x2F;rendering&#x2F;sliver_multi_box_adaptor.dart:274:23)
+I&#x2F;flutter (23143): #45     RenderObject.invokeLayoutCallback.&lt;anonymous closure&gt; (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1730:58)
+I&#x2F;flutter (23143): #46     PipelineOwner._enableMutationsToDirtySubtrees (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:799:15)
+I&#x2F;flutter (23143): #47     RenderObject.invokeLayoutCallback (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1730:13)
+I&#x2F;flutter (23143): #48     RenderSliverMultiBoxAdaptor._createOrObtainChild (package:flutter&#x2F;src&#x2F;rendering&#x2F;sliver_multi_box_adaptor.dart:263:5)
+I&#x2F;flutter (23143): #49     RenderSliverMultiBoxAdaptor.insertAndLayoutChild (package:flutter&#x2F;src&#x2F;rendering&#x2F;sliver_multi_box_adaptor.dart:401:5)
+I&#x2F;flutter (23143): #50     RenderSliverGrid.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;sliver_grid.dart:583:17)
+I&#x2F;flutter (23143): #51     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #52     RenderSliverPadding.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;sliver_padding.dart:182:11)
+I&#x2F;flutter (23143): #53     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #54     RenderViewportBase.layoutChildSequence (package:flutter&#x2F;src&#x2F;rendering&#x2F;viewport.dart:405:13)
+I&#x2F;flutter (23143): #55     RenderViewport._attemptLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;viewport.dart:1316:12)
+I&#x2F;flutter (23143): #56     RenderViewport.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;viewport.dart:1234:20)
+I&#x2F;flutter (23143): #57     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #58     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #59     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #60     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #61     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #62     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #63     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #64     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #65     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #66     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #67     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #68     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #69     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #70     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #71     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #72     _RenderProxyBox&amp;RenderBox&amp;RenderObjectWithChildMixin&amp;RenderProxyBoxMixin.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;proxy_box.dart:104:13)
+I&#x2F;flutter (23143): #73     RenderObject.layout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1634:7)
+I&#x2F;flutter (23143): #74     MultiChildLayoutDelegate.layoutChild (package:flutter&#x2F;src&#x2F;rendering&#x2F;custom_layout.dart:142:11)
+I&#x2F;flutter (23143): #75     _ScaffoldLayout.performLayout (package:flutter&#x2F;src&#x2F;material&#x2F;scaffold.dart:339:7)
+I&#x2F;flutter (23143): #76     MultiChildLayoutDelegate._callPerformLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;custom_layout.dart:212:7)
+I&#x2F;flutter (23143): #77     RenderCustomMultiChildLayoutBox.performLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;custom_layout.dart:356:14)
+I&#x2F;flutter (23143): #78     RenderObject._layoutWithoutResize (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:1509:7)
+I&#x2F;flutter (23143): #79     PipelineOwner.flushLayout (package:flutter&#x2F;src&#x2F;rendering&#x2F;object.dart:768:18)
+I&#x2F;flutter (23143): #80     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding&amp;PaintingBinding&amp;SemanticsBinding&amp;RendererBinding.drawFrame (package:flutter&#x2F;src&#x2F;rendering&#x2F;binding.dart:281:19)
+I&#x2F;flutter (23143): #81     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding&amp;PaintingBinding&amp;SemanticsBinding&amp;RendererBinding&amp;WidgetsBinding.drawFrame (package:flutter&#x2F;src&#x2F;widgets&#x2F;binding.dart:677:13)
+I&#x2F;flutter (23143): #82     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding&amp;PaintingBinding&amp;SemanticsBinding&amp;RendererBinding._handlePersistentFrameCallback (package:flutter&#x2F;src&#x2F;rendering&#x2F;binding.dart:219:5)
+I&#x2F;flutter (23143): #83     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding._invokeFrameCallback (package:flutter&#x2F;src&#x2F;scheduler&#x2F;binding.dart:990:15)
+I&#x2F;flutter (23143): #84     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding.handleDrawFrame (package:flutter&#x2F;src&#x2F;scheduler&#x2F;binding.dart:930:9)
+I&#x2F;flutter (23143): #85     _WidgetsFlutterBinding&amp;BindingBase&amp;GestureBinding&amp;ServicesBinding&amp;SchedulerBinding._handleDrawFrame (package:flutter&#x2F;src&#x2F;scheduler&#x2F;binding.dart:842:5)
+I&#x2F;flutter (23143): #86     _invoke (dart:ui&#x2F;hooks.dart:154:13)
+I&#x2F;flutter (23143): #87     _drawFrame (dart:ui&#x2F;hooks.dart:143:3)
+I&#x2F;flutter (23143):
+I&#x2F;flutter (23143): Image provider: AssetImage(bundle: null, name: &quot;assets&#x2F;rooms&#x2F;item4.jpg&quot;)
+I&#x2F;flutter (23143): Image key: AssetBundleImageKey(bundle: PlatformAssetBundle#3e8f0(), name: &quot;assets&#x2F;rooms&#x2F;item4.jpg&quot;,
+I&#x2F;flutter (23143): scale: 1.0)
+I&#x2F;flutter (23143): ════════════════════════════════════════════════════════════════════════════════════════════════════
+</code></pre>
+</p>
+</details>
+<p>So, how did we get there?</p>
+<h3 id="the-past"><a class="zola-anchor" href="#the-past" aria-label="Anchor link for: the-past">&sect;</a>
+<a name='part_i'></a>The Past</h3>
+<ul>
+<li>First &quot;generation&quot; of SDKs and languages (Objective-C and Java)</li>
+<li>Specialized skills, although developers cheered a &quot;lower level&quot; entry barrier (compared to what was available at the time)</li>
+<li>Marketplace! Woohoo!!11!</li>
+<li>Attract developers to sell apps: more users =&gt; more apps =&gt; platform dominates the market (caveat: Google has always had in mind to sell ads since acquiring Android)</li>
+</ul>
+<h3 id="the-present"><a class="zola-anchor" href="#the-present" aria-label="Anchor link for: the-present">&sect;</a>
+<a name='part_ii'></a>The Present</h3>
+<ul>
+<li>Second &quot;generation&quot; of SDKs and laguages (Swift and Dart a.k.a. Javascript on steroids)</li>
+<li>Convergence of skills, even lower entry barrier</li>
+<li>Marketplace: overflowing of low quality ads-riddled apps</li>
+<li>Moving features on the cloud, smartphones becoming again dumb terminals</li>
+<li>SDKs sell cloud services</li>
+</ul>
+<h3 id="the-future"><a class="zola-anchor" href="#the-future" aria-label="Anchor link for: the-future">&sect;</a>
+<a name='part_iii'></a>The Future</h3>
+<ul>
+<li>Big players offering training and tools for nothing</li>
+<li>Less and less work to build an app (tipically involving backend and frontend work)</li>
+<li>An army of devs willing to make a quick buck and selling users' data using their apps. This is <a target="_blank" rel="noopener noreferrer nofollow" href="https://media.ccc.de/v/35c3-9941-how_facebook_tracks_you_on_android">already happening</a>.</li>
+</ul>
+<p>So, Flutter documentation is great, the tutorial on dedicated websites are clear. The language logo is not dumb. What could possibly go wrong?</p>
+<p>Google is basically upselling Firebase services.</p>
+<p>Half joking here, but it wouldn't surprise me <strong>at all</strong> if Facebook would make its SDK more and more pervasive to the point of releasing its own operating system.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

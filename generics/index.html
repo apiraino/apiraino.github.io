@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-10-21" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/generics/"},"@type":"BlogPosting","url":"https://apiraino.github.io/generics/","headline":"Rust Generics","dateModified":"2019-10-21","datePublished":"2019-10-21","description":"Today I&#x27;ve learned a little about refactoring code using Generics.
+&lt;a class=&quot;zola-anchor&quot; href=&quot;#don-t-fix-what-ain-t-broken&quot; aria-label=&quot;Anchor link for: d…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Rust Generics" />
+<meta name="description" content="Today I&#x27;ve learned a little about refactoring code using Generics.
+&lt;a class=&quot;zola-anchor&quot; href=&quot;#don-t-fix-what-ain-t-broken&quot; aria-label=&quot;Anchor link for: d…" />
+<meta property="og:description" content="Today I&#x27;ve learned a little about refactoring code using Generics.
+&lt;a class=&quot;zola-anchor&quot; href=&quot;#don-t-fix-what-ain-t-broken&quot; aria-label=&quot;Anchor link for: d…" />
+<link rel="canonical" href="https://apiraino.github.io/generics/" />
+<meta property="og:url" content="https://apiraino.github.io/generics/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-10-21T00:00:00+00:00" itemprop="datePublished">21 October 2019</time></p>
+                <h1>Rust Generics</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Today I've learned a little about refactoring code using Generics.</p>
+<h3 id="don-t-fix-what-ain-t-broken"><a class="zola-anchor" href="#don-t-fix-what-ain-t-broken" aria-label="Anchor link for: don-t-fix-what-ain-t-broken">&sect;</a>
+(Don't) fix what ain't broken</h3>
+<p>I had <a href="https://apiraino.github.io/2019/08/13/rust-getting-into-iterators.html">some code</a> that worked well. Let's recap step by step the main points.</p>
+<p>I have a Trait with a <code>extract_data()</code> method. This method does nothing :-) I also have two structs for different kind of data:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">trait CommonBehaviourTrait {
+    fn extract_data(&amp;self) {
+        debug!(&quot;Default empty implementation&quot;);
+    }
+}
+
+struct AgencyStruct {
+    location: String
+}
+
+struct MemberStruct {
+    name: String
+}
+</code></pre>
+<p>I'm implementing the <code>extract_data()</code> method for both structs. The actual work done depends on the struct. We see that the <code>mapper()</code> function comes from different modules. While the name of the function is the same, the implementation might be different.</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">impl CommonBehaviourTrait for Vec&lt;AgencyStruct&gt; {
+    fn extract_data(&amp;self) {
+        agency_utils::mapper(self);
+    }
+}
+
+impl CommonBehaviourTrait for Vec&lt;MemberStruct&gt; {
+    fn extract_data(&amp;self) {
+        member_utils::mapper(self);
+    }
+}
+</code></pre>
+<p>Let's see what <code>mapper()</code> does for <code>AgencyStruct</code>:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">pub fn mapper&lt;&#x27;a, I&gt;(src: I) -&gt; impl Iterator&lt;Item = CommonStruct&gt; + &#x27;a
+where
+    I: IntoIterator&lt;Item = &amp;&#x27;a AgencyStruct&gt;,
+    &lt;I as std::iter::IntoIterator&gt;::IntoIter: &#x27;a,
+{
+    src.into_iter().map(|list_item| {
+        let res = CommonStruct::try_from(list_item)
+}
+</code></pre>
+<p>Which reads as: this function take an object <code>I</code>, an iterator (<code>IntoIter</code>, i.e. a trait that implements the <code>Iterator</code> itself) of <code>AgencyStruct</code> with an attached lifetime <code>'a</code>. The lifetime is valid for all items inside the iteration plus the iterator itself. The body of the function iterates <code>src</code> and remap the content to <code>CommonStruct</code> (a data structure that remaps different things to the same content). The function returns another iterator, this time of our <code>CommonStruct</code> type. The same lifetime <code>'a</code> is attached to the returning value.</p>
+<p>The <code>try_from</code> invoked there takes the reference to <code>AgencyStruct</code> and returns a new instance of <code>CommonStruct</code> (or an <code>ItemCreationError</code>):</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">impl TryFrom&lt;&amp;AgencyStruct&gt; for CommonStruct {
+    type Error = ItemCreationError;
+
+    fn try_from(src: &amp;Agencystruct) -&gt; Result&lt;Self, Self::Error&gt; {
+        CommonStruct {
+            data: src.location
+        }
+}
+</code></pre>
+<p>I was so proud of this code (written with heavy guidance on how to use iterators and the <code>where</code> clause), but a friend of mine decided to break my application with an innocent remark: &quot;why don't we make a generic implementation?&quot;. And he is right, there is a lot of boilerplate here!</p>
+<p>Ok, let's try a refactor.</p>
+<h3 id="generics-at-work"><a class="zola-anchor" href="#generics-at-work" aria-label="Anchor link for: generics-at-work">&sect;</a>
+Generics at work</h3>
+<p>First thing, we want to replace the specific type <code>AgencyStruct/MemberStruct</code> stuff with a generic type <code>T</code>, to be able to pass anything to the function.</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust"> pub trait CommonBehaviourTrait {
+    fn extract_data(self)
+    where
+        Self: std::marker::Sized,
+    {
+         debug!(&quot;Default implementation of CommonBehaviourTrait&quot;);
+     }
+}
+
+impl&lt;T&gt; CommonBehaviourTrait for Vec&lt;T&gt;
+where
+    T: TryInto&lt;CommonStruct, Error = ItemCreationError&gt; + Sized,
+{
+    fn extract_data(self) {
+         let expimp_data = mapper(self);
+     }
+ }
+</code></pre>
+<p>With this I could remove all the specific implementations of the Trait. Notable changes:</p>
+<ul>
+<li>Changing <code>&amp;self</code> to <code>self</code> means that now the compiler needs to know that the object passed is <code>Sized</code>: a reference has a known compile-time size, but a copy of an object doens't.</li>
+<li>The new <code>TryInto</code> says: &quot;<code>T</code> must be anything that can be turned into a <code>CommonStruct</code> (or returns an <code>ItemCreationError</code>) and that you know the size at compile-time (<code>Sized</code>).</li>
+</ul>
+<p>The <code>mapper()</code> function is then refactored as follows. Let's the diff for clarity:</p>
+<pre data-lang="diff" class="language-diff "><code class="language-diff" data-lang="diff">+pub fn mapper&lt;I, T&gt;(src: I) -&gt; impl Iterator&lt;Item = CommonStruct&gt;
+ where
+-    I: IntoIterator&lt;Item = &amp;&#x27;a MyStuff&gt;,
+-    &lt;I as std::iter::IntoIterator&gt;::IntoIter: &#x27;a,
++    I: IntoIterator&lt;Item = T&gt;,
++    T: TryInto&lt;CommonStruct, Error = ItemCreationError&gt; + Sized,
+ {
+     src.into_iter().map(|course| {
+-        let res = CommonStruct::try_from(course);
++        let res = course.try_into();
+         match res {
+             ...
+</code></pre>
+<p>Changes:</p>
+<ul>
+<li>We've removed the lifetime <code>'a</code> from <code>src</code>, now we are not passing a reference anymore</li>
+<li><code>I</code> is now a <code>T</code> generic parameter</li>
+<li>The <code>T</code> generic parameter is defined as we described a moment ago (an object that implements a TryInto etc. etc.).</li>
+<li>Since <code>src</code> iterator implements <code>TryInto</code>, now we can also call its items with <code>.try_into()</code> (not sure if this was needed).</li>
+</ul>
+<h3 id="closing-notes"><a class="zola-anchor" href="#closing-notes" aria-label="Anchor link for: closing-notes">&sect;</a>
+Closing notes</h3>
+<p>This is how the <code>TryFrom</code> I was using before is defined.</p>
+<p><a href="https://doc.rust-lang.org/std/convert/trait.TryFrom.html">Rust book</a> and <a href="https://doc.rust-lang.org/src/core/convert.rs.html#482">source</a>:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">pub trait TryFrom&lt;T&gt;: Sized {
+    &#x2F;&#x2F;&#x2F; The type returned in the event of a conversion error.
+    type Error;
+
+    &#x2F;&#x2F;&#x2F; Performs the conversion.
+    fn try_from(value: T) -&gt; Result&lt;Self, Self::Error&gt;;
+}
+</code></pre>
+<p>This is how the <code>TryInto</code> is defined.</p>
+<p><a href="https://doc.rust-lang.org/std/convert/trait.TryInto.html">Rust book</a> and <a href="https://doc.rust-lang.org/src/core/convert.rs.html#557-564">sources</a>:</p>
+<p><code>impl&lt;SpecificType, CommonStruct&gt; TryInto&lt;CommonStruct&gt; for Specifictype</code></p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">impl&lt;T, U&gt; TryInto&lt;U&gt; for T where U: TryFrom&lt;T&gt;
+{
+    type Error = U::Error;
+
+    fn try_into(self) -&gt; Result&lt;U, U::Error&gt; {
+        U::try_from(self)
+    }
+}
+</code></pre>
+<p>There's a tricky part in <code>TryInto</code> that got us lose some time; we were confused by the ordering of <code>U</code> and <code>T</code>.</p>
+<p>Another comment that I received looking at the refactored code is: you could have done that more easily with a macro, instead of getting crazy with that <code>where</code> clauses.</p>
+<p>Thanks to <a href="https://gitlab.com/tglman">@tglman</a> for causing all this trouble :-) and patiently teach me something really cool!</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

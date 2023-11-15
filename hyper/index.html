@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-18" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/hyper/"},"@type":"BlogPosting","url":"https://apiraino.github.io/hyper/","headline":"Hyper, the Rust async microframework","dateModified":"2019-07-18","datePublished":"2019-07-18","description":"&amp;sect;
+Introducing Hyper 0.12
+I had investigated …","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Hyper, the Rust async microframework" />
+<meta name="description" content="&amp;sect;
+Introducing Hyper 0.12
+I had investigated …" />
+<meta property="og:description" content="&amp;sect;
+Introducing Hyper 0.12
+I had investigated …" />
+<link rel="canonical" href="https://apiraino.github.io/hyper/" />
+<meta property="og:url" content="https://apiraino.github.io/hyper/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-07-18T00:00:00+00:00" itemprop="datePublished">18 July 2019</time></p>
+                <h1>Hyper, the Rust async microframework</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <h2 id="introducing-hyper-0-12"><a class="zola-anchor" href="#introducing-hyper-0-12" aria-label="Anchor link for: introducing-hyper-0-12">&sect;</a>
+Introducing Hyper 0.12</h2>
+<p>I had investigated how Futures work in Rust, the next step was finding a light web framework in Rust to build a microservice so I ended up trying <a href="https://hyper.rs">Hyper</a>. This is the first of a series of tutorials written for myself.</p>
+<p>Reading the &quot;label on the tin&quot;, Hyper is a high-performance HTTP async server + client that sits on the Tokio runtime and Future crate.</p>
+<p>What a Future is, I've put <a href="/2019/07/17/rust-future-examples.html">some notes here</a>.</p>
+<p>What the Tokio runtime is ... I don't care! Let's say it's just an engine that acts like a juggler and handles stuff very quickly.</p>
+<p><a href="https://hyper.rs/guides/">The guides</a> for Hyper are clear enough to get started.</p>
+<p>Oh, one big disclaimer before we start. Be sure to look at the latest Hyper <code>0.12.x</code> branch. Version <code>0.13.x</code> is in the works and changes a number of things (f.e. uses the async/await syntax). Slighly previous versions (like <code>0.12.15</code>) have a different API. Hyper is heavily in flux and breaking changes are not properly advertised. You'll find yourself looking at code written for <code>0.11</code> that doesn't compile anymore.</p>
+<p>But let's see how it works. As far as I could understand the basic principle of Hyper is: it creates a <a href="https://docs.rs/hyper/0.12.33/hyper/service/trait.Service.html">Service</a> struct that will handle all requests. I don't care now how all that work, just let me get started.</p>
+<h3 id="fire-up-a-minimal-server"><a class="zola-anchor" href="#fire-up-a-minimal-server" aria-label="Anchor link for: fire-up-a-minimal-server">&sect;</a>
+Fire up a minimal server</h3>
+<p>Here we have a server listening for incoming connections and returning a string to each of them as response:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">&#x2F;&#x2F; Notice we are using the Future crate re-exported from hyper
+&#x2F;&#x2F; use futures::future;
+use hyper::rt::Future;
+
+&#x2F;&#x2F; this is a &quot;convenience&quot; function to transform any function into a Service
+use hyper::service::service_fn_ok;
+use hyper::{Body, Request, Response, Server};
+
+fn main() {
+    println!(&quot;Start&quot;);
+
+    let addr = ([127, 0, 0, 1], 3000).into();
+    let server = Server::bind(&amp;addr)
+        .serve(|| {
+            &#x2F;&#x2F; This is the `Service` that will handle the connection.
+            &#x2F;&#x2F; `service_fn_ok` is a helper to convert a function that
+            &#x2F;&#x2F; returns a Response into a `Service`.
+            service_fn_ok(move |_: Request&lt;Body&gt;| Response::new(Body::from(&quot;Hello World!\n&quot;)))
+        })
+        .map_err(|e| eprintln!(&quot;server error: {}&quot;, e));
+
+    &#x2F;&#x2F; runs on tokio runtime
+    println!(&quot;Listening on http:&#x2F;&#x2F;{}&quot;, addr);
+    hyper::rt::run(server);
+
+    println!(&quot;Exiting&quot;);
+}
+</code></pre>
+<h3 id="hyper-spawns-a-future"><a class="zola-anchor" href="#hyper-spawns-a-future" aria-label="Anchor link for: hyper-spawns-a-future">&sect;</a>
+Hyper spawns a Future</h3>
+<p>The server listens for incoming connections and spawns a Future that sleep for 2 seconds.</p>
+<p>Notice how che client connection is closed immediately and the Future is resolved at a later stage.</p>
+<p>Do <em>not</em> use <code>std::thread::sleep</code> to add a delay, you'll end up blocking the whole Tokio runtime thread!</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn svc_wait(t: u64) -&gt; impl Future&lt;Item = (), Error = ()&gt; {
+    println!(&quot;[start] waiting...&quot;);
+    let when = Instant::now() + Duration::from_millis(t);
+    Delay::new(when)
+        .map_err(|e| panic!(&quot;timer failed; err={:?}&quot;, e))
+        .and_then(|_| {
+            println!(&quot;[end] waiting&quot;);
+            Ok(())
+        })
+}
+
+fn main() {
+    let addr = ([127, 0, 0, 1], 3000).into();
+    let server = Server::bind(&amp;addr)
+        .serve(|| {
+            service_fn_ok(|req: Request&lt;Body&gt;| {
+                &#x2F;&#x2F; received the client connection
+                eprintln!(&quot;Received client: {:?}&quot;, req.headers());
+                &#x2F;&#x2F; creating the future
+                let f = svc_wait(2000);
+                &#x2F;&#x2F; the future is run NOW
+                hyper::rt::spawn(f);
+                &#x2F;&#x2F; the client receives immediately a reply
+                eprintln!(&quot;Sending back NOW a response to the client&quot;);
+                Response::new(Body::from(&quot;Future triggered&quot;))
+            })
+        })
+        .map_err(|e| eprintln!(&quot;server error: {}&quot;, e));
+
+    &#x2F;&#x2F; runs on tokio runtime
+    println!(&quot;Listening on http:&#x2F;&#x2F;{}&quot;, addr);
+    hyper::rt::run(server);
+}
+</code></pre>
+<p>Observe the server logging:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash"># The request to the server will be immediately served, then the connection closed
+$ curl localhost:3000
+Future triggered
+
+# this is the output you&#x27;ll see on the server
+$ cargo run
+Listening on http:&#x2F;&#x2F;127.0.0.1:3000
+Received client: {&quot;host&quot;: &quot;127.0.0.1:3000&quot;, &quot;user-agent&quot;: &quot;curl&#x2F;7.64.0&quot;, &quot;accept&quot;: &quot;*&#x2F;*&quot;}
+[start] waiting...
+Sending back NOW a response to the client
+... waiting ...
+[end] waiting
+</code></pre>
+<p>A reply is being sent immediately to the client. The future is triggered, starts doing its &quot;work&quot; and finishes way after a reply is sent to the client.</p>
+<h3 id="a-simple-endpoint-router-spawns-different-futures"><a class="zola-anchor" href="#a-simple-endpoint-router-spawns-different-futures" aria-label="Anchor link for: a-simple-endpoint-router-spawns-different-futures">&sect;</a>
+A simple endpoint router, spawns different Futures</h3>
+<p>We mentioned earlier that the Hyper server runs a <a href="https://docs.rs/hyper/0.12.33/hyper/service/trait.Service.html">Service</a> that handles all the requests. This service implements a router that handles a tuple <code>(http_method, path)</code> where <code>http_method</code> can be GET, POST, etc. and <code>path</code> can be (f.e. <code>/</code>, <code>/user</code>, <code>/user/:id</code> and so on).</p>
+<p>In the following example, the router handles two endpoints:</p>
+<ul>
+<li><code>GET /wait</code>: triggers the waiting Future seen before</li>
+<li><code>GET /fetch</code>: triggers a request on a remote server</li>
+</ul>
+<p>Basically the same as before but with a twist: the request router is itself a Future that resolves when the final Future is resolved.</p>
+<p>Full code of this example is <a href="https://github.com/apiraino/rust-future-explorations/tree/master/hyper-router">here</a>. Here we have the interesting bits:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn fetch_data() -&gt; impl Future&lt;Item = future::FutureResult&lt;RespStruct, String&gt;, Error = ()&gt; {
+    let uri: Uri = &quot;http:&#x2F;&#x2F;httpbin.org&#x2F;get&quot;.parse().expect(&quot;Cannot parse URL&quot;);
+    Client::new()
+        .get(uri)
+        &#x2F;&#x2F; Future is polled here
+        .and_then(|res| {
+            &#x2F;&#x2F; extract the body from the Response
+            res.into_body().concat2()
+        })
+        .map_err(|err| println!(&quot;error: {}&quot;, err))
+        .map(|body| {
+            &#x2F;&#x2F; here parse the FutureResult, serialize into a validated Struct
+            let decoded: RespStruct = serde_json::from_slice(&amp;body).expect(&quot;Couldn&#x27;t deserialize&quot;);
+            future::ok(decoded)
+        })
+}
+
+fn svc_wait(t: u64) -&gt; impl Future&lt;Item = (), Error = ()&gt; {
+    &#x2F;&#x2F; code omitted for brevity
+}
+
+&#x2F;&#x2F; Just an alias to make it more readable
+type BoxFut = Box&lt;dyn Future&lt;Item = Response&lt;Body&gt;, Error = hyper::Error&gt; + Send&gt;;
+
+&#x2F;&#x2F; This is our request router
+fn service_router(req: Request&lt;Body&gt;) -&gt; BoxFut {
+    let mut response = Response::new(Body::empty());
+
+    &#x2F;&#x2F; routes the request to the appropriate worker
+    match (req.method(), req.uri().path()) {
+
+         &#x2F;&#x2F; GET &#x2F;wait
+        (&amp;Method::GET, &quot;&#x2F;wait&quot;) =&gt; {
+            let r = svc_wait(1500);
+            hyper::rt::spawn(r);
+            *response.body_mut() = Body::from(format!(&quot;Triggered waiting {}ms&quot;, 1500));
+        }
+
+         &#x2F;&#x2F; GET &#x2F;fetch
+        (&amp;Method::GET, &quot;&#x2F;fetch&quot;) =&gt; {
+            let r = fetch_data().map(|x| {
+                println!(&quot;got data: {:?}&quot;, x);
+            });
+            hyper::rt::spawn(r);
+            *response.body_mut() = Body::from(&quot;Sent request to external webservice&quot;);
+        }
+
+        &#x2F;&#x2F; ... more routers
+
+    }
+    eprintln!(&quot;Returning a response&quot;);
+    Box::new(future::ok(response))
+}
+
+fn main() {
+    let addr = ([127, 0, 0, 1], 3000).into();
+    let server = Server::bind(&amp;addr)
+        .serve(|| {
+            &#x2F;&#x2F; now we spawn a Future with our request router
+            service_fn(service_router)
+        })
+        .map_err(|e| eprintln!(&quot;server error: {}&quot;, e));
+
+    println!(&quot;Listening on http:&#x2F;&#x2F;{}&quot;, addr);
+    hyper::rt::run(server);
+}
+</code></pre>
+<p>Now you can call the server on two endpoints:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ curl localhost:3000&#x2F;wait
+Triggered waiting 1500ms
+
+$ curl localhost:3000&#x2F;fetch
+Sent request to external webservice
+</code></pre>
+<p>More examples can be found on <a href="https://github.com/hyperium/hyper/tree/v0.12.33/examples">the Hyper GitHub repo</a> but without a proper context they didnt make too much sense to me (your mileage may vary). Maybe a bit more explaination of they actual do should suffice.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

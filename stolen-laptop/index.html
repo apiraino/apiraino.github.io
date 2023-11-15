@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-04-06" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/stolen-laptop/"},"@type":"BlogPosting","url":"https://apiraino.github.io/stolen-laptop/","headline":"Losing my laptop: lessons learned","dateModified":"2019-04-06","datePublished":"2019-04-06","description":"While I was at the Rust LATAM conference, bad luck struck me hard. As a side effect of being tired, I&#x27;ve lost my backpack with passport and laptop.
+I cou…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Losing my laptop: lessons learned" />
+<meta name="description" content="While I was at the Rust LATAM conference, bad luck struck me hard. As a side effect of being tired, I&#x27;ve lost my backpack with passport and laptop.
+I cou…" />
+<meta property="og:description" content="While I was at the Rust LATAM conference, bad luck struck me hard. As a side effect of being tired, I&#x27;ve lost my backpack with passport and laptop.
+I cou…" />
+<link rel="canonical" href="https://apiraino.github.io/stolen-laptop/" />
+<meta property="og:url" content="https://apiraino.github.io/stolen-laptop/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-04-06T00:00:00+00:00" itemprop="datePublished">6 April 2019</time></p>
+                <h1>Losing my laptop: lessons learned</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>While I was at the <a href="/2019/04/06/latam.html">Rust LATAM conference</a>, bad luck struck me hard. As a side effect of being tired, I've lost my backpack with passport and laptop.</p>
+<p>I could manage to exit Uruguay with some help from local friends and the local embassy of my country. On the other hand, unfortunately, the laptop should be considered <a target="_blank" rel="noopener noreferrer nofollow" href="https://en.wikipedia.org/wiki/Missing_in_action">M.I.A.</a> as was not promptly retrieved. At the end of this blurb of text I will detail a bit the terrible customer support of Uber handling this case.</p>
+<p>A lost laptop, when it's your main interface to the digital world, is a precious lesson on how to secure your device and an interesting (albeit expensive!) test of my setup. So let's attempt a retrospective (note: I'm a Linux user).</p>
+<h3 id="what-went-well"><a class="zola-anchor" href="#what-went-well" aria-label="Anchor link for: what-went-well">&sect;</a>
+What went well</h3>
+<ul>
+<li>Password keyring GPG-encrypted. I use <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.passwordstore.org">pass</a>; no password is saved in any browser or online third-party password storage (e.g. LastPass, Bitwarden, 1password, etc.)</li>
+<li>The master GPG key protecting the keyring is on a Yubikey, always kept separated from the laptop when not attended</li>
+<li>The GPG-encrypted keyring is syncronized on a private, self-hosted GIT repo</li>
+<li>Offline backup of the GPG private keys on a LUKS encrypted removable device. Password to decrypt the LUKS device kept offline on a piece of paper.</li>
+</ul>
+<h3 id="what-can-be-improved-and-how"><a class="zola-anchor" href="#what-can-be-improved-and-how" aria-label="Anchor link for: what-can-be-improved-and-how">&sect;</a>
+What can be improved (and how)</h3>
+<ul>
+<li>Some data lost because not committed/backed up (not deemed important). Suggestion: the content of the laptop should be considered a local cache.</li>
+<li>Laptop access only protected by a login password. Suggestion: use <a href="https://developers.yubico.com/yubico-pam">yubico PAM module</a> to login using the Yubikey</li>
+<li>Disk not encrypted. Suggestion: encrypt the whole disk or at least a partition with the important things. Use <a href="https://www.dyne.org/software/tomb">tomb</a>. This partition should be decrypted on successful login and re-encrypted on logoff, hibernate, shutdown.</li>
+<li>Browser left with some open sessions. Suggestion: not much you can do. Sometimes it's impractical to always logout and login. Find a good compromise based on your workflow and threat model.</li>
+<li>Email client with local mail storage and local contact list (just the few I still contact through email). Suggestion: no good suggestion here. Maybe use a webmail interfaces?</li>
+<li>Need a new laptop. Suggestion: shit happens, get over with it.</li>
+</ul>
+<h3 id="countermeasures"><a class="zola-anchor" href="#countermeasures" aria-label="Anchor link for: countermeasures">&sect;</a>
+Countermeasures</h3>
+<p>Actions took to rebuild and secure my environment:</p>
+<ul>
+<li>Retrieved password keyring from the remote repo</li>
+<li>Retrieved <code>i3wm</code> configuration from my <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.gitlab.com/apiraino/dotfiles">dotfiles</a> repo</li>
+<li>Generated new SSH key to access remote servers and services. Deleted old pub keys from any <code>.ssh/authorized_keys</code></li>
+<li>Changed a couple of passwords and invalidated a couple of active sessions</li>
+<li>Refreshed API keys for a couple of services</li>
+</ul>
+<h3 id="about-uber"><a class="zola-anchor" href="#about-uber" aria-label="Anchor link for: about-uber">&sect;</a>
+About Uber</h3>
+<p>Ok, let's close with with a personal note about Uber.</p>
+<p>What's the single essential thing that must happen when you leave an important item in a taxi? Being able to immediately contact the driver. With Uber this is not possible, because as the fare finishes, you lose the phone number of your driver.</p>
+<p>So, after realizing that my laptop was in the Uber car, we used their App to file a &quot;Lost Item&quot; report. Second unnerving thing: they don't put you through a human being, you just push a button, end of the report.</p>
+<p>After a radio silence of one day, we decided to pay a visit to the Uber headquarters in Montevideo. We have patiently explained the situation to a clerk (that verified and validated our story) and told us that the driver assured that no backpack was in their car.</p>
+<p>We want to trust Uber and their drivers' word, so we ask if it's possible to contact the clients that took that car after us. Sure, it's possible but for privacy reasons these phone numbers can't be disclosed (makes sense). The clerk gives us a Post-It note with two emails to contact: <code>lert@uber.com</code> and <code>legal@uber.com</code>.</p>
+<p>We write immediately and were disappointed to discover that <code>legal@uber.com</code> is not a valid recipient. Radio silence from <code>lert@uber.com</code>, not even a bot responding they've received our email.</p>
+<p>We keep on sending emails every two days to <code>lert@uber.com</code> but now it's just plain stalking, we don't really expect to a) receive an answer and b) to retrieve my backpack after a week.</p>
+<p>Uber support in managing my case was simply a joke.</p>
+<p>This is one of the most clear examples of what's wrong in this new VC-funded economy: they provide a service without owning a single asset (e.g. cars or employees providing the service); they take no responsibility and their customer support is unwilling to help, when help is really needed.</p>
+<p>If I needed one more reason to be skeptic towards some of these &quot;disrupting&quot; startups, well, here it is.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

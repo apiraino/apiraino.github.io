@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-01-23" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/software-appreciation-6-lnav/"},"@type":"BlogPosting","url":"https://apiraino.github.io/software-appreciation-6-lnav/","headline":"Appreciation for software #6: lnav","dateModified":"2020-01-23","datePublished":"2020-01-23","description":"Sometimes I find myself analyzing logs: the usual workflow is grepping my way through the file, often more files at once, sometimes both gzipped and uncompressed because I need to also look at old …","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Appreciation for software #6: lnav" />
+<meta name="description" content="Sometimes I find myself analyzing logs: the usual workflow is grepping my way through the file, often more files at once, sometimes both gzipped and uncompressed because I need to also look at old …" />
+<meta property="og:description" content="Sometimes I find myself analyzing logs: the usual workflow is grepping my way through the file, often more files at once, sometimes both gzipped and uncompressed because I need to also look at old …" />
+<link rel="canonical" href="https://apiraino.github.io/software-appreciation-6-lnav/" />
+<meta property="og:url" content="https://apiraino.github.io/software-appreciation-6-lnav/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+  <script src="https://apiraino.github.io/js/axios.min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2020-01-23T00:00:00+00:00" itemprop="datePublished">23 January 2020</time></p>
+                <h1>Appreciation for software #6: lnav</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>Sometimes I find myself analyzing logs: the usual workflow is grepping my way through the file, often more files at once, sometimes both gzipped and uncompressed because I need to also look at old rotated logs. Then pipe and filter the results with <code>sed</code>, <code>less</code>, <code>sort</code>, <code>uniq</code> or <code>cut</code> whatever bash coreutils is needed to group stuff. Sometimes these bash oneliners get ugly. I hate Bash. I never bothered to learn <code>awk</code> because I hate it, too. Lots of hate, this workflow can be improved :-)</p>
+<p>There are many command-line tools and online services (like Logentries) trying to solve this problem. I think I've found the sweet spot by using <a href="https://lnav.org/features">lnav</a>. It's one of those tools that takes time to learn, but it pays off. Also, I love tools that make me feel I'm using only 10% of. I'm <em>really thankful</em> to the authors for having written such a tool.</p>
+<p>A great feature I'm learning to use is to replace the old way of analyzing logs using a SQL syntax. <code>lnav</code> automatically creates a virtual SQlite table; the schema is based on the configuration file used to parse the logs. You can then use plain SQL queries (!) to tear logs apart and filter whatever you want.</p>
+<p>Another powerful feature of <code>lnav</code> is its extensibility. Do you have a custom log file format? You can easily write a JSON file to teach <code>lnav</code> how to parse it in great detail. I was too lazy to write a script to generate that JSON so I've used this <a href="https://github.com/PaulWay/lnav-formats/blob/master/make_format.pl">old perl script</a> (btw, I don't like Perl, too).</p>
+<p>Here's how: <a href="https://lnav.readthedocs.io/en/latest/formats.html#defining-a-new-format">https://lnav.readthedocs.io/en/latest/formats.html#defining-a-new-format</a></p>
+<p>Obviously, searching the web for &quot;lnav log formats&quot; shows that people had fun creating <a href="https://github.com/hagfelsh/lnav_formats">a lot of custom formats</a>.</p>
+<p>The <a href="https://lnav.readthedocs.io/en/latest/formats.html#defining-a-new-format">documentation is really detailed</a>, I always appreciate when a project is well documented.</p>
+<p>Some usage examples:</p>
+<ul>
+<li>filter out stuff, add more filters one after another</li>
+</ul>
+<figure>
+    <figcaption>It's a GIF. Click it. Notice how you can autocomplete regexps with tabs</figcaption>
+    <img data-gifffer="/images/filter-out.gif" data-gifffer-alt="It's pronounced with a hard 'G'" />
+</figure>
+<ul>
+<li>Run in headless mode, execute a SQL query and exit</li>
+</ul>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ lnav -n \
+    -c &quot;;SELECT c_ip, count(*), sum(sc_bytes) AS total FROM access_log \
+        GROUP BY c_ip ORDER BY total DESC LIMIT 10&quot;
+    cloud-http-access.log
+
+    c_ip      count(*) total
+198.27.81.94          2   984
+60.191.38.77          1   507
+62.210.10.77          1   451
+195.154.63.222        1   451
+52.28.236.88          1   308
+66.133.109.36         1   308
+</code></pre>
+<ul>
+<li>Load live and rotated log files at the same time</li>
+</ul>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ lnav -r &#x2F;var&#x2F;www&#x2F;logs&#x2F;https-access.log
+
+# will load:
+    &#x2F;var&#x2F;www&#x2F;logs&#x2F;https-access.log
+    &#x2F;var&#x2F;www&#x2F;logs&#x2F;https-access.log.1.gz
+    &#x2F;var&#x2F;www&#x2F;logs&#x2F;https-access.log.2.gz
+    &#x2F;var&#x2F;www&#x2F;logs&#x2F;https-access.log.3.gz
+    ...
+</code></pre>
+<p>One funny situation in which <code>lnav</code> helped me is calculating how much time I've spent on a project. I had to look at the git history because I forgot to note down the time spent on the project. No, I'm too lazy to use time-tracking applications :-)</p>
+<p>So, what I did is extracting my commits with a custom <code>git log</code> command (thanks Stack Overflow):</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">git log \
+    --pretty=format:&#x27;%C(yellow)%h%x09%Creset%C(cyan)%C(bold)%ad%Creset  %C(green)%Creset %s&#x27; \
+    --date=short \
+    --reverse \
+    --author=me
+</code></pre>
+<p>the result is something like this (I don't have colours on my shell, but you probably do ^_^):</p>
+<pre><code>9bda78ba2       2019-08-02   Lorem ipsum dolor sit amet
+54fbd2cc5       2019-08-02   consectetur adipiscing elit, sed do
+3e515d1ed       2019-08-02   eiusmod tempor incididunt ut labore
+7f0e86e5b       2019-08-03   et dolore magna aliqua. Ut enim ad minim veniam
+ef65b99c1       2019-08-05   quis nostrud exercitation ullamco
+d55f249d8       2019-08-05   laboris nisi ut aliquip ex ea commodo
+5c3bb1010       2019-08-06   consequat. Duis aute irure dolor in reprehenderit
+3a2118cec       2019-08-06   in voluptate velit esse cillum dolore
+...
+</code></pre>
+<p>I then simply passed this to <code>lnav</code>, pressed <code>i</code> to see an histogram grouped by date, then pressed <code>z/Z</code> to zoom in/out to get to see the actual days. Example of the output:</p>
+<figure>
+    <img src="/images/lnav_group_by.png">
+</figure>
+<p>It took me two days to write this invoice, but I've learned a lot in the process :-D</p>
+<p>One final note: as of January 2020 the latest v0.8.5 release does not work under Wayland. I had to checkout the v0.8.6 alpha branch and compile it.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+  <br/><br/>
+  <div id="gh-comments-list"></div>
+</div>
+
+<script type="text/javascript">
+
+// To use Gihub comments instead of gists
+// var base_url = "https://github.com/apiraino/apiraino.github.io/issues/"
+// var base_api_url = "https://api.github.com/repos/apiraino/apiraino.github.io/issues/"
+
+// Link to create a new comment
+var base_url = "https://gist.github.com/apiraino/"
+// Link to retrieve all comments
+var base_api_url = "https://api.github.com/gists/"
+
+var url = base_url + 'dcf8a3d539364506f4c4988a45554675' + '#new_comment_field'
+var api_url = base_api_url + 'dcf8a3d539364506f4c4988a45554675' + '/comments'
+
+axios.defaults.headers.get['Content-Type'] = 'application/json'
+axios.defaults.headers.get['Accept'] = 'application/vnd.github.v3.html+json'
+axios
+  .get(api_url)
+  .then(response => {
+    if (response.data !== undefined) {
+      var addComment = "<a href='" + url + "' rel='nofollow' class='btn-comment'>Post a comment</a><br/><br/>(Must be logged into GitHub)"
+      document.getElementById('gh-comments-list').innerHTML = addComment
+      this.data = response.data
+      this.data.forEach(function(comment) {
+        var date = new Date(comment.created_at);
+        var t = "<div id='gh-comment'>";
+        t += "<img src='" + comment.user.avatar_url + "' width='24px'>";
+        t += "<b><a href='" + comment.user.html_url + "'>" + comment.user.login + "</a></b>";
+        t += " posted at ";
+        t += "<em>" + date.toUTCString() + "</em>";
+        t += "<div id='gh-comment-hr'></div>";
+        t += comment.body_html;
+        t += "</div>";
+        document.getElementById('gh-comments-list').innerHTML += t
+        // document.getElementById('gh-comments-list').innerText += t
+        // document.getElementById('gh-comments-list').textContent += t
+      })
+    }
+  })
+  .catch(error => {
+    console.debug('Got: ' + error)
+    if (console.response) {
+      console.debug(error.response.data.detail)
+      // document.getElementById('gh-comments-list').innerText = "text";
+      // document.getElementById('gh-comments-list').textContent = "text";
+    }
+    var errMsg = "<p class='no-comments'>Error while getting comments<br />(pls report if you see this)</p>"
+    document.getElementById('gh-comments-list').innerHTML = errMsg
+  })
+
+</script>
+
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

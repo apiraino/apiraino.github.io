@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-17" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/rust-integration-tests-and-ci/"},"@type":"BlogPosting","url":"https://apiraino.github.io/rust-integration-tests-and-ci/","headline":"Integration tests in Rust and CI","dateModified":"2019-08-17","datePublished":"2019-08-17","description":"I&#x27;m writing a small service in Rust, let&#x27;s summarize how it works:
+
+A client calls my server on https:&#x2F;&#x2F;www.rustserver.com&#x2F;endpoint
+The client receives immediately…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Integration tests in Rust and CI" />
+<meta name="description" content="I&#x27;m writing a small service in Rust, let&#x27;s summarize how it works:
+
+A client calls my server on https:&#x2F;&#x2F;www.rustserver.com&#x2F;endpoint
+The client receives immediately…" />
+<meta property="og:description" content="I&#x27;m writing a small service in Rust, let&#x27;s summarize how it works:
+
+A client calls my server on https:&#x2F;&#x2F;www.rustserver.com&#x2F;endpoint
+The client receives immediately…" />
+<link rel="canonical" href="https://apiraino.github.io/rust-integration-tests-and-ci/" />
+<meta property="og:url" content="https://apiraino.github.io/rust-integration-tests-and-ci/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-08-17T00:00:00+00:00" itemprop="datePublished">17 August 2019</time></p>
+                <h1>Integration tests in Rust and CI</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>I'm writing a small service in Rust, let's summarize how it works:</p>
+<ol>
+<li>A client calls my server on <code>https://www.rustserver.com/endpoint</code></li>
+<li>The client receives immediately a <code>200 OK</code> to acknowledge the request</li>
+<li>The server calls external services on <code>https://ext1.domain.com</code>, <code>https://ext2.domain.com</code>, <code>https://ext3.domain.com</code>, etc.</li>
+<li>The server retrieves all the responses, do some parsing and store them somewhere</li>
+</ol>
+<p>While it's important to have unit tests for step (4), I'd also like to have integration tests and trigger the whole workflow from start to finish.</p>
+<h3 id="the-tool-i-need"><a class="zola-anchor" href="#the-tool-i-need" aria-label="Anchor link for: the-tool-i-need">&sect;</a>
+<a id="part_i"></a>The tool I need</h3>
+<p>In Python I was used to have a mocking library that allows me to define such as:</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">import mock
+
+@mock.patch(&#x27;mybackend.application.api.call_external_server&#x27;)
+def test_1(self, server_mock):
+
+    # the test client calls my endpoint
+    resp = self.call_my_server(email=self.email, token=self.tk)
+    self.assertEqual(resp.status, 200)
+
+    # verify that the external server call has been really happened
+    self.assertEqual(1, len(server_mock.mock_calls))
+
+    # other tests to check what happened after the external call was completed
+</code></pre>
+<p>So, how do we put this workflow under integration tests on Rust? I looked for a mocking library but couldn't find one to be easy enough to use. The crate <a href="https://github.com/lipanski/mockito">mockito</a> gets close to what I'd like a mocking library to be but it can only mock an HTTP request that it's directly called from the test.</p>
+<p>The alternate approach is to roll up your sleeve and find a creative solution: for example start a proxy server that intercepts all outbound HTTP request and returns a static JSON.</p>
+<h3 id="adding-the-man-in-the-middle"><a class="zola-anchor" href="#adding-the-man-in-the-middle" aria-label="Anchor link for: adding-the-man-in-the-middle">&sect;</a>
+<a id="part_ii"></a> Adding the man in the middle</h3>
+<p><a href="https://github.com/mitmproxy/mitmproxy">mitm</a> is my proxy of choice when I need to inspect traffic, easy enough to get things done quickly.</p>
+<p><code>mitm</code> can be quickly scripted to have all sorts of funny things happening! In my case I just want the request to be intercepted and a static JSON response returned. This can be accomplished with 10 lines of python:</p>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">from mitmproxy import http
+from mitmproxy import ctx
+
+def response(flow: http.HTTPFlow) -&gt; None:
+
+    if &#x27;&#x2F;oauth2&#x2F;v1&#x2F;access_token&#x27; in flow.request.pretty_url:
+        ctk.log.info(&#x27;Gotcha!&#x27;)
+        with open(&#x27;static_response.json&#x27;, &#x27;r&#x27;) as fp:
+            flow.response = http.HTTPResponse.make(
+                201,
+                fp.read().encode(&#x27;UTF-8&#x27;),
+                headers={&quot;Content-Type&quot;: &quot;application&#x2F;json&quot;}
+            )
+        return
+
+</code></pre>
+<p>Run it and then try to call the remote endpoint:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ mitmproxy --scripts my_script.py
+</code></pre>
+<figure>
+    <img src="/images/mitm.png">
+</figure>
+<h3 id="adding-a-proxy-in-a-rust-http-client"><a class="zola-anchor" href="#adding-a-proxy-in-a-rust-http-client" aria-label="Anchor link for: adding-a-proxy-in-a-rust-http-client">&sect;</a>
+<a id="part_iii"></a>Adding a proxy in a Rust http client</h3>
+<p>Ok we have the proxy. How do we tell the Rust client to use the proxy? And since this is only needed in tests we need a flag to enable the proxied call.</p>
+<p>My solution, while not the cleanest, is to have a compilation flag to compile the client with or without the proxy (I use <a href="https://hyper.rs">hyper</a> as http client and <a href="https://github.com/tafia/hyper-proxy">hyper_proxy</a> to add a proxy).</p>
+<p>Let's add a feature flag:</p>
+<pre data-lang="toml" class="language-toml "><code class="language-toml" data-lang="toml"># Cargo.toml
+...
+[features]
+proxy_requests = []
+default = []
+...
+</code></pre>
+<p>Add the proxied connection flag to the client:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">use hyper::{client::HttpConnector, Body, Client};
+use hyper_proxy::ProxyConnector;
+use hyper_tls::HttpsConnector;
+
+pub struct MyClient {
+    #[cfg(feature = &quot;proxy_requests&quot;)]
+    pub client: Client&lt;ProxyConnector&lt;HttpConnector&gt;, Body&gt;,
+    #[cfg(not(feature = &quot;proxy_requests&quot;))]
+    pub client: Client&lt;HttpsConnector&lt;HttpConnector&gt;, Body&gt;,
+}
+
+impl MyClient {
+    pub fn new() -&gt; Self {
+        let http_connector = HttpConnector::new(4);
+        let https_connector = HttpsConnector::new(4).expect(&quot;TLS initialization failed&quot;);
+        let proxy = {
+            let proxy_uri =
+                format!(&quot;{}:{}&quot;,
+                    get_env!(&quot;PROXY_HOST&quot;),
+                    get_env!(&quot;PROXY_PORT&quot;)
+                ).parse().unwrap();
+            let proxy = Proxy::new(Intercept::All, proxy_uri);
+
+            &#x2F;&#x2F; My proxy is on plain HTTP
+            let proxy_connector = ProxyConnector::from_proxy_unsecured(http_connector, proxy);
+            proxy_connector
+        };
+
+        &#x2F;&#x2F; When running tests and CI builds, run with &quot;cargo run --features=proxy_requests&quot;
+        #[cfg(feature = &quot;proxy_requests&quot;)]
+        let client = Client::builder().build::&lt;_, hyper::Body&gt;(proxy);
+
+        &#x2F;&#x2F; In real life, server is run with &quot;cargo run&quot;
+        #[cfg(not(feature = &quot;proxy_requests&quot;))]
+        let client = Client::builder().build::&lt;_, hyper::Body&gt;(https_connector);
+
+        MyClient { client }
+    }
+}
+</code></pre>
+<p>Let's write an integration test. This integration test is completely unaware of what's happening behind, it will always succeed. But it's useful to trigger the internal workflow.</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">#[cfg(feature = &quot;proxy_requests&quot;)]
+#[test]
+fn test_workflow() {
+    let c = utils::TestClient::new();
+    let url = c.add_to_url(&quot;&#x2F;test&quot;).expect(&quot;Could not generate Url&quot;);
+    let mut response = c.client.get(url).send().expect(&quot;Could not GET &#x2F;test&quot;);
+    let resp = response.text().unwrap();
+    assert!(response.status().is_success(), format!(&quot;{} - {:?}&quot;, response.status(), resp));
+}
+</code></pre>
+<p>Like mentioned in the code comments, I run tests with:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cargo run --features=proxy_requests
+$ cargo test --features=proxy_requests
+</code></pre>
+<p>Now all connections all intercepted by our man in the middle. In production I run:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ cargo run
+</code></pre>
+<h3 id="setup-the-ci"><a class="zola-anchor" href="#setup-the-ci" aria-label="Anchor link for: setup-the-ci">&sect;</a>
+<a id="part_iv"></a>Setup the CI</h3>
+<p>Now the last part: let's automate this and update our CI builds!</p>
+<p>I use CircleCI for this project, so I've updated the configuration file with the following items (see the comments):</p>
+<pre data-lang="yaml" class="language-yaml "><code class="language-yaml" data-lang="yaml">jobs:
+  rust-tests:
+    docker:
+      - image: circleci&#x2F;rust:latest
+    steps:
+      - ... some steps ...
+      - download-and-install-mitm
+      - run:
+          name: Run mitm
+          background: true
+          command: |
+            # I&#x27;m running the headless version of &quot;mitmproxy&quot;
+            mitmdump --scripts my_script.py
+      - run:
+          name: Run server
+          environment:
+            DEPLOY_MODE: test
+            RUST_BACKTRACE: 1
+          background: true
+          command: |
+            # Run the backend with maximum debug logging
+            # Enable proxied requests
+            # use &quot;nohup&quot; to log the output to a file
+            RUST_LOG=my_backend=debug nohup cargo run --features=proxy_requests
+      - run:
+          name: Run tests
+          environment:
+            DEPLOY_MODE: test
+            RUST_BACKTRACE: 1
+            RUST_TEST_THREADS: 1
+            RUST_TEST_NOCAPTURE: 1
+          command: |
+            # enable the integration tests under feature flag
+            cargo test --features=proxy_requests --all
+      - run:
+          name: Post-mortem checks
+          command: |
+            sh .&#x2F;scripts&#x2F;post-mortem.sh
+</code></pre>
+<p>One more problem to solve. Like mentioned before, the integration test has no way to know or report a failure, it will always succeed.</p>
+<p>The only trace I have if something breaks is inspecting the server logging (notice the &quot;nohup&quot; when running the Rust server). In future I'd like to integrate a serious logging facility in Rust that allows me to write a proper log file and log to syslog.</p>
+<p>In the meanwhile I'll just ... well ... grep through the logged stdout for a &quot;BACKTRACE&quot; or other markers :-)</p>
+<p>Here is what the <code>post-mortem.sh</code> does:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">RES=$( grep -c BACKTRACE $LOGFILE )
+if [ &quot;$RES&quot; -ne &quot;0&quot; ] ; then
+    echo &quot;test(s) failed&quot;
+    cat $LOGFILE
+    exit 1
+fi
+</code></pre>
+<p>Like I said, nothing here is implemented the way I'd like, but it's a start.</p>
+<p>Things I'd like to improve in the future:</p>
+<ul>
+<li>Ideally find a serious HTTP mocking library and remove the whole proxy crutch</li>
+<li>Add a logging facility, I will investigate <a href="https://github.com/sfackler/log4rs">log4rs</a>, maybe <a href="https://github.com/daboross/fern">fern</a>?</li>
+<li>Improve the post-mortem reporting</li>
+</ul>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

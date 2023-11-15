@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-15" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/install-matrix/"},"@type":"BlogPosting","url":"https://apiraino.github.io/install-matrix/","headline":"Installing a Matrix server","dateModified":"2020-04-15","datePublished":"2020-04-15","description":"In my (impossible) mission to manage my digital life without relying on third-party SaaS, another important step is a chat system. Can my usecase be accommodated with something else than Slack? Let…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Installing a Matrix server" />
+<meta name="description" content="In my (impossible) mission to manage my digital life without relying on third-party SaaS, another important step is a chat system. Can my usecase be accommodated with something else than Slack? Let…" />
+<meta property="og:description" content="In my (impossible) mission to manage my digital life without relying on third-party SaaS, another important step is a chat system. Can my usecase be accommodated with something else than Slack? Let…" />
+<link rel="canonical" href="https://apiraino.github.io/install-matrix/" />
+<meta property="og:url" content="https://apiraino.github.io/install-matrix/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+  <script src="https://apiraino.github.io/js/axios.min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2020-04-15T00:00:00+00:00" itemprop="datePublished">15 April 2020</time></p>
+                <h1>Installing a Matrix server</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>In my (impossible) mission to manage my digital life without relying on third-party SaaS, another important step is a chat system. Can my usecase be accommodated with something else than Slack? Let's quickly overview the options for self-hosting, then what I've installed and how does it look like.</p>
+<p>Briefly, the options and how I feel about them as of March 2020:</p>
+<ul>
+<li><a href="https://matrix.org">matrix.org</a>: I saw a <a href="https://media.ccc.de/v/35c3-9400-matrix_the_current_status_and_year_to_date">CCC talk</a> and made a note to try it. I was attracted by the global federation idea behind it. Connect your instance with other instances and bridge with third-party systems.</li>
+<li><a href="https://github.com/RocketChat">Rocket.chat</a>: a server written in JS using Meteor, a framework my frontend friends say it's past its times. Will keep an eye on it.</li>
+<li><a href="https://mattermost.com">Mattermost</a>: another promising alternative, but also heard a couple of lukewarm comments about usability. I might try it, though.</li>
+<li>I'm probably forgetting others worth a mention ...</li>
+</ul>
+<p>As usual, this is my subjective experience (right or wrong), these are my unfiltered thoughts (right or wrong) and this is not a blog post trending on twitter :-P this is just me taking down notes.</p>
+<p>As the title suggests, I decided to try matrix, the name was cool (lol) and it seems to have the most buzz across Nerdlands.</p>
+<p>Being essentially an open protocol, one of the important foundation of Matrix is <a href="https://matrix.org/docs/spec">the API documentation</a> and notably a <a href="https://matrix.org/docs/spec/client_server/r0.6.0">simple and clean client API</a> to interact with your (or someone else's) server. I could hack a simple bot in a very short time using their Python async API, some <a href="https://github.com/vranki/hemppa">examples here</a>.</p>
+<p>The reference implementation of a server running on the Matrix protocol is a Python3 web backend called <a href="https://github.com/matrix-org/synapse">Synapse</a>. Installing Synapse is very easy. There's a handy Docker container for a quick install. Although I usually prefer installing non-dockerized services, now I just want the convenience to throw that and play with it, so I'll go for the fastest path with a SQLite database.</p>
+<p>I had to figure out a little bit the proxy pass-through configuration, the Synapse server needs two open ports. I think the 8448 is for the login and for federation (that is, users from other Matrix instances willing to join your instance).</p>
+<pre data-lang="apache" class="language-apache "><code class="language-apache" data-lang="apache">&lt;VirtualHost *:443&gt;
+    SSLEngine on
+    ProxyPass &#x2F; http:&#x2F;&#x2F;127.0.0.1:8008&#x2F; nocanon
+    ProxyPassReverse &#x2F; http:&#x2F;&#x2F;127.0.0.1:8008&#x2F;
+&lt;&#x2F;VirtualHost&gt;
+
+&lt;VirtualHost *:8448&gt;
+    SSLEngine on
+    ProxyPass &#x2F;_matrix http:&#x2F;&#x2F;127.0.0.1:8008&#x2F;_matrix nocanon
+    ProxyPassReverse &#x2F;_matrix http:&#x2F;&#x2F;127.0.0.1:8008&#x2F;_matrix
+&lt;&#x2F;VirtualHost&gt;
+</code></pre>
+<p>Other small details to take care of, like manually enable the possibility for users to signup (which I find awkward because how else do I create the admin user?) and it's basically done. I spin up the docker image and we're online. I must say Synapse made a very good first impression, my first evaluation is always a sort of &quot;grandma's test&quot; and see in how much time I can walk the happy path provided by the documentation.
+As usual, after starting the service, first check the open ports: Synapse opens to the world the TCP/8008, the python3 server (Twisted). Let's close it immediately:</p>
+<p><code>iptables -I DOCKER-USER -p tcp --dport 8008 -j DROP</code></p>
+<p>Configuration and DB path:</p>
+<p>SQLite DB: <code>/var/lib/docker/volumes/synapse-data/_data/homeserver.db</code></p>
+<p>Config file: <code>/var/lib/docker/volumes/synapse-data/_data/homeserver.yml</code></p>
+<h3 id="the-matrix-clients"><a class="zola-anchor" href="#the-matrix-clients" aria-label="Anchor link for: the-matrix-clients">&sect;</a>
+The Matrix clients</h3>
+<p>A brief overview of the clients available (as of March 2020). Easy: <a href="https://riot.im">Riot.im</a>, the rest looks like a lot of work in progress stuff.</p>
+<p>Your can either use it from the <a href="https://github.com/vector-im/riot-web">browser or download an Electron App</a>. The Android client to be used is <a href="https://github.com/vector-im/riotX-android">RiotX</a>. I'd say that both clients work fine. Sometimes I receive complaints that the client is not receiving updates, maybe a push notifications issue? No idea, I'm not going to dive into the code and investigate.</p>
+<p>The user interface is pretty basic but it's ok. I find interesting that I can edit the previous message simply by pressing arrow up.</p>
+<figure>
+    <figcaption>Edit an old message</figcaption>
+    <img data-gifffer="/images/riot-edit-msgs.gif" />
+</figure>
+<p>I like end-to-end encrypted rooms, just be careful: losing the client key will cut you out from reading the messages and that's by design.</p>
+<figure>
+    <caption>The localization could use a bit of love, though</caption>
+    <img src="/images/riotim-e2e.png">
+</figure>
+<p>I then invited some friends of mine (already resigned to be my guinea pigs).</p>
+<p>There are a lot of fine settings, which is interesting. For example you can notify the server when you're writing, if you're reading a message, for mentions, for messages from bots and so on and so forth. The customization is at least on par (if not more customizable) with other platforms like Zulip or Slack. I have disabled the typing notification because each keystroke sends 4 requests (!) to the server. Seriously, wtf?!</p>
+<p>Would a WebSocket work for this?</p>
+<pre><code>2020-04-16 10:38:41,258 - synapse.access.http.8008 - 302 - INFO - OPTIONS-37149 - 11.22.33.44 - 8008 - {None} Processed request: 0.001sec&#x2F;0.001sec (0.000sec, 0.000sec) (0.000sec&#x2F;0.000sec&#x2F;0) 2B 200 &quot;OPTIONS &#x2F;_matrix&#x2F;client&#x2F;r0&#x2F;rooms&#x2F;!xxx&#x2F;typing&#x2F;%40user%3Achat.domain.com HTTP&#x2F;1.1&quot;
+2020-04-16 10:38:41,309 - synapse.access.http.8008 - 302 - INFO - GET-37148 - 11.22.33.44 - 8008 - {@user:chat.domain.com} Processed request: 16.861sec&#x2F;0.002sec (0.007sec, 0.000sec) (0.000sec&#x2F;0.000sec&#x2F;0) 694B 200 &quot;GET &#x2F;_matrix&#x2F;client&#x2F;r0&#x2F;sync?filter=0&amp;timeout=30000&amp;since=s1234_56789_0123_4567_890_1_2_34_5 HTTP&#x2F;1.1&quot;
+2020-04-16 10:38:41,310 - synapse.access.http.8008 - 302 - INFO - PUT-37150 - 11.22.33.44 - 8008 - {@user:chat.domain.com} Processed request: 0.013sec&#x2F;0.001sec (0.002sec, 0.004sec) (0.000sec&#x2F;0.000sec&#x2F;0) 2B 200 &quot;PUT &#x2F;_matrix&#x2F;client&#x2F;r0&#x2F;rooms&#x2F;!xxx%3Achat.domain.com&#x2F;typing&#x2F;%40user%3Achat.domain.com HTTP&#x2F;1.1&quot;
+2020-04-16 10:38:41,377 - synapse.access.http.8008 - 302 - INFO - OPTIONS-37151 - 11.22.33.44 - 8008 - {None} Processed request: 0.000sec&#x2F;0.001sec (0.000sec, 0.000sec) (0.000sec&#x2F;0.000sec&#x2F;0) 2B 200 &quot;OPTIONS &#x2F;_matrix&#x2F;client&#x2F;r0&#x2F;sync?filter=0&amp;timeout=30000&amp;since=s1234_56789_0123_4567_890_1_2_34_5 HTTP&#x2F;1.1&quot;
+</code></pre>
+<p>Using the client is ok, after some time one get used to minimalistic style and the sometimes confusing interface. I am no UX expert at all but:</p>
+<ul>
+<li>Why would I want in the first level of a popup menu (i.e. where space is at a premium!) an item to show the message source json?</li>
+<li>Why the &quot;react&quot; and the &quot;stickers&quot; icons are the same?</li>
+</ul>
+<figure>
+    <img src="/images/riotim-web-ux-0.png">
+</figure>
+<ul>
+<li>Why the &quot;reply to message&quot; UI covers my messages?</li>
+</ul>
+<figure>
+    <img src="/images/riotim-web-ux-1.png">
+</figure>
+<ul>
+<li>Why the &quot;forward message&quot; cancel icon (&quot;X&quot;) is up there?</li>
+</ul>
+<figure>
+    <img src="/images/riotim-web-ux-2.png">
+</figure>
+<p>It's really hard getting it right when it comes to UX.</p>
+<p>Some features, from and external point of view, look hacked rather baked into the client. Example: here is how I can add and use a Giphy bot to a room.</p>
+<figcaption>(You have just downloaded a 4mb GIF)</figcaption>
+<img data-gifffer="/images/riot-add-giphy-synapse.gif" data-gifffer-alt="Can't even troll my friends" />
+<p>Yes, it works (kind of) but the implementation is not refined. Notice how much time it takes to have a feedback from the bot. The experience could be disappointing for a user.</p>
+<p>Respect for the people working on this project and trying to make it a sustainable business, I'm really rooting for them. But I also have to be honest and say that as of today I cannot suggest this platform to my non technical friends/clients, unless the constraints are clear from the start (no custom emojis, no gifs, no fun). I don't see that friend of mine that has TikTok installed using this.</p>
+<p>The great added value I want to explore in the following weeks is the integration with other (non) proprietary platforms. I can have a relay on IRC, Slack, Telegram, Discord etc. because unfortunately I have to have a user account on each of these platforms to stay in touch even for two only two people. A single centralized client for many proprietary platforms all orchestrated by a decentralized platform. The irony is not lost on this.</p>
+<p>I tried quickly setting up a bridge towards a Slack account and I failed the grandma's test. Apparently I need to install a Docker container (another one?). So I'll have a look at that later.</p>
+<h3 id="on-decentralized-platforms"><a class="zola-anchor" href="#on-decentralized-platforms" aria-label="Anchor link for: on-decentralized-platforms">&sect;</a>
+On decentralized platforms</h3>
+<p>I noticed that <em>no</em> matrix client except those from riot.im implement end-to-end (e2e) message encryption. Same story for the servers that implement the Matrix protocol. Same <a href="https://matrix.org/sdks/">for the SDK</a>: only the matrix team did accomplish this.</p>
+<p>At the CCC, Moxie Marlinspike from Signal gave a &quot;controversial&quot; talk about how a decentralized messaging system cannot work. Like it or not, he has a point: implementing e2e on a decentralized protocol is a huge pain in the ass <em>if</em> you don't want to sacrifice usability for your users. If you don't want to share your contacts with the server, fine, but then good luck porting your data to another device. You can backup on the messaging platform implicitly (like on Signal) or explicitly (like on Threema). Threema even gives you the option to backup on an offline device, which is a very good approach.</p>
+<p>But. My Threema contacts never backup their data when they change device and regularly lose their ThreemaID and cannot recover their account data. They have to pay for another Threema licence (!) or I need to kindly ask the support for help (!!). Because they're non-tech people used to have &quot;magically&quot; their contacts and important chats and important nude pics automatically synchronized. You can't even have them do a simple thing like clicking a goddamn button and backup their stuff before throwing away the old smartphone.</p>
+<p>I hate giving my contacts to Signal, but I see the usecase. My contacts on Signal were mostly phone numbers. You can't tell one from the other when they're all numbers. At some point I enabled sharing my contact list (which Signal promises to be stored encrypted on their servers) and - bam! - my contacts suddenly became real people with name and surname. Cool, right? The side effect is that when a contact in my list creates an account on Signal we both receive a notification - a <em>completely unsolicited and that I cannot opt-out</em> - stupid notification saying &quot;hey, your friend John Doe in on Signal!&quot;. Well, thanks but I don't want this crap.</p>
+<p>Centralized platforms have spoiled users and now it is hard to decentralize people's <em>minds</em>.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+  <br/><br/>
+  <div id="gh-comments-list"></div>
+</div>
+
+<script type="text/javascript">
+
+// To use Gihub comments instead of gists
+// var base_url = "https://github.com/apiraino/apiraino.github.io/issues/"
+// var base_api_url = "https://api.github.com/repos/apiraino/apiraino.github.io/issues/"
+
+// Link to create a new comment
+var base_url = "https://gist.github.com/apiraino/"
+// Link to retrieve all comments
+var base_api_url = "https://api.github.com/gists/"
+
+var url = base_url + '892fa8003a241a1d70d7642b63a0a5e6' + '#new_comment_field'
+var api_url = base_api_url + '892fa8003a241a1d70d7642b63a0a5e6' + '/comments'
+
+axios.defaults.headers.get['Content-Type'] = 'application/json'
+axios.defaults.headers.get['Accept'] = 'application/vnd.github.v3.html+json'
+axios
+  .get(api_url)
+  .then(response => {
+    if (response.data !== undefined) {
+      var addComment = "<a href='" + url + "' rel='nofollow' class='btn-comment'>Post a comment</a><br/><br/>(Must be logged into GitHub)"
+      document.getElementById('gh-comments-list').innerHTML = addComment
+      this.data = response.data
+      this.data.forEach(function(comment) {
+        var date = new Date(comment.created_at);
+        var t = "<div id='gh-comment'>";
+        t += "<img src='" + comment.user.avatar_url + "' width='24px'>";
+        t += "<b><a href='" + comment.user.html_url + "'>" + comment.user.login + "</a></b>";
+        t += " posted at ";
+        t += "<em>" + date.toUTCString() + "</em>";
+        t += "<div id='gh-comment-hr'></div>";
+        t += comment.body_html;
+        t += "</div>";
+        document.getElementById('gh-comments-list').innerHTML += t
+        // document.getElementById('gh-comments-list').innerText += t
+        // document.getElementById('gh-comments-list').textContent += t
+      })
+    }
+  })
+  .catch(error => {
+    console.debug('Got: ' + error)
+    if (console.response) {
+      console.debug(error.response.data.detail)
+      // document.getElementById('gh-comments-list').innerText = "text";
+      // document.getElementById('gh-comments-list').textContent = "text";
+    }
+    var errMsg = "<p class='no-comments'>Error while getting comments<br />(pls report if you see this)</p>"
+    document.getElementById('gh-comments-list').innerHTML = errMsg
+  })
+
+</script>
+
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

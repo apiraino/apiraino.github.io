@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-02" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/emacs-themes-24bit/"},"@type":"BlogPosting","url":"https://apiraino.github.io/emacs-themes-24bit/","headline":"Enabling Emacs 24bit themes","dateModified":"2020-08-02","datePublished":"2020-08-02","description":"This weekend I&#x27;ve spent some time on &#x2F;r&#x2F;unixporn and enjoyed their beautiful desktop customizations. The next things I know is that I&#x27;v…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Enabling Emacs 24bit themes" />
+<meta name="description" content="This weekend I&#x27;ve spent some time on &#x2F;r&#x2F;unixporn and enjoyed their beautiful desktop customizations. The next things I know is that I&#x27;v…" />
+<meta property="og:description" content="This weekend I&#x27;ve spent some time on &#x2F;r&#x2F;unixporn and enjoyed their beautiful desktop customizations. The next things I know is that I&#x27;v…" />
+<link rel="canonical" href="https://apiraino.github.io/emacs-themes-24bit/" />
+<meta property="og:url" content="https://apiraino.github.io/emacs-themes-24bit/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+  <script src="https://apiraino.github.io/js/axios.min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2020-08-02T00:00:00+00:00" itemprop="datePublished">2 August 2020</time></p>
+                <h1>Enabling Emacs 24bit themes</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>This weekend I've spent some time on <a href="https://old.reddit.com/r/unixporn/"><code>/r/unixporn</code></a> and enjoyed their beautiful desktop customizations. The next things I know is that I've ended up into another hell-hole to enable one theme on my Emacs. Let's see how deep the rabbit hole goes and summarize the keypoints learned.</p>
+<h3 id="preface-linux-shells-suck"><a class="zola-anchor" href="#preface-linux-shells-suck" aria-label="Anchor link for: preface-linux-shells-suck">&sect;</a>
+Preface: Linux shells suck</h3>
+<p>Mr. Obvious, I suppose?</p>
+<p>There is a crowd of lost souls out there trying to figure out and explain in which order the linux shell loads configuration files, because the most common answer is: &quot;it depends&quot;. It's one of the classic UNIX stratified crust dating back to (I guess) ~20 (30?) years ago and always kept back compatible. Anyway, done with the complaints, let's move on.</p>
+<p>Looking back, these were the steps I went through to reach the goal:</p>
+<ol>
+<li>Why Emacs screws up theme colors</li>
+<li>Because it's a 24bit colors theme: how do I have Emacs support such themes?</li>
+<li>It depends on the shell: what shell do I have and why it doesn't behave the way I want</li>
+<li>The shell doesn't know how to manage more than 256 colors: how do I fix this?</li>
+<li>I have the fix: how to apply it in a consistent way?</li>
+</ol>
+<p>In one sentence: on a Linux shell, you need to customize <code>terminfo</code> to have Emacs display more than 256 colors.</p>
+<p>Each damn step took its own good deal of research, trial and error, let's go through each one.</p>
+<h3 id="1-why-emacs-screws-up-theme-colors"><a class="zola-anchor" href="#1-why-emacs-screws-up-theme-colors" aria-label="Anchor link for: 1-why-emacs-screws-up-theme-colors">&sect;</a>
+1) Why Emacs screws up theme colors</h3>
+<p>Many Emacs themes (especially the most beautiful) have more than 256 colors. In my narrow-minded view, never could I imagine that so many colors could be needed.</p>
+<p>Installed the theme, run Emacs, I get <em>slightly</em> disappointed, the product does not match the label on the tin.</p>
+<figure>
+    <img src="/images/emacs-theme-00.png">
+    <figcaption>Comparing what I see to what I am *supposed* to see</figcaption>
+</figure>
+<h3 id="2-how-do-i-have-emacs-display-more-colors"><a class="zola-anchor" href="#2-how-do-i-have-emacs-display-more-colors" aria-label="Anchor link for: 2-how-do-i-have-emacs-display-more-colors">&sect;</a>
+2) How do I have Emacs display more colors?</h3>
+<p>Emacs support 24bit colors since 26.x. I notice that &quot;graphical&quot; Emacs (<code>emacs-gtk</code> and <code>emacs-lucid</code>, compiled against X11 and more libraries) behave differently. They bring a set of dependencies and eLisp functions to check for graphical capabilities. Now I understand why I don't have any of those. I've always used <code>emacs-nox</code>, the version without dependencies, <a href="https://emacs.stackexchange.com/a/45564">without even realizing the limitations</a>.</p>
+<p>Running <code>emacs -nw</code> (no window) shows the same behaviour as using <code>emacs-nox</code>, so I can test capabilities both on the &quot;enhanced&quot; emacs version and the barebone one.</p>
+<p>All good, then? Nope. It's not a problem of emacs, rather of the shell I'm sitting on.</p>
+<h3 id="3-what-shell-do-i-have-and-why-it-doesn-t-behave-the-way-i-want"><a class="zola-anchor" href="#3-what-shell-do-i-have-and-why-it-doesn-t-behave-the-way-i-want" aria-label="Anchor link for: 3-what-shell-do-i-have-and-why-it-doesn-t-behave-the-way-i-want">&sect;</a>
+3) What shell do I have and why it doesn't behave the way I want</h3>
+<p>Let's first check the terminal capabilities:</p>
+<pre><code>$ echo $TERM
+xterm-256color
+</code></pre>
+<p>but</p>
+<pre><code>$ echo $COLORTERM
+truecolor
+</code></pre>
+<p><a href="https://gist.github.com/XVilka/8346728">This Github gist details 24bit support</a> in many shells: it's very likely that a modern shell supports 24bit colors.</p>
+<p>So how do I do that?</p>
+<h3 id="4-have-more-color-on-the-linux-shell"><a class="zola-anchor" href="#4-have-more-color-on-the-linux-shell" aria-label="Anchor link for: 4-have-more-color-on-the-linux-shell">&sect;</a>
+4) Have more color on the Linux shell</h3>
+<p>In order to have 24bit colors, you need to first instruct the shell to use such a palette, being the standard 256 colors (or worse, if you're out of luck). This is done by generating a new <code>terminfo</code> file (a database describing terminals).</p>
+<p>You can verify this with one of the many scripts around, example <a href="https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal">this</a>.</p>
+<p>This procedure is detailed on <a href="https://www.gnu.org/software/emacs/manual/html_node/efaq/Colors-on-a-TTY.html">GNU's emacs faq</a> and it takes 10 seconds.</p>
+<p>Let's generate the 24bit <code>terminfo</code> file:</p>
+<pre><code>$ tic -x -o ~&#x2F;.terminfo terminfo-24bit.src
+
+# or better, a XDG basedir compliant path:
+$ export TERMINFO=$XDG_CONFIG_HOME&#x2F;terminfo
+$ tic -x -o $TERMINFO terminfo-24bit.src
+</code></pre>
+<p>and tell our shell to use more colors:</p>
+<pre><code>$ export TERM=xterm-24bit
+</code></pre>
+<p>Now let's run emacs and compare the colors available with <code>M-x list-colors-display</code> with the new env var enabled.</p>
+<figure>
+    <img src="/images/emacs-theme-03.png">
+    <figcaption>The number of colors is doubled!</figcaption>
+</figure>
+<p>Interesting fact: even on a 24bit enabled shell, Emacs only has ~550 colors instead of ~256: this is something curious I didn't figure out.</p>
+<p>As always, the funny thing is that once you identify exactly the problem, there is always a place where you could find the correct solution, <a href="http://www.skybert.net/emacs/colourful-tty-emacs">this blog post</a> for example - provided you could formulate the right question.</p>
+<h3 id="5-persist-this-configuration"><a class="zola-anchor" href="#5-persist-this-configuration" aria-label="Anchor link for: 5-persist-this-configuration">&sect;</a>
+5) Persist this configuration</h3>
+<p>I throw the new env vars in <code>~/.profile</code> so after the next login I will have everything set.</p>
+<p>Nope.</p>
+<p>When I open a new terminal (I use Gnome Terminal) from X11 or Wayland I don't see my $TERM applied and I am back to 256 colors. Terminal (non graphical) shells are fine.</p>
+<p>More digging. And here I've learned the exact <a href="https://unix.stackexchange.com/questions/170493/login-non-login-and-interactive-non-interactive-shells">differences between shells</a>: login, non-login, interactive and non-interactive.</p>
+<p>Turns out that Gnome Terminal is the &quot;culprit&quot;. By default it doesn't open a login shell (which makes sense) but that means that it <strong>overwrites</strong> your <code>~/.profile</code> with something else (which is not ok).</p>
+<p>I can say &quot;overwrite&quot; by placing <code>echo</code> statements all along the login process and save a log file:</p>
+<pre><code>-- Loading &#x2F;etc&#x2F;profile [start]: $TERM=dumb
+-- Loading &#x2F;etc&#x2F;profile [end]: $TERM=dumb
+-- Loading ~&#x2F;.profile [start]: $TERM=dumb
+-- Loading ~&#x2F;.profile [end]: $TERM=xterm-24bit
+-- Loading ~&#x2F;.bashrc: $TERM=xterm-256color          # &lt;-- WHAT THE HELL?!
+user@localhost:~$
+</code></pre>
+<p><code>printf</code> debugging never disappoints.</p>
+<p>You have two choices: create <code>~/.bash_profile</code> or tell Gnome Terminal to behave like a login shell which will force reading the <code>./profile</code> file. I choose the second option because I don't want another confusing file lingering around.</p>
+<p>Now all settings will survive a reboot.</p>
+<figure>
+    <img src="/images/emacs-theme-04.png">
+    <figcaption>Behold the colors!</figcaption>
+</figure>
+<h3 id="finished"><a class="zola-anchor" href="#finished" aria-label="Anchor link for: finished">&sect;</a>
+Finished?</h3>
+<p>Of course not: bugs!</p>
+<p>If you followed and implemented the above steps, congratulations: I have just broke your shell when you ssh into a remote server supporting only 256 colors! The TERM environment variable is always sent.</p>
+<p>You can workaround this by aliasing the old color scheme:</p>
+<p><code>alias ssh256=&quot;TERM=xterm-256color ssh&quot;</code></p>
+<p>EDIT: But that will have other problems, such giving <code>ssh</code> will not autocomplete hosts anymore. So the most sensitive choice is to <em>not</em> set this configuration in the shell settings and only launch emacs with it:</p>
+<p><code>alias emacs='TERM=xterm-24bit emacs'</code></p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+  <br/><br/>
+  <div id="gh-comments-list"></div>
+</div>
+
+<script type="text/javascript">
+
+// To use Gihub comments instead of gists
+// var base_url = "https://github.com/apiraino/apiraino.github.io/issues/"
+// var base_api_url = "https://api.github.com/repos/apiraino/apiraino.github.io/issues/"
+
+// Link to create a new comment
+var base_url = "https://gist.github.com/apiraino/"
+// Link to retrieve all comments
+var base_api_url = "https://api.github.com/gists/"
+
+var url = base_url + '95d7c232d96a43e38ee996935b44d37d' + '#new_comment_field'
+var api_url = base_api_url + '95d7c232d96a43e38ee996935b44d37d' + '/comments'
+
+axios.defaults.headers.get['Content-Type'] = 'application/json'
+axios.defaults.headers.get['Accept'] = 'application/vnd.github.v3.html+json'
+axios
+  .get(api_url)
+  .then(response => {
+    if (response.data !== undefined) {
+      var addComment = "<a href='" + url + "' rel='nofollow' class='btn-comment'>Post a comment</a><br/><br/>(Must be logged into GitHub)"
+      document.getElementById('gh-comments-list').innerHTML = addComment
+      this.data = response.data
+      this.data.forEach(function(comment) {
+        var date = new Date(comment.created_at);
+        var t = "<div id='gh-comment'>";
+        t += "<img src='" + comment.user.avatar_url + "' width='24px'>";
+        t += "<b><a href='" + comment.user.html_url + "'>" + comment.user.login + "</a></b>";
+        t += " posted at ";
+        t += "<em>" + date.toUTCString() + "</em>";
+        t += "<div id='gh-comment-hr'></div>";
+        t += comment.body_html;
+        t += "</div>";
+        document.getElementById('gh-comments-list').innerHTML += t
+        // document.getElementById('gh-comments-list').innerText += t
+        // document.getElementById('gh-comments-list').textContent += t
+      })
+    }
+  })
+  .catch(error => {
+    console.debug('Got: ' + error)
+    if (console.response) {
+      console.debug(error.response.data.detail)
+      // document.getElementById('gh-comments-list').innerText = "text";
+      // document.getElementById('gh-comments-list').textContent = "text";
+    }
+    var errMsg = "<p class='no-comments'>Error while getting comments<br />(pls report if you see this)</p>"
+    document.getElementById('gh-comments-list').innerHTML = errMsg
+  })
+
+</script>
+
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-30" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/rustlab19/"},"@type":"BlogPosting","url":"https://apiraino.github.io/rustlab19/","headline":"RustLab 19 takeaways","dateModified":"2019-06-30","datePublished":"2019-06-30","description":"And here I am back from the Italian RustLab 2019.
+Really happy to have participated, also extremely ho…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="RustLab 19 takeaways" />
+<meta name="description" content="And here I am back from the Italian RustLab 2019.
+Really happy to have participated, also extremely ho…" />
+<meta property="og:description" content="And here I am back from the Italian RustLab 2019.
+Really happy to have participated, also extremely ho…" />
+<link rel="canonical" href="https://apiraino.github.io/rustlab19/" />
+<meta property="og:url" content="https://apiraino.github.io/rustlab19/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-06-30T00:00:00+00:00" itemprop="datePublished">30 June 2019</time></p>
+                <h1>RustLab 19 takeaways</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>And here I am back from the <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.rustlab.it">Italian RustLab 2019</a>.</p>
+<p>Really happy to have participated, also extremely honoured I was on the stage of the second most important Rust Italian event <em>*EVER*</em>.</p>
+<p>I brought <a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/apiraino/open-taffeta">my pet project in Rust</a> and tried to describe in simple words what is like bootstrapping your first serious Rust project - after you're getting bored of small tools and exercism. A project that some people will have expectations.</p>
+<p>Due to some last second rescheduling I opened the conference, so besides the stage fright - I could really see there were a lot of people (~180 is the official number) and then I could relax and enjoy the conference and the workshops. As usual, I'll quickly draft a list of things/people I don't want to forget:</p>
+<h3 id="workshops"><a class="zola-anchor" href="#workshops" aria-label="Anchor link for: workshops">&sect;</a>
+Workshops</h3>
+<p>Workshops are hard to prepare; you need to have a deep knowledge on the topic even if the workshop is entry-level because even simple questions can be tricky. And then there is always someone expert on the domain that makes a difficult question.</p>
+<p>This was a conference where I spent the most time in workshops!</p>
+<ul>
+<li>
+<p>Writing web services with Rust by Emanuele Tagliaferri, Enrico Risa: very good pace, interesting subject. A little sad that we had to wrap the workshop in a hurry while we having the most fun. Actix is an advanced tool that promises crazy fast performances and an extremely small memory footprint. It's hard to learn, some of the code you need to write looks really bad; I need another project to put it at work. I may have it. Let's see.</p>
+</li>
+<li>
+<p>Writing modern command-line applications in Rust by David Peter: very interesting subject for me, live-coding session too fast, many could not keep up (I could barely). Many interesting tricks and insights on the Rust programming language. Very clean code, love it!</p>
+</li>
+<li>
+<p>Getting started with WebAssembly by Ryan Levick: very good pace and great introduction. In my opinion the technology is not ready yet for &quot;general-purpose&quot; use cases. There are still some friction points to keep in mind that won't make the experience as pleasant as I would like for frontend development. Great tool, though, to optimize critical parts of a web application.</p>
+</li>
+</ul>
+<p>A workshop always teaches you something about the language. Sometimes a lot.</p>
+<p>In general I've learned a lot about these technologies and now I know what I'd like to try and what to leave aside.</p>
+<p>I truly love the passion of people preparing a workshop, working for the community.</p>
+<h3 id="people"><a class="zola-anchor" href="#people" aria-label="Anchor link for: people">&sect;</a>
+People</h3>
+<p>I've met in person some of the people from the Italian Rust Slack channel, it was great to put a face on those nicknames.</p>
+<p>I've met again the &quot;usual&quot; Rust conf attendees you always meet :-) that are becoming friends!</p>
+<p>Also new people! I've met for the first time Gargi Sharma (she held the talk about &quot;Syscalls for Rustaceans&quot;) and Neville Dipale (&quot;Adopting Rust by gracefully oxidising web applications&quot;), very interesting to listen to their experiences.</p>
+<p>I've also met one of the main core developer of the Postgres database, the most humble person you will encounter. Did you know that the second most contributor of the codebase is <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.2ndquadrant.com">a small Italian company</a>?
+His insights were really interesting. We talked also on how big cloud playes use opensource products and sometimes they do not give back. Some do, but some don't.</p>
+<h3 id="organization"><a class="zola-anchor" href="#organization" aria-label="Anchor link for: organization">&sect;</a>
+Organization</h3>
+<p>Overall a really good organization, great efforts from <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.develer.com">Develer</a> to push new technologies in Italy. The catering was stellar :-) My greatest appreciation to the small fistful of people that organized the event.</p>
+<p>Organizing a Rust conference in Italy is still task for a hero. Delivering a conference with 180 attendees (according to their stats) is an astounding result. I hope the community will be enriched from this experience and move on and will grow further.</p>
+<p>We need to spin this wheel together!</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-01-13" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/wayland/"},"@type":"BlogPosting","url":"https://apiraino.github.io/wayland/","headline":"Wayland: worth a try?","dateModified":"2020-01-13","datePublished":"2020-01-13","description":"After watching a talk about the Hikari window manager, I was slightly horrified by how Wayland have been r…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Wayland: worth a try?" />
+<meta name="description" content="After watching a talk about the Hikari window manager, I was slightly horrified by how Wayland have been r…" />
+<meta property="og:description" content="After watching a talk about the Hikari window manager, I was slightly horrified by how Wayland have been r…" />
+<link rel="canonical" href="https://apiraino.github.io/wayland/" />
+<meta property="og:url" content="https://apiraino.github.io/wayland/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+  <script src="https://apiraino.github.io/js/axios.min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2020-01-13T00:00:00+00:00" itemprop="datePublished">13 January 2020</time></p>
+                <h1>Wayland: worth a try?</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>After watching a talk about the <a href="https://media.ccc.de/v/36c3-87-x11-and-wayland-a-tale-of-two-implementations">Hikari window manager</a>, I was slightly horrified by how Wayland have been released since 10 years and still X11 is everywhere. So I decided to try it and see why.</p>
+<p>The summary is: if you use Gnome (maybe also KDE through KWin?), Wayland may be usable for the average user. On the other hand, if you use a more niche window manager, it will be more fun :-)</p>
+<p>An important limitation about Wayland: screen sharing applications (conferencing and WebRTC apps webapps) seems to not work well at this time (and this is <a href="https://www.swalladge.net/archives/2019/10/14/are-we-wayland-yet#not-so-great">a dealbreaker</a> <a href="https://anthony.som.codes/blog/2020-01-28-screen-sharing-on-linux/">for many</a>).</p>
+<p>As of July 2020 there seems to be Pipewire being able solve the issue, <a href="https://superuser.com/a/1572441">at least on Fedora 32</a>. Or there are ugly workarounds using <a href="https://superuser.com/a/1560749">wf-recorder</a>.</p>
+<p>This said, a lot of X11 applications will work under Wayland because of some magic provided by <a href="https://wayland.freedesktop.org/xserver.html">Xwayland</a>, an X11 client that forwards all Wayland events to X11 seamlessly; in the end this means that you can stay on a mixed X11/Wayland desktop and migrate at your own pace (or - more likely - at the pace of development of applications you need to support Wayland).</p>
+<p>So, on a recent Ubuntu 19.x, I simply had to logout and login again using Gnome/Wayland. Done. Enjoy Wayland and find what's not working.</p>
+<p>If you use another window manager, read on, here be dragons.</p>
+<h3 id="installing-sway"><a class="zola-anchor" href="#installing-sway" aria-label="Anchor link for: installing-sway">&sect;</a>
+Installing Sway</h3>
+<p>Under X I use <a href="https://i3wm.org">i3 window manager</a>, so the obvious choice was to install the <a href="https://swaywm.org/">Sway window manager</a> which provides almost full compatibility with i3 config files (in my case just small adjustments). I've immediately noticed an annoying name clash with a Microsoft product, so search results are always a bit dirty. I am confident that the window manager will outlive the Microsoft product, so I'll just wait :-)</p>
+<p>Important gotcha about Sway: it won't work with the nVIDIA proprietary drivers but will work with Nouveau, see the <a href="https://news.ycombinator.com/item?id=21628494">Hacker news discussion</a> and the <a href="https://github.com/swaywm/sway/wiki#nvidia-users">Wiki</a>.</p>
+<p>Sway is a project run by a fistful of heroes, they wrote their own Wayland compositor (<a href="https://github.com/swaywm/wlroots/graphs/contributors">wlroots</a>) and other &quot;utilities&quot; like a wallpaper manager and all kind of ancillary stuff that you don't even see, but it's there and need constant maintenance.</p>
+<p>Sway has some rough edges but the project is incredibly active (I'll get to this in a bit) and the maintainers are quick to give feedback. These guys definitively need to be supported (I did).</p>
+<p>So, the basic Sway configuration works fine, the fun starts when you need to customize and add features.</p>
+<p>Some sparse tips:</p>
+<ul>
+<li>
+<p>To see if an application is running under XWayland, use <code>xeyes</code> and hover over the application. If the eyes follow your cursor, that's a X11 application running through Xwayland.</p>
+</li>
+<li>
+<p>Add these env variables for toolkits and applications to make them run on Wayland:</p>
+<ul>
+<li>GTK: <code>GDK_BACKEND=wayland</code> (but <a href="https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment">not on Firefox</a>)</li>
+<li>Qt: <code>QT_QPA_PLATFORM=wayland-egl</code></li>
+<li>Clutter: <code>CLUTTER_BACKEND=wayland</code></li>
+<li>SDL: <code>SDL_VIDEODRIVER=wayland</code></li>
+</ul>
+<p>Setting these variables <em>seems</em> to make Firefox and Thunderbird less stable and prone to crashes (TODO: investigate).</p>
+</li>
+<li>
+<p>Check if we are running Wayland</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">$ echo $XDG_SESSION_TYPE
+wayland
+</code></pre>
+</li>
+</ul>
+<h3 id="getting-to-the-edge"><a class="zola-anchor" href="#getting-to-the-edge" aria-label="Anchor link for: getting-to-the-edge">&sect;</a>
+Getting to the edge</h3>
+<p>Sway is a project run by a small number of volunteers, the main focus is the Arch Linux distribution (btw); this means that all the tools and components are packaged for other distributions (Debian, Ubuntu, etc.) by other volunteers. Given the pace of development of these tools, it's easy to run into issues because you have installed an &quot;old&quot; version of something (&quot;old&quot; being a couple of months before).</p>
+<p>This is why I've decided to prepare a workflow to compile myself everything from the latest git stable tags. It's a work in progress and since I don't want to pollute my workstation with a lot of development packages, I'm experimenting with a <a href="https://gist.github.com/apiraino/262dc499ceeed7003bf83b6ecd9c9591">Docker container</a> and the <a href="https://openbuildservice.org">OpenSUSE packaging service</a> (there are already Sway build there that I can probably use as guidance). I will update this article when I'll have figured something.</p>
+<p>If you are reading this and have suggestions, please let me know ;-)</p>
+<p>UPDATE: I kind of found my way through a Docker container solution. <a href="/2020/01/28/sway-from-sources.html">Read here</a> for more info. Using the build service from openSUSE is still not understood.</p>
+<h3 id="replacements"><a class="zola-anchor" href="#replacements" aria-label="Anchor link for: replacements">&sect;</a>
+Replacements</h3>
+<p>Besides rewriting parts of my <a href="https://gitlab.com/apiraino/dotfiles/tree/master/i3">i3 scripts</a> to adjust them for Wayland, I'd like to replace my current X11 applications and utilities with &quot;native&quot; ones to see how far I can go. Here's a list I will keep updated:</p>
+<ul>
+<li><code>xclip</code>: <a href="https://github.com/bugaevc/wl-clipboard">wl-clipboard</a></li>
+<li><code>dmenu</code>: <a href="https://github.com/nyyManni/dmenu-wayland">dmenu-wayland</a></li>
+<li><code>mpv</code>: works fine</li>
+<li>Firefox/Thunderbird: the porting to Wayland is in progress, there are some rough edges. Can be used under Xwayland. Or pure Wayland setting <code>MOZ_DBUS_REMOTE=1</code> and <code>MOZ_ENABLE_WAYLAND=1</code>. There is a <code>firefox-wayland</code> package but reports do not indicate to work very well. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=635134">Tracking issue</a>.</li>
+<li><code>dmenu</code>: <a href="https://github.com/nyyManni/dmenu-wayland">dmenu-wl</a></li>
+<li><code>py3status</code> (a better status bar for i3): <a href="https://github.com/Alexays/Waybar">swaybar</a></li>
+<li><a href="https://wiki.gnome.org/Initiatives/Wayland/Applications">Gnome application Wayland support</a>
+<ul>
+<li><code>blueman-amanager</code>: supports Wayland</li>
+<li><code>nm-applet</code>: supports Wayland (but broken: workaround is to force X11 backend, e.g. <code>GDK_BACKEND=X11 nm-applet --indicator</code>)<br><strong>UPDATE</strong>: fixed in v1.8.24</li>
+<li><code>gnome-terminal</code>: supports Wayland</li>
+<li><code>gnome-screenshot</code>: broken</li>
+</ul>
+</li>
+<li><a href="https://www.password-store.org/">password-store</a> uses <code>xclip</code> to copy passwords in the clipboard. Wayland support has been merged but not yet released (as of January 2020). Need to check out the <a href="https://git.zx2c4.com/password-store">master branch</a>. Install with <code>PREFIX=~/.local make install</code>.</li>
+</ul>
+<h3 id="open-issues"><a class="zola-anchor" href="#open-issues" aria-label="Anchor link for: open-issues">&sect;</a>
+Open issues</h3>
+<ul>
+<li>
+<p><del>Cannot copy and paste anymore to and from Emacs: the issue is with the <code>xclip.el</code> package, it does not use correctly wl-clipboard. Opened a <a href="https://debbugs.gnu.org/cgi/bugreport.cgi?bug=39103">bug report</a>.</del> SOLVED by updating to <code>wl-clipboard</code> 2.0</p>
+</li>
+<li>
+<p><del><code>wl-clipboard</code> shows weird visual artifacts, (also reflects when using in Emacs with <code>xclip.el</code>, appends <code>^M</code> whitespaces).</del> SOLVED by updating to <code>wl-clipboard</code> 2.0</p>
+</li>
+<li>
+<p>Firefox: sporadic UI blocks</p>
+<ul>
+<li>See <code>dunst</code> problem</li>
+</ul>
+</li>
+<li>
+<p>screen lock (on lid close) sometimes doesn't work (screen is not locked before sleep mode)</p>
+</li>
+<li>
+<p>Sometimes the WiFi network is disconnected</p>
+</li>
+<li>
+<p>Sway sporadic crashes (esp. when reloading the configuration) and I am taken to the login.</p>
+<p>TODO: investigate these errors (if related):</p>
+<pre><code>Jan 16 08:33:02 localhost xdg-desktop-por[2998]: Failed to get application states: GDBus.Error:org.freedesktop.portal.Error.Failed: Could not get window list: Cannot invoke method; proxy is for the well-known name org.gnome.Shell without an owner, and proxy was constructed with the G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag
+
+Jan 31 13:21:25 localhost xdg-desktop-por[2225]: Failed to get application states: GDBus.Error:org.freedesktop.portal.Error.Failed: Could not get window list: Cannot invoke method; proxy is for the well-known name org.gnome.Shell without an owner, and proxy was constructed with the G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag
+</code></pre>
+</li>
+<li>
+<p><code>nm-applet</code> crashes when getting connection information, <a href="https://gitlab.gnome.org/GNOME/network-manager-applet/issues/64">issue</a>.<br><strong>UPDATE</strong>: <a href="https://gitlab.gnome.org/GNOME/network-manager-applet/blob/58946f0f5c1f84ae4136e6d417870572bfd45cd5/NEWS">fixed in v1.8.24</a></p>
+</li>
+<li>
+<p><code>gnome-terminal</code> cannot open web links (from the &quot;Open Link&quot; shortcut), sometimes crashes when I try too hard :-)</p>
+<pre><code>Jan 24 13:17:47 localhost gnome-terminal-server[27398]: Error: no DISPLAY environment variable specified
+</code></pre>
+</li>
+<li>
+<p>DBus notifications daemon (<code>dunst</code>) block Thunderbird for some seconds until all mailbox have been checked. Possibly other applications, too.</p>
+<pre><code>Feb 20 10:37:21 valkyrie systemd[1672]: Starting Dunst notification daemon...
+Feb 20 10:37:21 valkyrie dunst[5577]: CRITICAL: Cannot open X11 display.
+Feb 20 10:37:21 valkyrie systemd[1672]: dunst.service: Main process exited, code=exited, status=1&#x2F;FAILURE
+Feb 20 10:37:21 valkyrie systemd[1672]: dunst.service: Failed with result &#x27;exit-code&#x27;.
+</code></pre>
+<p>Solution: replace <code>dunst</code> with <a href="https://github.com/emersion/mako">mako</a>, see this <a href="https://github.com/dunst-project/dunst/issues/264#issuecomment-435626530">issue</a>.</p>
+<p>Tried to manually run <code>dunst -verbosity debug</code> and notifications seem to work.</p>
+</li>
+<li>
+<p>Polkit manager does not start or is broken. This is reflected in subtle errors on running stuff that require root permissions and just breaks, example Installing Virtualbox extension pack:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-4.1.8-75467.vbox-extpack
+</code></pre>
+<p>Workaround: install with <code>sudo</code>. Need to find a way to start Polkit. Traces <a href="https://www.virtualbox.org/ticket/8473#comment:7">here</a>, <a href="https://github.com/swaywm/sway/wiki#im-not-using-logind-but-still-want-dbuspolkitpower-management-to-work">here</a> and <a href="https://github.com/swaywm/sway/issues/4492#issuecomment-530710387">here</a>.</p>
+</li>
+</ul>
+<h3 id="resources"><a class="zola-anchor" href="#resources" aria-label="Anchor link for: resources">&sect;</a>
+Resources</h3>
+<p>https://forum.manjaro.org/t/tale-of-the-young-boy-who-migrates-from-i3-to-sway/59618</p>
+<p>https://github.com/swaywm/sway/wiki#configuration</p>
+<p>https://gist.github.com/toger5/3a509d9a9d7ebba1e02205b00449ccff</p>
+<p>https://old.reddit.com/r/swaywm/comments/eg0efb/what_components_do_i_need_to_assemble_a_complete/</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+  <br/><br/>
+  <div id="gh-comments-list"></div>
+</div>
+
+<script type="text/javascript">
+
+// To use Gihub comments instead of gists
+// var base_url = "https://github.com/apiraino/apiraino.github.io/issues/"
+// var base_api_url = "https://api.github.com/repos/apiraino/apiraino.github.io/issues/"
+
+// Link to create a new comment
+var base_url = "https://gist.github.com/apiraino/"
+// Link to retrieve all comments
+var base_api_url = "https://api.github.com/gists/"
+
+var url = base_url + 'f2751c6886b33a40014772260020e6ed' + '#new_comment_field'
+var api_url = base_api_url + 'f2751c6886b33a40014772260020e6ed' + '/comments'
+
+axios.defaults.headers.get['Content-Type'] = 'application/json'
+axios.defaults.headers.get['Accept'] = 'application/vnd.github.v3.html+json'
+axios
+  .get(api_url)
+  .then(response => {
+    if (response.data !== undefined) {
+      var addComment = "<a href='" + url + "' rel='nofollow' class='btn-comment'>Post a comment</a><br/><br/>(Must be logged into GitHub)"
+      document.getElementById('gh-comments-list').innerHTML = addComment
+      this.data = response.data
+      this.data.forEach(function(comment) {
+        var date = new Date(comment.created_at);
+        var t = "<div id='gh-comment'>";
+        t += "<img src='" + comment.user.avatar_url + "' width='24px'>";
+        t += "<b><a href='" + comment.user.html_url + "'>" + comment.user.login + "</a></b>";
+        t += " posted at ";
+        t += "<em>" + date.toUTCString() + "</em>";
+        t += "<div id='gh-comment-hr'></div>";
+        t += comment.body_html;
+        t += "</div>";
+        document.getElementById('gh-comments-list').innerHTML += t
+        // document.getElementById('gh-comments-list').innerText += t
+        // document.getElementById('gh-comments-list').textContent += t
+      })
+    }
+  })
+  .catch(error => {
+    console.debug('Got: ' + error)
+    if (console.response) {
+      console.debug(error.response.data.detail)
+      // document.getElementById('gh-comments-list').innerText = "text";
+      // document.getElementById('gh-comments-list').textContent = "text";
+    }
+    var errMsg = "<p class='no-comments'>Error while getting comments<br />(pls report if you see this)</p>"
+    document.getElementById('gh-comments-list').innerHTML = errMsg
+  })
+
+</script>
+
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-12" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/configuring-postfix-dovecot/"},"@type":"BlogPosting","url":"https://apiraino.github.io/configuring-postfix-dovecot/","headline":"Configuring Postfix and Dovecot","dateModified":"2019-03-12","datePublished":"2019-03-12","description":"&amp;sect;
+&lt;a id=&quot;p…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Configuring Postfix and Dovecot" />
+<meta name="description" content="&amp;sect;
+&lt;a id=&quot;p…" />
+<meta property="og:description" content="&amp;sect;
+&lt;a id=&quot;p…" />
+<link rel="canonical" href="https://apiraino.github.io/configuring-postfix-dovecot/" />
+<meta property="og:url" content="https://apiraino.github.io/configuring-postfix-dovecot/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-03-12T00:00:00+00:00" itemprop="datePublished">12 March 2019</time></p>
+                <h1>Configuring Postfix and Dovecot</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <h3 id="the-itch-that-needed-to-be-scratched"><a class="zola-anchor" href="#the-itch-that-needed-to-be-scratched" aria-label="Anchor link for: the-itch-that-needed-to-be-scratched">&sect;</a>
+<a id="part_i"></a>The itch that needed to be scratched</h3>
+<p>I had to move my own server on another machine because the old VPS was aging and due to be turned off soon-ish by the provider.</p>
+<p>So I took the chance to re-learn for the n-th time some <i>madz sysamin skillz</i> and configure to the maximum security extend possible the mail server.</p>
+<p>First of all, the struggle. Being something that I don't usually do, I always start almost from scratch and have to educate me over terms and protocols like POP3, IMAP, STARTTLS and so on.</p>
+<p>Then, the utter hostility of these services towards the poor soul that needs to implement the services. Really a lot of time was spent looking for resources and trying a myriad of different settings until finding the right combo that make everything play along the way I wanted.</p>
+<p>Here are some lessons learned.</p>
+<h3 id="you-can-t-simply-live-under-a-ssl-rock"><a class="zola-anchor" href="#you-can-t-simply-live-under-a-ssl-rock" aria-label="Anchor link for: you-can-t-simply-live-under-a-ssl-rock">&sect;</a>
+<a id="part_ii"></a>You can't simply live under a SSL rock</h3>
+<p>I've tried since quite some time to implement the industry best practices and <a href="/2018/09/22/tls-too-soon.html">tried to lock myself in an ideal world</a> where everything has the green sigil of Let's Encrypt.</p>
+<p>Well, I've realized that this is simply not possible because there's always a non-negligible percentage of servers that simply don't care as much and if you want to talk with them, you have to be more tolerant.</p>
+<p>So you dutifully implement STARTTLS, hoping this will be a hint to move the conversation to a more secure place. Often it won't be the case and you'll still see server from important provider sending in plain text!</p>
+<p>I'm appalled by how a lot is discussed about privacy and security but still - in the business world - a lot of sensible documents are exchanged via email in plain text.</p>
+<h3 id="mail-protocols-are-insecure-by-design-and-it-shows"><a class="zola-anchor" href="#mail-protocols-are-insecure-by-design-and-it-shows" aria-label="Anchor link for: mail-protocols-are-insecure-by-design-and-it-shows">&sect;</a>
+<a id="part_iii"></a>Mail protocols are insecure by design, and it shows</h3>
+<p>At the 35C3 I could attend a very interesting talk about the (in)famous <a target="_blank" rel="noopener noreferrer nofollow" href="https://media.ccc.de/v/35c3-9463-attacking_end-to-end_email_encryption">Efail S/MIME vulnerability</a> (still not completely resolved!). The speaker showed how the root evil of everything is an inordinate amount of patching over protocols (POP3/SMTP) that are not supposed to be secure, because born in a more trustful world than today. Or, like the Postfix manual aptly says: &quot;In a distant past, the Internet was a friendly environment&quot;.</p>
+<h3 id="you-are-a-hamster-running-in-a-wheel"><a class="zola-anchor" href="#you-are-a-hamster-running-in-a-wheel" aria-label="Anchor link for: you-are-a-hamster-running-in-a-wheel">&sect;</a>
+<a id="part_iii"></a>You are a hamster running in a wheel</h3>
+<p>The moment you start a task like this, you realize you have a long way ahead. Then you patiently make your way in that jungle that is Postfix and Dovecot. Then you succeed and you are - oh - so proud of your server. You'll probably say to yourself: this time I will document everything.</p>
+<p>But then I gave up because in the end it doesn't make sense to put all the knowledge of a sysadmin on a Markdown file. I won't simply remember that <em>that</em> setting solved that problem, I cannot write a book with all the steps. Can you write down all the steps and possible pitfalls when compiling a C source code?</p>
+<p>And finally you realize that in a month you will have forgotten everything and the next time you'll start from scratch, exactly like this time and time before: you basically live in the <a target="_blank" rel="noopener noreferrer nofollow" href="https://www.imdb.com/title/tt0107048/">Groundhog Day movie</a>.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

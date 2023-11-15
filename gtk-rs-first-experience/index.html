@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-05-09" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/gtk-rs-first-experience/"},"@type":"BlogPosting","url":"https://apiraino.github.io/gtk-rs-first-experience/","headline":"Half week .into() Gtk with Rust","dateModified":"2019-05-09","datePublished":"2019-05-09","description":"I&#x27;ve attended the Rust+Gnome 2019 Hackfest.
+
+    
+        
+            Much fun, …","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="Half week .into() Gtk with Rust" />
+<meta name="description" content="I&#x27;ve attended the Rust+Gnome 2019 Hackfest.
+
+    
+        
+            Much fun, …" />
+<meta property="og:description" content="I&#x27;ve attended the Rust+Gnome 2019 Hackfest.
+
+    
+        
+            Much fun, …" />
+<link rel="canonical" href="https://apiraino.github.io/gtk-rs-first-experience/" />
+<meta property="og:url" content="https://apiraino.github.io/gtk-rs-first-experience/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2019-05-09T00:00:00+00:00" itemprop="datePublished">9 May 2019</time></p>
+                <h1>Half week .into() Gtk with Rust</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <p>I've attended the <a href="https://wiki.gnome.org/Hackfests/Rust2019">Rust+Gnome 2019 Hackfest</a>.</p>
+<center>
+    <figure>
+        <img src="/images/doge.png">
+            <figcaption>Much fun, so spaß</figcaption>
+    </figure>
+</center>
+<p>I'll recap a bit the experience for future reference.</p>
+<p>Code for this ongoing project is hosted on <a href="https://github.com/apiraino/poor-postman">GitHub</a>.</p>
+<p>Now that I think of it, I would't mind pulling out a basic tutorial out of this experience.</p>
+<h2 id="assess-my-rust-proficiency"><a class="zola-anchor" href="#assess-my-rust-proficiency" aria-label="Anchor link for: assess-my-rust-proficiency">&sect;</a>
+Assess my Rust proficiency</h2>
+<p>Starting to get comfortable with Rust and its quirks, still uncomfortable with the Rust memory model. Never used GTK before, have a general idea of how a GUI application work.</p>
+<h2 id="day-1"><a class="zola-anchor" href="#day-1" aria-label="Anchor link for: day-1">&sect;</a>
+Day 1</h2>
+<h3 id="where-did-i-start"><a class="zola-anchor" href="#where-did-i-start" aria-label="Anchor link for: where-did-i-start">&sect;</a>
+Where did I start</h3>
+<p>I tried my usual &quot;brute force&quot; approach when learning something new: skip tutorials and documentation, get a working codebase, try to figure out the basics by reading the code and have something working with a lot of copy and paste.</p>
+<p>I used as a starting point a workshop that <a href="https://github.com/GuillaumeGomez">Guillaume</a> and <a href="https://github.com/sdroege">Sebastian</a> held at the <a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop">RustFest '18 in Rome</a>.</p>
+<p>I liked how the application was structured: as a GUI application tends to have boiler-plate (to build the GUI itself, of course!), I want to keep this boiler-plate separated from the business logic, and even better split the GUI code in submodules, each with its own responsibility. This way, the application can grow without getting messy.</p>
+<p>However, after writing a working sample application doing some wild copy-pasting, this tutorial didn't work very well for me, I got a bit lost in some details that I will explain below, so I've started from scratch with a clean slate.</p>
+<h3 id="what-was-clear-and-helpful"><a class="zola-anchor" href="#what-was-clear-and-helpful" aria-label="Anchor link for: what-was-clear-and-helpful">&sect;</a>
+What was clear and helpful</h3>
+<p>Thanks to the <a href="https://github.com/gtk-rs/examples">examples repo</a> I could hack together some simple examples, although perhaps not ideal in real-life applications, e.g. all the code in the <code>main</code> method does not tell you much about idiomatic GTK applications.</p>
+<h3 id="what-was-confusing"><a class="zola-anchor" href="#what-was-confusing" aria-label="Anchor link for: what-was-confusing">&sect;</a>
+What was confusing</h3>
+<p>In general the code from the workshop helped me figuring out the basics, but also raised some questions:</p>
+<ul>
+<li>
+<p>The memory management with macro like <a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/blob/master/src/macros.rs#L4">upgrade_weak()</a> and <a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/blob/master/src/app.rs#L207">downgrade()</a> is (for me) an advanced topic that set me off.</p>
+<p>The <a href="https://github.com/gtk-rs/examples/blob/5b9c4b2d86a47ed3a5014ec723f3613ce3231827/src/bin/child-properties.rs#L19">macro replacing it</a> helps but it has some downsides (that macro will be rewritten in the future), but anyway nothing a newbie should worry about.</p>
+</li>
+<li>
+<p>The <code>async</code> macro defined <a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/blob/master/src/macros.rs#L19">here</a> appears to be not needed anymore.</p>
+</li>
+<li>
+<p>For any button with multiple states (represented by an <code>Enum</code>), did I had to implement <a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/blob/master/src/app.rs#L108">all these methods</a>? Example:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum ButtonState {
+    Enabled,
+    Disabled,
+}
+
+impl&lt;&#x27;a&gt; From&lt;&amp;&#x27;a glib::Variant&gt; for ButtonState {
+    fn from(v: &amp;glib::Variant) -&gt; ButtonState {}
+}
+
+impl From&lt;bool&gt; for ButtonState {
+    fn from(v: bool) -&gt; ButtonState {}
+}
+
+impl From&lt;ButtonState&gt; for glib::Variant {
+    fn from(v: ButtonState) -&gt; glib::Variant {}
+}
+</code></pre>
+<p>This seems not to be needed anymore, but it is confusing.</p>
+</li>
+<li>
+<p>Why do I need to <a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/blob/master/src/app.rs#L34">wrap</a> my App struct with layers or <code>Rc</code> and dereferencing methods? Why don't I need to do all this when building a <a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/blob/master/src/app.rs#L34">simpler example application</a>? Am I leaking memory if I don't?</p>
+<p>The general question for me is: do I need to wrap Structs to not leak memory? How do I know if my application is leaking memory?</p>
+</li>
+</ul>
+<p>All these questions found an answer in the following days.</p>
+<h3 id="accomplishments-of-today"><a class="zola-anchor" href="#accomplishments-of-today" aria-label="Anchor link for: accomplishments-of-today">&sect;</a>
+Accomplishments of today</h3>
+<p>After throwing away the first application stub, I've rewrote a second prototype, leveraging what I've learned but keeping things simpler. The second try went much better, I gained a basic understanding on how to structure a basic Gtk without stuffing everything into the <code>main.rs</code>.</p>
+<h2 id="day-2"><a class="zola-anchor" href="#day-2" aria-label="Anchor link for: day-2">&sect;</a>
+Day 2</h2>
+<p>During the night, while I was wearing off the Club Mate, I've decided that it was boring to just hack together a useless GTK app showcasing just random widgets without a purpose. Therefore I thought that it could be interesting to draft a basic simple &quot;clone&quot; of <a href="https://www.getpostman.com/">Postman</a>, the great tool to test APIs.</p>
+<p>What I need is:</p>
+<ul>
+<li>An input widget to enter a URL</li>
+<li>A text widget with a listener to paste the HTTP response into (with some nice formatting, maybe)</li>
+</ul>
+<p>I can leverage and get quickly out of the way the HTTP part using <a href="https://crates.io/crates/reqwest">reqwest</a>. And to add some spice to the receipt, why not making it asynchronous, so the main GUI thread is not blocked until the remote server answers.</p>
+<p>A quick question lead to a simple answer: spawn a thread inside the event manager of the input widget. Here's a succint version of the implementation:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">&#x2F;&#x2F; create a transmit&#x2F;receive facility
+let (tx, rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+
+&#x2F;&#x2F; create the text widget and its text buffer
+let response_container = gtk::TextView::new();
+let buf = response_container.get_buffer().expect(&quot;dang!&quot;);
+buf.set_text(&quot;Hey, placeholder text&quot;);
+
+&#x2F;&#x2F; spawn the thread when the user press &lt;Return&gt; on the input URL
+&#x2F;&#x2F; pass the transmitter
+url_input.connect_activate(clone!(tx =&gt; move |_| {
+
+    let client = reqwest::Client::new();
+
+    thread::spawn(clone!(tx =&gt; move || {
+        let mut resp = client
+            .post(...)
+            .send()
+            .expect(&quot;Request failed&quot;);
+        let resp_data : Value = resp.json().unwrap();
+
+        &#x2F;&#x2F; send result to channel
+        tx.send(format!(&quot;{}&quot;, resp_data))
+            .expect(&quot;Couldn&#x27;t send data to channel&quot;);
+    }));
+}));
+
+&#x2F;&#x2F; attach the receiver, write the text into the buffer
+rx.attach(None, move |response_data| {
+    buf.set_text(&amp;response_data);
+});
+</code></pre>
+<h3 id="what-was-confusing-1"><a class="zola-anchor" href="#what-was-confusing-1" aria-label="Anchor link for: what-was-confusing-1">&sect;</a>
+What was confusing</h3>
+<ul>
+<li>I had to figure out a bit of Gtk &quot;parlance&quot;, example:<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">Gtk::Button::set_sensitive(bool) = to enable&#x2F;disable a button
+</code></pre>
+</li>
+</ul>
+<h3 id="accomplishments-of-today-1"><a class="zola-anchor" href="#accomplishments-of-today-1" aria-label="Anchor link for: accomplishments-of-today-1">&sect;</a>
+Accomplishments of today</h3>
+<ul>
+<li>
+<p>Removed all the code that yesterday I've found confusing, things seems to work either way: no idea if I broke anything :-)</p>
+</li>
+<li>
+<p>Understood a bit better how to read the GTK-rs APIs (example: the difference between <code>Entry</code> and <code>EntryExt</code>), where to look for methods implemented by widgets, where to look for events (<code>connect_*</code>).</p>
+</li>
+<li>
+<p>Added a thread &quot;spawner&quot; inside a widget event manager</p>
+</li>
+</ul>
+<h2 id="day-3"><a class="zola-anchor" href="#day-3" aria-label="Anchor link for: day-3">&sect;</a>
+Day 3</h2>
+<p>Unfortunately I could not participate as I was offlined due to previous arrangements.</p>
+<h2 id="day-4"><a class="zola-anchor" href="#day-4" aria-label="Anchor link for: day-4">&sect;</a>
+Day 4</h2>
+<p>Today I tried experimenting with more new things. <a href="https://github.com/antoyo">@antoyo</a> showed me his shiny new toy <a href="https://github.com/antoyo/relm">relm</a> to create a GUI application using a declarative approach based on macros.</p>
+<p>A really seducing way to create GUI applications, because - like we discussed - the GUI code shouldn't get in my way, I want to concentrate on the &quot;business logic&quot; of the application.</p>
+<p>Unfortunately the first try didn't go too far as I got a bit lost in importing the right <code>relm_*</code> crates and macros. That looks like a stupid reason to be blocked :-) but at some point I've stashed the branch and got back the &quot;classic&quot; way. I'll definitively check <code>relm</code> at a later stage.</p>
+<p>Today I've added a simple Http client (leveraging the <code>reqwest</code> crate), and a couple more widgets and started testing this simple application.</p>
+<p>Things got slower because I tried decoupling the business logic of the application, doing weird things like trying to move and handle gtk objects far from their context. I couldn't make sense of what I was doing, so I gave up.</p>
+<p>As the last day went on, I felt more and more tired so as I produced less and less code I was trolling more and more the gtk-rs team :-) I've forked the gtk-rs repo and stashed some small PR that I hope to push real soon, in time for the next major release.</p>
+<p>It is absolutely great to have maintainers behind your back giving explainations and encouraging you to submit PRs even for trivial things. This is the best part of the open-source development.</p>
+<p>But in the end I've accomplished less that I wanted, that's price to pay for experimenting :-)</p>
+<h3 id="what-was-confusing-2"><a class="zola-anchor" href="#what-was-confusing-2" aria-label="Anchor link for: what-was-confusing-2">&sect;</a>
+What was confusing</h3>
+<ul>
+<li>I didn't not manage to <em>quickly</em> hack together a new version of the application using relm</li>
+<li>Rust quirks got again in the way</li>
+</ul>
+<p>But that was basically all I can complain for this day.</p>
+<h3 id="accomplishments-of-today-2"><a class="zola-anchor" href="#accomplishments-of-today-2" aria-label="Anchor link for: accomplishments-of-today-2">&sect;</a>
+Accomplishments of today</h3>
+<ul>
+<li>Got a bit more comfortable with the GUI code and how it's meant to be written</li>
+<li>Added a (yet unfinished) Http client to manage the connections</li>
+<li>Prepared a small PR for the <code>gtk-rs</code> main repository (that likely will be merged before the next main release)</li>
+<li>Learned a bit more on how to correctly stack widgets horizontally and vertically and how to lay down things like you imagine them</li>
+</ul>
+<h2 id="general-acknowledgements"><a class="zola-anchor" href="#general-acknowledgements" aria-label="Anchor link for: general-acknowledgements">&sect;</a>
+General acknowledgements</h2>
+<p>The <strong>amazing</strong> gtk-rs people doing an <strong>amazing</strong> job on the Gtk tookit.</p>
+<p>The <strong>amazing</strong> gtk-rs people patiently explaining me a lot of basic stuff :-)</p>
+<p><a href="https://apiraino.github.io/gtk-rs-first-experience/kinvolk.io">kinvolk.io</a> for hosting the whole band and fueling us with an endless stream of caffeine.</p>
+<p>Once again the Rust developer community proved to be incredibly competent and helpful.</p>
+<p>It was great meeting again the gtk-rs and some really good friends.</p>
+<p>I couldn't have asked more from a workhop.</p>
+<p>As an unexpected bonus, experienced Gtk-rs developers and maintainers were really interested in my questions and feedback to understand where the pain points were to a complete newbie with no prior experience of the toolkit. This report is also for them!</p>
+<center><h3>Thank you folks, you are great!</h3></center>
+<h2 id="references"><a class="zola-anchor" href="#references" aria-label="Anchor link for: references">&sect;</a>
+References</h2>
+<p><a href="https://github.com/sdroege/rustfest-rome18-gtk-gst-workshop/tree/master/src">RustFest 18 workshop on GTK-rs</a></p>
+<p>Misc <a href="https://gitlab.gnome.org/World/Rust">GTK applications in Rust</a></p>
+<p><a href="https://github.com/gtk-rs/examples">GTK-rs examples</a></p>
+<p><a href="https://gtk-rs.org/docs-src/">Documentation</a></p>
+<p>Other projects to inspect for good first issues:</p>
+<ul>
+<li>https://gitlab.gnome.org/GNOME/fractal</li>
+<li>https://gitlab.gnome.org/BrainBlasted/Social</li>
+<li>https://gitlab.gnome.org/World/podcasts</li>
+<li>https://gitlab.gnome.org/World/Shortwave</li>
+<li>https://gitlab.gnome.org/users/haecker-felix/projects</li>
+<li>https://gitlab.gnome.org/haecker-felix/Authenticator</li>
+</ul>
+<p><a href="https://github.com/antoyo/relm">Relm</a>: inspired by <a href="https://github.com/gdotdesign/elm-ui">Elm</a>, a library that abstracts the details when building a GUI.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>

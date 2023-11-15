@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>localhost</title>
+  <meta name="author" content="apiraino">
+  <meta name="description" content="sorting the wheat from the chaff">
+  <link rel="shortcut icon" type="image/x-icon" href="https://apiraino.github.io/assets/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="https://apiraino.github.io/css/style.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/additional.css">
+  <link rel="stylesheet" href="https://apiraino.github.io/css/comments.css">
+
+  <!-- SEO tags -->
+
+
+
+
+
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-09-22" />
+<script type="application/ld+json">{"mainEntityOfPage":{"@type":"WebPage","@id":"https://apiraino.github.io/tls-too-soon/"},"@type":"BlogPosting","url":"https://apiraino.github.io/tls-too-soon/","headline":"TLS: too soon to secure your email?","dateModified":"2018-09-22","datePublished":"2018-09-22","description":"&amp;sect;
+Part I: Disbelief
+Some time ago I&#x27;ve re…","@context":"https://schema.org"}</script>
+
+
+
+<meta name="generator" content="Zola 0.11" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="localhost" />
+<meta property="og:title" content="TLS: too soon to secure your email?" />
+<meta name="description" content="&amp;sect;
+Part I: Disbelief
+Some time ago I&#x27;ve re…" />
+<meta property="og:description" content="&amp;sect;
+Part I: Disbelief
+Some time ago I&#x27;ve re…" />
+<link rel="canonical" href="https://apiraino.github.io/tls-too-soon/" />
+<meta property="og:url" content="https://apiraino.github.io/tls-too-soon/" />
+<!-- End SEO tag -->
+
+
+  
+  
+  <script src="https://apiraino.github.io/js/gifffer.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="/">localhost</a></h1>
+        <h2>sorting the wheat from the chaff</h2>
+        <section class="social">
+  <span>
+    <!-- Yeah, still there but I don't use it anymore -->
+    <!-- <a href="https://gitlab.com/apiraino">
+         <img src="https://apiraino.github.io/assets/gitlab.png" alt="gitlab" />
+         </a> -->
+    <a href="https://github.com/apiraino">
+      <img src="https://apiraino.github.io/assets/github.png" alt="github" />
+    </a>
+    <a href="mailto:apiraino at pm dot me">
+      <img src="https://apiraino.github.io/assets/email.png" alt="email" />
+    </a>
+    <a href="https://apiraino.github.io/assets/publickey.apiraino@pm.me.asc">
+      <img src="https://apiraino.github.io/assets/gpg.png" alt="My GPG key" />
+    </a>
+    <a href="/atom.xml">
+      <img src="https://apiraino.github.io/assets/rss.png" alt="RSS/Atom feed" />
+    </a>
+  </span>
+</section>
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        
+
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+          <div class="popout">
+            <section>
+              <header class="post-header">
+                <p class="post-meta"><time datetime="2018-09-22T00:00:00+00:00" itemprop="datePublished">22 September 2018</time></p>
+                <h1>TLS: too soon to secure your email?</h1>
+              </header>
+            </section>
+          </div>
+          <section>
+            <h3 id="part-i-disbelief"><a class="zola-anchor" href="#part-i-disbelief" aria-label="Anchor link for: part-i-disbelief">&sect;</a>
+<a name='part_i'></a>Part I: Disbelief</h3>
+<p>Some time ago I've read about the <a href="http://starttls-everywhere.org">STARTTLS Everywhere</a> campaign by the EFF. I was immediately sold.</p>
+<p>With the precious help of a friend (more knowledgeable than me on the matter), we configured my Postfix as follows:</p>
+<pre data-lang="postfix" class="language-postfix "><code class="language-postfix" data-lang="postfix">smtp_enforce_tls = no
+smtpd_tls_loglevel = 1
+smtpd_tls_cert_file = &#x2F;path&#x2F;to&#x2F;letsencrypt&#x2F;fullchain.pem
+smtpd_tls_key_file = &#x2F;path&#x2F;to&#x2F;letsencrypt&#x2F;privkey.pem
+smtpd_tls_received_header = yes
+
+smtpd_tls_session_cache_database = btree:${data_directory}&#x2F;smtpd_scache
+smtpd_tls_session_cache_timeout = 86400s
+smtpd_tls_security_level = encrypt  # &lt;--- THIS is the important part!
+smtpd_tls_ciphers = high
+smtpd_tls_mandatory_ciphers = high
+
+smtp_tls_session_cache_database = btree:${data_directory}&#x2F;smtp_scache
+smtp_tls_session_cache_timeout = 86400s
+smtp_tls_security_level = encrypt  # &lt;--- THIS is the important part!
+smtp_tls_ciphers = high
+smtp_tls_mandatory_ciphers = high
+</code></pre>
+<p>After the changes everything works; so, let's start our experimentation period.</p>
+<p>After a while (couple of weeks), as I sent emails from my various account, some mail server started spitting back my emails:</p>
+<ul>
+<li>tin.it</li>
+<li>tiscali.it</li>
+<li>&lt;another_italian_domain_pretty_important_to_me&gt;</li>
+</ul>
+<p>The error message I receive is a nice:</p>
+<figure>
+    <img src="/images/too_much_tls.png">
+    <figcaption>Too much, too soon</figcaption>
+</figure>
+<p>Two of these emails servers are <em>Italian national providers</em> - not amateurish Postfix installation from your know-it-all friend that plugs printer power cords.</p>
+<p>Don't they, right?</p>
+<h3 id="part-ii-technical-support-ftw-or-not"><a class="zola-anchor" href="#part-ii-technical-support-ftw-or-not" aria-label="Anchor link for: part-ii-technical-support-ftw-or-not">&sect;</a>
+<a name='part_ii'></a>Part II: Technical support FTW ... or not?</h3>
+<p>This part will be really short. I've contacted the admin reference suggesting to improve their configuration and - of course - my request was ignored.</p>
+<p>Well, not exactly ignored: I could actually hear their laughters thousands kms away.</p>
+<p>So, all I could do was relax the configuration I was so proud of and allow a more tolerant communication among SMTP servers:</p>
+<pre data-lang="postfix" class="language-postfix "><code class="language-postfix" data-lang="postfix">smtp_tls_security_level = may
+# smtp_tls_security_level = encrypt
+smtpd_tls_security_level = may
+# smtpd_tls_security_level = encrypt
+</code></pre>
+<p>followed by the usual <code>postfix reload</code>.</p>
+<h3 id="part-iii-to-add-insult-to-injury"><a class="zola-anchor" href="#part-iii-to-add-insult-to-injury" aria-label="Anchor link for: part-iii-to-add-insult-to-injury">&sect;</a>
+<a name='part_iii'></a>Part III: To add insult to injury</h3>
+<p>Fun fact! I have an old email account seldom used on one of the above-mentioned internet providers. I meant to use that account outside their country with the same SMTP settings because - well - what could possibly go wrong?</p>
+<figure>
+    <img src="/images/smtp_outside.png">
+    <figcaption>Ouch, *michael* doesn't like emails from evil countries</figcaption>
+</figure>
+<p>Although this is described in a support page of that provider, it doesn't make this less awkward.</p>
+
+          </section>
+        </article>
+
+        
+        <div id="gh-comments">
+          <br/>
+          <div id="gh-comments-list">
+            <p class='no-comments'>Comments closed for this article</p>
+          </div>
+        </div>
+        
+
+        
+      </section>
+    </div>
+    <!-- stop GIF from looping -->
+<script>
+Gifffer({
+  playButtonStyles: {
+    'width': '60px',
+    'height': '60px',
+    'border-radius': '30px',
+    'background': 'rgba(0, 255, 0, 0.3)',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'margin': '-30px 0 0 -30px'
+  },
+  playButtonIconStyles: {
+    'width': '0',
+    'height': '0',
+    'border-top': '14px solid transparent',
+    'border-bottom': '14px solid transparent',
+    'border-left': '14px solid rgba(0, 255, 0, 0.5)',
+    'position': 'absolute',
+    'left': '26px',
+    'top': '16px'
+  }
+});
+window.onload = function() {
+  Gifffer();
+}
+</script>
+
+
+  </body>
+</html>
